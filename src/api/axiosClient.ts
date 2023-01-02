@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 const axiosClient = axios.create({
     baseURL: 'http://localhost:8888/api/v1',
     headers: {
@@ -7,9 +8,11 @@ const axiosClient = axios.create({
     }
 })
 
-axiosClient.interceptors.request.use(config => {
-    //handle token
-    return config
+axiosClient.interceptors.request.use(async config => {
+    return config;
+  },
+  error => {
+    Promise.reject(error)
 })
 
 axiosClient.interceptors.response.use(res => {

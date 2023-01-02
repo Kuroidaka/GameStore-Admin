@@ -24,6 +24,7 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "customize-cra": "^1.0.0",
     "framer-motion": "^8.0.2",
+    "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
     "react-dom": "^18.2.0",

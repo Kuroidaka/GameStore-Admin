@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Tippy from '@tippyjs/react/headless';
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import { img } from "~/assert/img";
 import NavItem from "./NavItem";
@@ -9,6 +9,7 @@ import AdminOption from "./AdminOption";
 import { NavList } from "./NavList";
 import config from "~/config";
 import Avatar from "~/component/Avatar/Avatar";
+import { useAppSelector } from "~/hook";
 
 interface SidebarProps {
     sideBarRef: React.RefObject<HTMLDivElement>,
@@ -18,16 +19,16 @@ interface SidebarStyleProps {
     sidebarOpen: Boolean
 }
 
+interface localType {
+    id:number
+}
+
 const Sidebar:FC<SidebarProps> = (props) => {
     const { sideBarRef, sidebarOpen } = props
     const location = useLocation()
     const avatarRef = useRef< HTMLImageElement>(null)
     const adminNavRef = useRef<HTMLDivElement>(null)
     const navigate = useNavigate()
-    // console.log(location.pathname);
-    // console.log(activeItem);
-    
-    // const { title } = useParams
 
 
     const handleClickAdminInfo = () => {

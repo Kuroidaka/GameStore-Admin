@@ -1,14 +1,18 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaFacebookF } from 'react-icons/fa'
 import { AiOutlineGooglePlus } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify';
+import jwt_decode from "jwt-decode";
 import "react-toastify/dist/ReactToastify.css";
 
 import config from '~/config'
 import { img } from "~/assert/img";
 import { adminApi } from "~/api/admin/authApi";
+import { userApi } from "~/api/admin/userApi";
+import { useAppDispatch } from "~/hook";
+import { ReduxLogin } from "~/redux/requestApi";
 
 
 
@@ -27,10 +31,23 @@ interface LoginProps {
 
 }
 
+interface decodeType {
+    User_Account_Name: string
+    User_Account_Permission: string
+    createdAt: string
+    exp: number
+    iat: number
+    id: number
+    updatedAt: string
+
+}
+
 const Login:FC<LoginProps> = () => {
 
     const [username, setUsername]= useState<string>('')
     const [password, setPassword]= useState<string>('')
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     const handleLogin = (e:ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -38,10 +55,24 @@ const Login:FC<LoginProps> = () => {
             User_Account_Name: username,
             User_Account_Password: password
         }
+
         adminApi.login(data)
-        .then(res => {
-            console.log(res);
+        .then((res:any) => {            
+            sessionStorage.setItem("token", res.token);
+            return res
         })
+        .then((res:any) => {
+            const data = jwt_decode<decodeType>(res.token);
+
+            const token = res.token
+
+            userApi.getUserById(data.id, token)
+            .then((res:any) => {
+
+                ReduxLogin(dispatch, res.data, navigate)
+            })
+        })
+        
         .catch(() => {
             toast.error('Wrong Password or username', toastOption)
 
