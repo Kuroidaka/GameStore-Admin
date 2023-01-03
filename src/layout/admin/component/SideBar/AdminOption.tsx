@@ -5,7 +5,8 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import config from "~/config";
-import { useAppSelector } from "~/hook";
+import { useAppDispatch, useAppSelector } from "~/hook";
+import { logOut } from "~/page/Admin/auth.slice";
 
 interface AdminOptionProps {
     handleClickAdminInfo: () => void
@@ -16,16 +17,20 @@ const AdminOption:FC<AdminOptionProps> = (props) => {
     const {handleClickAdminInfo, adminNavRef} = props
     const currentUser = useAppSelector(state => state.auth)
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
 
     const handleLogout = () => {
-        navigate(config.adminRoutePath.login)
+        console.log('dispatch logout');
+        
+        dispatch(logOut())
+        // navigate(config.adminRoutePath.login)
     }
 
     return ( 
         <Option>
             <span onClick={handleClickAdminInfo}>
                 <div className="admin-name-wrap" >
-                        <div id="admin-name" className="admin-name">{currentUser.User_Account_Name}</div>
+                        <div id="admin-name" className="admin-name">canh</div>
                         <IoMdArrowDropdown />
                 </div>
                     <label htmlFor="admin-name">Administrator</label> 

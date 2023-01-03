@@ -11,8 +11,10 @@ import config from '~/config'
 import { img } from "~/assert/img";
 import { adminApi } from "~/api/admin/authApi";
 import { userApi } from "~/api/admin/userApi";
+import { loginPayload } from "../auth.slice";
 import { useAppDispatch } from "~/hook";
-import { ReduxLogin } from "~/redux/requestApi";
+import { login } from "../auth.slice";
+// import { ReduxLogin } from "~/redux/requestApi";
 
 
 
@@ -30,7 +32,6 @@ const toastOption = {
 interface LoginProps {
 
 }
-
 interface decodeType {
     User_Account_Name: string
     User_Account_Permission: string
@@ -47,36 +48,39 @@ const Login:FC<LoginProps> = () => {
     const [username, setUsername]= useState<string>('')
     const [password, setPassword]= useState<string>('')
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const handleLogin = (e:ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const data = {
+        console.log('dispatch login');
+        
+        dispatch(login({
             User_Account_Name: username,
             User_Account_Password: password
-        }
+        }))
 
-        adminApi.login(data)
-        .then((res:any) => {            
-            sessionStorage.setItem("token", res.token);
-            return res
-        })
-        .then((res:any) => {
-            const data = jwt_decode<decodeType>(res.token);
+        // adminApi.login(data)
+        // .then((res:any) => {            
+        //     sessionStorage.setItem("token", res.token);
+        //     return res
+        // })
+        // .then((res:any) => {
+        //     const data = jwt_decode<decodeType>(res.token);
 
-            const token = res.token
+        //     const token = res.token
 
-            userApi.getUserById(data.id, token)
-            .then((res:any) => {
+        //     userApi.getUserById(data.id, token)
+        //     .then((res:any) => {
+        //         const { data } = res
 
-                ReduxLogin(dispatch, res.data, navigate)
-            })
-        })
+                
+        //     })
+        // })
         
-        .catch(() => {
-            toast.error('Wrong Password or username', toastOption)
+        // .catch(() => {
+        //     toast.error('Wrong Password or username', toastOption)
 
-        }) 
+        // }) 
     }
 
     useEffect(() => {
