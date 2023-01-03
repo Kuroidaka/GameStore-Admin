@@ -23,7 +23,7 @@ const AdminOption:FC<AdminOptionProps> = (props) => {
         console.log('dispatch logout');
         
         dispatch(logOut())
-        // navigate(config.adminRoutePath.login)
+        navigate(config.adminRoutePath.login)
     }
 
     return ( 

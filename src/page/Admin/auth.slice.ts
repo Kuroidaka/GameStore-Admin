@@ -11,12 +11,14 @@ interface authState {
   currentUser?: User
   logging: Boolean
   loggedIn: Boolean
+  logError: Boolean
 }
 
 const initialState: authState = {  
   currentUser: undefined,
   logging: false,
-  loggedIn: false
+  loggedIn: false,
+  logError: false
 };
 
 export interface loginPayload {
@@ -32,14 +34,17 @@ export const authReducer = createSlice({
 
     login: (state, action: PayloadAction<loginPayload>) => {
         state.logging = true
+        state.logError = false
     },
     loginSuccess: (state, action: PayloadAction<User>) => {
         state.currentUser = action.payload
         state.logging = false
         state.loggedIn = true
     },
-    loginFail: (state, action: PayloadAction<loginPayload>) => {
+    loginFail: (state) => {
         state.logging = false
+        state.loggedIn = false
+        state.logError = true
     },
     logOut: (state) => {
       state.currentUser = undefined
@@ -65,5 +70,7 @@ export const authReducer = createSlice({
 export const { login, loginSuccess, loginFail, logOut } = authReducer.actions;
 
 export const selectUser = (state: RootState) => state;
+export const selectLogging = (state:any) => state.logging
+export const selectLogError = (state:any) => state.logError
 
 export default authReducer.reducer;

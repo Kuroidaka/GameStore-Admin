@@ -40,7 +40,6 @@ interface decodeType {
     iat: number
     id: number
     updatedAt: string
-
 }
 
 const Login:FC<LoginProps> = () => {
@@ -61,7 +60,7 @@ const Login:FC<LoginProps> = () => {
 
         // adminApi.login(data)
         // .then((res:any) => {            
-        //     sessionStorage.setItem("token", res.token);
+        //     localStorage.setItem("token", res.token);
         //     return res
         // })
         // .then((res:any) => {
