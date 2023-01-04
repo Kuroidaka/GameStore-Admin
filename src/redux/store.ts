@@ -1,18 +1,47 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from "@reduxjs/toolkit"
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 
 import createSagaMiddleware from 'redux-saga';
 import authReducer from '../page/Admin/auth.slice'
 import rootSaga from './rootSaga';
 
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+}
+
+const rootReducer = combineReducers({ 
+  auth: authReducer, 
+})
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 const SagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
-  reducer: {
-    auth: authReducer
-  },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(SagaMiddleware)
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      immutableCheck: { warnAfter: 128 },
+      serializableCheck: { warnAfter: 128 },
+    }
+  }).concat(SagaMiddleware)
 });
 
 SagaMiddleware.run(rootSaga);
 
+
+export const persistor = persistStore(store)
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
 import { CiLogout, CiMail, CiSettings, CiUser } from "react-icons/ci";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import config from "~/config";
 import { useAppDispatch, useAppSelector } from "~/hook";
-import { logOut } from "~/page/Admin/auth.slice";
+import { logOut, selectUser } from "~/page/Admin/auth.slice";
 
 interface AdminOptionProps {
     handleClickAdminInfo: () => void
@@ -15,9 +15,18 @@ interface AdminOptionProps {
 
 const AdminOption:FC<AdminOptionProps> = (props) => {
     const {handleClickAdminInfo, adminNavRef} = props
-    const currentUser = useAppSelector(state => state.auth)
+    const currentUser = useAppSelector(selectUser)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
+    
+    useEffect(() => {
+        if(currentUser){
+            console.log(currentUser.User_Account_Name);
+            
+        }
+ 
+        
+    },[currentUser])
 
     const handleLogout = () => {
         console.log('dispatch logout');
@@ -30,7 +39,7 @@ const AdminOption:FC<AdminOptionProps> = (props) => {
         <Option>
             <span onClick={handleClickAdminInfo}>
                 <div className="admin-name-wrap" >
-                        <div id="admin-name" className="admin-name">canh</div>
+                        <div id="admin-name" className="admin-name">{currentUser?.User_Account_Name}</div>
                         <IoMdArrowDropdown />
                 </div>
                     <label htmlFor="admin-name">Administrator</label> 

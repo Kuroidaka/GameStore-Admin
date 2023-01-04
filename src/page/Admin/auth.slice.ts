@@ -8,17 +8,19 @@ import { User } from '~/model/User.model'
 // }
 
 interface authState {
-  currentUser?: User
-  logging: Boolean
-  loggedIn: Boolean
-  logError: Boolean
+  currentUser: User | null
+  logging?: Boolean
+  loggedIn?: Boolean
+  logError?: Boolean
+  msg?: string
 }
 
 const initialState: authState = {  
-  currentUser: undefined,
+  currentUser: null,
   logging: false,
   loggedIn: false,
-  logError: false
+  logError: false,
+  msg: ''
 };
 
 export interface loginPayload {
@@ -40,14 +42,16 @@ export const authReducer = createSlice({
         state.currentUser = action.payload
         state.logging = false
         state.loggedIn = true
+        state.logError = false
     },
-    loginFail: (state) => {
+    loginFail: (state, action: PayloadAction<string>) => {
         state.logging = false
         state.loggedIn = false
-        state.logError = true
+        state.logError = true 
+        state.msg = action.payload
     },
     logOut: (state) => {
-      state.currentUser = undefined
+      state.currentUser = null
       state.loggedIn = false
     }
 
@@ -69,8 +73,10 @@ export const authReducer = createSlice({
 
 export const { login, loginSuccess, loginFail, logOut } = authReducer.actions;
 
-export const selectUser = (state: RootState) => state;
-export const selectLogging = (state:any) => state.logging
-export const selectLogError = (state:any) => state.logError
+export const selectUser = (state:RootState) => state.auth.currentUser;
+export const selectLogging = (state:RootState) => state.auth.logging
+export const selectLoggedIn = (state:RootState) => state.auth.loggedIn
+export const selectLogError = (state:RootState) => state.auth.logError
+export const selectLogMsg = (state:RootState) => state.auth.msg
 
 export default authReducer.reducer;

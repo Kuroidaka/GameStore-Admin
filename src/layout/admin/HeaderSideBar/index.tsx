@@ -44,8 +44,6 @@ const HeaderSideBar:FC<HeaderSideBarProps> = ({children}) => {
                 {children}
             </div>
         </Content>
-
-
     </Container>
     );
 }

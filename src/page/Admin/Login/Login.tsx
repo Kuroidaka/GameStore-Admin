@@ -1,22 +1,15 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import { FaFacebookF } from 'react-icons/fa'
-import { AiOutlineGooglePlus } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify';
-import jwt_decode from "jwt-decode";
 import "react-toastify/dist/ReactToastify.css";
 
 import config from '~/config'
+import { icon } from "~/assert/icon";
 import { img } from "~/assert/img";
-import { adminApi } from "~/api/admin/authApi";
-import { userApi } from "~/api/admin/userApi";
-import { loginPayload } from "../auth.slice";
-import { useAppDispatch } from "~/hook";
+import { selectLogError, selectLoggedIn, selectLogMsg, selectUser } from "../auth.slice";
+import { useAppDispatch, useAppSelector } from "~/hook";
 import { login } from "../auth.slice";
-// import { ReduxLogin } from "~/redux/requestApi";
-
-
 
 const toastOption = {
     position: toast.POSITION.TOP_RIGHT,
@@ -28,18 +21,8 @@ const toastOption = {
     progress: undefined,
 }
 
-
 interface LoginProps {
 
-}
-interface decodeType {
-    User_Account_Name: string
-    User_Account_Permission: string
-    createdAt: string
-    exp: number
-    iat: number
-    id: number
-    updatedAt: string
 }
 
 const Login:FC<LoginProps> = () => {
@@ -47,44 +30,32 @@ const Login:FC<LoginProps> = () => {
     const [username, setUsername]= useState<string>('')
     const [password, setPassword]= useState<string>('')
     const dispatch = useAppDispatch()
-    // const navigate = useNavigate()
+    const logError = useAppSelector(selectLogError)
+    const loggedIn = useAppSelector(selectLoggedIn)
+    const msg = useAppSelector(selectLogMsg)
+    const currentUser = useAppSelector(selectUser)
+    const navigate = useNavigate()
 
     const handleLogin = (e:ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('dispatch login');
-        
+
         dispatch(login({
             User_Account_Name: username,
             User_Account_Password: password
         }))
-
-        // adminApi.login(data)
-        // .then((res:any) => {            
-        //     localStorage.setItem("token", res.token);
-        //     return res
-        // })
-        // .then((res:any) => {
-        //     const data = jwt_decode<decodeType>(res.token);
-
-        //     const token = res.token
-
-        //     userApi.getUserById(data.id, token)
-        //     .then((res:any) => {
-        //         const { data } = res
-
-                
-        //     })
-        // })
-        
-        // .catch(() => {
-        //     toast.error('Wrong Password or username', toastOption)
-
-        // }) 
     }
 
     useEffect(() => {
+        if(logError) toast.error(msg, toastOption)
+    }, [logError])
 
-    }, [])
+    useEffect(() => {
+        if(loggedIn) {
+           navigate(config.adminRoutePath.home) 
+
+        }
+
+    },[loggedIn, currentUser])
 
     return ( 
     <Container>
@@ -120,11 +91,11 @@ const Login:FC<LoginProps> = () => {
                 <div className="link">
 
                     <div className="icon fb">
-                        <FaFacebookF />
+                        <icon.facebook />
                     </div>
 
                     <div className="icon gg">
-                        <AiOutlineGooglePlus/>
+                        <icon.google/>
                     </div>
                     
                 </div>
