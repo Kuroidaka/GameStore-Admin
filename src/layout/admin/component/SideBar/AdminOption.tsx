@@ -32,6 +32,7 @@ const AdminOption:FC<AdminOptionProps> = (props) => {
         console.log('dispatch logout');
         
         dispatch(logOut())
+        localStorage.removeItem("token");
         navigate(config.adminRoutePath.login)
     }
 

@@ -12,6 +12,14 @@ function storeToken(token: string) {
     localStorage.setItem('token', token)
 }
 
+function getToken() {
+    return localStorage.getItem('token')
+}
+
+function clearToken() {
+    localStorage.removeItem("token");
+}
+
 function* handleLogin(payload: loginPayload) {
 
         const data = payload
@@ -22,7 +30,12 @@ function* handleLogin(payload: loginPayload) {
         if(res.msg) {
             yield put({type: loginFail.type, payload: res.msg})
         }
-        else {
+        else if(res.token){
+            // yield fork(storeToken, res.token)
+            localStorage.setItem('token', res.token)
+            const decode = jwt_decode<UserToken>(res.token)
+            const user:ResponseGenerator = yield call(userApi.getUserById, decode.id, res.token)
+            yield put({type: loginSuccess.type, payload:user.data})
             return res
         }
         
@@ -33,7 +46,7 @@ function* handleLogin(payload: loginPayload) {
 
 function* handleLogout() {
     console.log('handle Logout');
-    localStorage.removeItem("token");
+    yield call(clearToken)
 }
 
 
@@ -42,13 +55,17 @@ function* watchLoginFlow() {
         
         const action:PayloadAction<loginPayload> = yield take(login.type)
         const res:ResponseGenerator = yield call(handleLogin, action.payload)
-        
-        if(res?.token){
-            yield fork(storeToken, res.token)
-            const decode = jwt_decode<UserToken>(res.token)
-            const user:ResponseGenerator = yield call(userApi.getUserById, decode.id, res.token)
-            yield put({type: loginSuccess.type, payload:user.data})
 
+        const token = getToken()
+        console.log('check token');
+        
+        if(token){
+            console.log('token', token);
+            // yield fork(storeToken, res.token)
+            // const decode = jwt_decode<UserToken>(res.token)
+            // const user:ResponseGenerator = yield call(userApi.getUserById, decode.id, res.token)
+            // yield put({type: loginSuccess.type, payload:user.data})
+            
             yield take(logOut.type)
             call(handleLogout)
         }

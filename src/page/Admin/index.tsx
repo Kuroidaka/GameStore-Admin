@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import config from '~/config'
 import Home from '~/page/Admin/Home/Home'
 import Login from '~/page/Admin/Login/Login'
@@ -9,12 +9,19 @@ import AddUser from '~/page/Admin/ManageUser/ManageUser'
 import ManageTeam from '~/page/Admin/ManageTeam/ManageTeam'
 import ContactInfo from '~/page/Admin/ContactInfo/ContactInfo'
 import { useAppSelector } from '~/hook'
-import { selectUser } from './auth.slice'
-import { Fragment } from 'react'
+import { selectLoggedIn, selectUser } from './auth.slice'
+import { Fragment, useEffect } from 'react'
 
 const AdminRoutes = () => {
     const currentUser = useAppSelector(selectUser)
+    const LoggedIn = useAppSelector(selectLoggedIn)
+    const navigate = useNavigate()
 
+    useEffect(() => {
+        if(!LoggedIn) {
+            navigate(config.adminRoutePath.login)
+        }
+    }, [LoggedIn])
 
     return ( 
         <Routes>
