@@ -4,7 +4,8 @@ import axios from "axios";
 const axiosClient = axios.create({
     baseURL: 'http://localhost:8888/api/v1',
     headers: {
-        'content-type': 'application/json'
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
 })
 
