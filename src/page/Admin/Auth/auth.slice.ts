@@ -1,5 +1,5 @@
 import {  createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../redux/store';
+import { RootState } from '~/redux/store';
 import { User } from '~/model/User.model'
 
 // export interface CounterState {
@@ -17,6 +17,7 @@ interface authState {
 
 const initialState: authState = {  
   currentUser: null,
+
   logging: false,
   loggedIn: false,
   logError: false,
@@ -29,11 +30,18 @@ export interface loginPayload {
 }
 
 
+export interface registerPayload {
+  User_Account_Name: string
+  // User_Account_Email: string
+  User_Account_Password: string
+  User_Account_Permission: string
+}
+
+
 export const authReducer = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-
     login: (state, action: PayloadAction<loginPayload>) => {
         state.logging = true
         state.logError = false
@@ -71,9 +79,10 @@ export const authReducer = createSlice({
 //   },
 });
 
-export const { login, loginSuccess, loginFail, logOut } = authReducer.actions;
+export const { login, loginSuccess, loginFail, logOut} = authReducer.actions;
 
-export const selectUser = (state:RootState) => state.auth.currentUser;
+export const selectCurrentUser = (state:RootState) => state.auth.currentUser;
+
 export const selectLogging = (state:RootState) => state.auth.logging
 export const selectLoggedIn = (state:RootState) => state.auth.loggedIn
 export const selectLogError = (state:RootState) => state.auth.logError

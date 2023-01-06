@@ -4,6 +4,9 @@ export interface userApiType{
    id: number
 }   
 
+interface searchType {
+    User_Account_Name: string
+}
 
 
 export const userApi = {
@@ -18,6 +21,12 @@ export const userApi = {
         }
         
         return axiosClient.get(url, config)
+    },
+    
+    search: (data:searchType) => {
+        const url = '/user/search'
+        
+        return axiosClient.post(url, {data})
     },
    
 

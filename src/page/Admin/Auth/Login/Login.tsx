@@ -1,126 +1,129 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import { FaFacebookF } from 'react-icons/fa'
-import { AiOutlineGooglePlus } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify';
-import { adminApi } from '~/api/admin/authApi'
-
 import "react-toastify/dist/ReactToastify.css";
 
-
-import config from "~/config";
-import Notify from "~/page/Admin/Register/Component/Notify";
-import InputInfo from "./Component/infoUser";
-interface RegisterProps {
-
-}
+import config from '~/config'
+import { icon } from "~/assert/icon";
+import { img } from "~/assert/img";
+import { selectLogError, selectLoggedIn, selectLogMsg, selectCurrentUser, selectLogging } from "../auth.slice";
+import { useAppDispatch, useAppSelector } from "~/hook";
+import { login } from "../auth.slice";
 
 const toastOption = {
     position: toast.POSITION.TOP_RIGHT,
     autoClose: 5000,
-    hideProgressBar: false,
+    hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
 }
 
+interface LoginProps {
 
-const Register:FC<RegisterProps> = () => {
+}
 
-    const [username, setUsername] = useState<string>('')
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
-    const [passwordCF, setPasswordCF] = useState<string>('')
-    const [inputModal, setInputModal] = useState<Boolean>(false)
-    const [successModal, setSuccessModal] = useState<Boolean>(false)
+const Login:FC<LoginProps> = () => {
+
+    const [username, setUsername]= useState<string>('')
+    const [password, setPassword]= useState<string>('')
+    const dispatch = useAppDispatch()
+    const logError = useAppSelector(selectLogError)
+    const loggedIn = useAppSelector(selectLoggedIn)
+    const logging = useAppSelector(selectLogging)
+    const msg = useAppSelector(selectLogMsg)
+    const currentUser = useAppSelector(selectCurrentUser)
     const navigate = useNavigate()
+    const notify = useRef<any>(null)
 
-    const handleClickContinue = () => {
-        setSuccessModal(false)
-        navigate(config.adminRoutePath.login)
-    }
-
-    const handleRegister = (e:ChangeEvent<HTMLFormElement>) => {
+    const handleLogin = (e:ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if(password !== passwordCF) {
-            return toast.error('Error', toastOption)
-        }
-        else {
-            const data = {
-                User_Account_Name: username,
-                User_Account_Password: password,
-                User_Account_Permission: 'admin'
-            }
 
-            adminApi.register(data).then(res => {
-                if(res) {
-                    setInputModal(true)  
-                }
-            })
-        }
+        dispatch(login({
+            User_Account_Name: username,
+            User_Account_Password: password
+        }))
     }
 
+    const toastLoading = () => {
+        if(!toast.isActive(notify.current)) notify.current = toast.loading('Logging')
+        else toast.update(notify.current, { render: 'Logging', isLoading: true})
+    }
+    const toastError = () => toast.update(notify.current, { render: msg, type: "error", isLoading: false, ...toastOption})
+    const toastSuccess = () => toast.update(notify.current, { render: 'Success', type: "success", isLoading: false, ...toastOption})
+
+    useEffect(() => {
+        logError && toastError()
+    }, [logError])
+
+    useEffect(() => {
+        logging && toastLoading()
+    }, [logging])
+
+    useEffect(() => {
+        if(loggedIn) {
+            setTimeout(() => {
+               navigate(config.adminRoutePath.home) 
+            }, 1000)
+            toastSuccess()  
+        }
+
+    },[loggedIn, currentUser])
 
     return ( 
     <Container>
-        {successModal && <Notify handleClick={handleClickContinue}/>}
-        {inputModal && <InputInfo setInputModal={setInputModal} setSuccessModal={setSuccessModal}/>}
-
-
        <div className="wrapper">
-            <form className="register-form" onSubmit={handleRegister}>
+            <form className="login-form" onSubmit={handleLogin}>
                 <div className="header">
-                    <h1>CREATE ACCOUNT</h1>
+                    <img src={img.logo} alt="" />
                 </div>
 
-                <div className="form-body">
-
+                <div className="form-body" >
                     <div className="input-bar">
-                        <input type="text" onInput={(e:ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} value={username} placeholder="Username?"/>
+                        <input type="text" placeholder="Email or username"
+                            value={username} onInput={(e:ChangeEvent<HTMLInputElement>) => {setUsername(e.target.value)}}/>
                     </div>
 
                     <div className="input-bar">
-                        <input type="email" onInput={(e:ChangeEvent<HTMLInputElement>) => setEmail(e.target.value) } value={email} placeholder="Email or username"/>
+                        <input type="password" placeholder="Password"
+                        value={password} onInput={(e:ChangeEvent<HTMLInputElement>) => {setPassword(e.target.value)}}/>
                     </div>
 
-                    <div className="input-bar">
-                        <input type="password" onInput={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value) } value={password} placeholder="Password"/>
+                    <div className="keep">
+                        <input type="checkbox" name="" id="keep-me" />
+                        <label htmlFor="keep-me">Keep me logged in</label>
                     </div>
 
-                    <div className="input-bar">
-                        <input type="password" onInput={(e:ChangeEvent<HTMLInputElement>) => setPasswordCF(e.target.value)} value={passwordCF} placeholder="Password Confirm"/>
-                    </div>
-
-                    <Button>CREATE ACCOUNT</Button>
+                    <Button>LOG IN</Button>
 
                     <div className="ask">
-                        <p>Already have account ? </p>
-                        <Link to={config.adminRoutePath.login}>LOGIN</Link>
+                        <p>Do not have account already ? </p>
+                        <Link to={config.adminRoutePath.register}>REGISTER</Link>
                     </div>
                 </div>
                 <div className="link">
 
                     <div className="icon fb">
-                        <FaFacebookF />
+                        <icon.facebook />
                     </div>
 
                     <div className="icon gg">
-                        <AiOutlineGooglePlus/>
+                        <icon.google/>
                     </div>
                     
                 </div>
             </form>
        </div>
 
+       <ToastContainer/>
 
-       <ToastContainer />
     </Container>
     );
 }
  
-export default Register;
+export default Login;
 
 const Container = styled.div`
 width: 100vw;
@@ -133,20 +136,23 @@ align-items: center;
     .wrapper{
         max-width: calc(100vw - 20px);
         width: 450px;
-        
-        .register-form {
+        height: auto;
+
+        .login-form {
             
             box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px ;
-            max-width: 450px;
             width: 100%;
-
             padding: 30px;
 
             .header{
-                height: 50px;
+                height: 90px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+
+                img{
+                    height: 100%;
+                }
             }
 
             .form-body{
@@ -197,7 +203,7 @@ align-items: center;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin-top: 25px;
+                margin-top: 40px;
                 gap: 14px;
 
                 .icon{

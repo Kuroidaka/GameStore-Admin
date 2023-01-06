@@ -4,12 +4,12 @@ import { img } from '~/assert/img';
 import Avatar from '~/component/Avatar/Avatar';
 import Button from '~/component/Button/Button';
 import Input from '~/component/Input/Input';
-import { UserListType } from '../ManageUser';
+import { UserPropType } from '../ManageUser';
 
 interface EditUserPropTypes {
     setIsEditNew:  React.Dispatch<React.SetStateAction<boolean>>
-    setUserList:  React.Dispatch<React.SetStateAction<UserListType[]>>
-    userList: UserListType[]
+    setUserList:  React.Dispatch<React.SetStateAction<UserPropType[]>>
+    userList: UserPropType[]
 }
 
 const permissionList = ['User', 'Manager', 'Admin']
@@ -75,8 +75,6 @@ const EditUser:FC<EditUserPropTypes> = (props) => {
 
             console.log(data);
             
-
-            setUserList([...userList, data])
         }
     }
 

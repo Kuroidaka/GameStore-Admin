@@ -5,12 +5,12 @@ import { img } from '~/assert/img';
 import Avatar from '~/component/Avatar/Avatar';
 import Button from '~/component/Button/Button';
 import Input from '~/component/Input/Input';
-import { UserListType } from '../ManageUser';
+import { UserPropType } from '../ManageUser';
 
 interface addNewUserPropTypes {
     setIsAddNew:  React.Dispatch<React.SetStateAction<boolean>>
-    setUserList:  React.Dispatch<React.SetStateAction<UserListType[]>>
-    userList: UserListType[]
+    setUserList:  React.Dispatch<React.SetStateAction<UserPropType[]>>
+    userList: UserPropType[]
 }
 
 const permissionList = ['User', 'Manager', 'Admin']
@@ -62,20 +62,20 @@ const AddNewUser:FC<addNewUserPropTypes> = (props) => {
             setPwCFError('')
             setPwError('')
             
-            const data = {
-                id: 1,    
-                username: username,
-                email: email,
-                role: permis,
-                phone: '',
-                status: true,
-                password: password,
-                avatar: imgPreview,
-                createDate: Date.now(),
-            }
+            // const data = {
+            //     id: 1,    
+            //     username: username,
+            //     email: email,
+            //     role: permis,
+            //     phone: '',
+            //     status: true,
+            //     password: password,
+            //     avatar: imgPreview,
+            //     createDate: Date.now(),
+            // }
 
 
-            setUserList([...userList, data])
+            // setUserList([...userList, data])
             setIsAddNew(false)
         }
     }

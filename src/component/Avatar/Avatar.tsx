@@ -1,9 +1,10 @@
 
 import { FC, forwardRef, RefAttributes } from 'react';
 import styled from 'styled-components'
+import { img } from '~/assert/img';
 
 interface AvatarPropTypes {
-    src : string
+    src : string 
     width: string
     ref ?:React.LegacyRef<HTMLImageElement> | undefined
 }

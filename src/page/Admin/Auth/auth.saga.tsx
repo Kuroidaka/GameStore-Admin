@@ -8,6 +8,7 @@ import { ResponseGenerator } from "~/model/ResGenerator.model";
 import { UserToken } from "~/model/User.model";
 
 
+
 function storeToken(token: string) {
     localStorage.setItem('token', token)
 }
@@ -45,7 +46,6 @@ function* handleLogin(payload: loginPayload) {
 }
 
 function* handleLogout() {
-    console.log('handle Logout');
     yield call(clearToken)
 }
 
@@ -57,10 +57,8 @@ function* watchLoginFlow() {
         const res:ResponseGenerator = yield call(handleLogin, action.payload)
 
         const token = getToken()
-        console.log('check token');
         
         if(token){
-            console.log('token', token);
             // yield fork(storeToken, res.token)
             // const decode = jwt_decode<UserToken>(res.token)
             // const user:ResponseGenerator = yield call(userApi.getUserById, decode.id, res.token)
@@ -74,20 +72,8 @@ function* watchLoginFlow() {
     }
 }
 
-// function* loginFlow() {
-//     while (true) {
-//       const {user, password} = yield take('LOGIN_REQUEST')
-//       const token = yield call(authorize, user, password)
-//       if (token) {
-//         yield call(Api.storeItem, {token})
-//         yield take('LOGOUT')
-//         yield call(Api.clearItem, 'token')
-//       }
-//     }
-//   }
 
 export default function* authSaga() {
     yield fork(watchLoginFlow)
-    console.log('auth saga');
     
 }

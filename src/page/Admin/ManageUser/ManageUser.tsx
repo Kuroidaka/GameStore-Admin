@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import styled from 'styled-components'
 import { img } from '~/assert/img';
@@ -9,24 +9,23 @@ import EditUser from '~/page/Admin/ManageUser/Component/EditUser';
 import Button from '~/component/Button/Button';
 import Avatar from '~/component/Avatar/Avatar';
 import Tippy from '@tippyjs/react/headless';
+import { userApi } from '~/api/admin/userApi';
+import { User } from '~/model/User.model';
 
-export interface UserListType {
-    id?: number;
-    username?: string;
-    email?: string;
-    name?: string;
-    role?: string;
-    phone?: string;
-    status?: boolean;
-    createDate?: number;
-    avatar?: any;
+
+export interface UserPropType extends User {
+    avatar: string | null
+    status: string | null
+    phone: string | null
+
+
 }
 
 const ManageUser = () => {
-    const [userList, setUserList] = useState<UserListType[]>([])
+    const [userList, setUserList] = useState<UserPropType[]>([])
     const [isAddNew, setIsAddNew] = useState<boolean>(false)
     const [isEditNew, setIsEditNew] = useState<boolean>(false)
-    const [isRoleOption, setIsRoleOption] = useState<boolean>(false)
+    const [isRoleOption, setIsRoleOption] = useState<number>(-1)
     const [isOpenOption, setIsOpenOption] = useState<number>(-1)
     
 
@@ -38,14 +37,26 @@ const ManageUser = () => {
         idx === isOpenOption ? setIsOpenOption(-1) : setIsOpenOption(idx)
     }
 
+    const handleIsRuleOptionOpen = (idx:number) => {
+        idx === isRoleOption ? setIsRoleOption(-1) : setIsRoleOption(idx)
+    }
+
     const handleClickEditOption = () => {
         setIsEditNew(true)
         setIsOpenOption(-1)
     }
 
-    const handleIsRuleOptionOpen = () => {
-        setIsRoleOption(!isRoleOption)
-    }
+    useEffect(() => {
+        const data = {
+            User_Account_Name: ''
+        }
+
+        userApi.search(data)
+        .then(res => {
+            console.log(res.data);
+            setUserList(res.data)
+        })
+    }, [])
 
     return ( 
         <Container>
@@ -100,11 +111,11 @@ const ManageUser = () => {
                                     <td style={{textAlign: 'center'}}>{user.id}</td>
                                     <td>
                                         <div className="user">
-                                            <Avatar src={user.avatar} width='40px'/>
+                                            <Avatar src={user.avatar ? user.avatar : img.defaultAvatar} width='40px'/>
 
                                             <div className="info">
-                                                <div className="name">{user.name}</div>
-                                                <div className="username">{user.username}</div>
+                                                <div className="name">no name</div>
+                                                <div className="username">{user.User_Account_Name}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -116,27 +127,38 @@ const ManageUser = () => {
                                        <span>{user.status? 'Online' : 'Offline'}</span> 
                                     </td>
     
-                                    <td>{user.createDate}</td>
+                                    <td>{user.createdAt}</td>
                                     <td>
-                                        <div className='role-btn' onClick={handleIsRuleOptionOpen}>
-                                        {(user.role === 'Admin') && <icon.adminRole />}
-                                        {(user.role === 'User') && <icon.userRole />}
-                                        <span>{user.role}</span>
-                                        <icon.arrowDown />
+
                                         
-                                           {isRoleOption && <div className="popper-role">
-                                                <div className='item-role'>
-                                                    <icon.adminRole />
-                                                    <span>Admin</span>
-                                                </div>
-                                                
-                                                <div className='item-role'>
-                                                    <icon.userRole />
-                                                    <span>User</span>
-                                                </div>
-                                                
-                                            </div>}
-                                        </div>
+                                        <Tippy
+                                             interactive
+                                             visible= {isRoleOption === idx}
+                                             placement='bottom-start'
+                                             onClickOutside={() => {setIsRoleOption(-1)}}
+                                             render={() => {
+                                                return <PopperRole>
+                                                            <div className='item-role'>
+                                                                <icon.adminRole />
+                                                                <span>Admin</span>
+                                                            </div>
+                                                            <div className='item-role'>
+                                                                <icon.userRole />
+                                                                <span>User</span>
+                                                            </div>
+                                                        </PopperRole>
+                                             }}
+                                        >
+                                            <div className='role-btn' onClick={() =>handleIsRuleOptionOpen(idx)}>
+                                            {(user.User_Account_Permission === 'Admin') && <icon.adminRole />}
+                                            {(user.User_Account_Permission === 'User') && <icon.userRole />}
+                                            <span>{user.User_Account_Permission}</span>
+                                            <icon.arrowDown />
+                                        
+                                            </div>
+
+                                        </Tippy>
+                                        
                                     </td>
                                     <td>
                                         <div className='option'>
@@ -332,32 +354,7 @@ const Container = styled.div`
                                         font-size: 1.7rem;
                                     }
 
-                                    .popper-role{
-                                        background-color: var(--secondary_admin);
-                                        width: 100%;
-                                        position: absolute;
-                                        height: auto;
-                                        border-radius: 5px;
-                                        top: calc(var(--btn-height));
-                                        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-                                        padding: 5px 0;
-
-                                        .item-role{
-
-                                            padding: 5px 10px;
-                                            display: flex;
-                                            justify-content: flex-start;
-                                            align-items: center;
-                                            width: 100%;
-                                            gap: 5px;
-
-
-                                            &:hover{
-                                                background-color: var(--hover-item_dark);
-                                            }
-
-                                        }
-                                    }
+                                    
                                 }
 
                                 &.online{
@@ -426,6 +423,7 @@ const Container = styled.div`
 `
 
 const PopperOption = styled.div`
+
 width: 150px;
 height: auto;
 background-color: white;
@@ -440,6 +438,7 @@ overflow: hidden;
     padding: 10px;
     font-size: 1.2rem;
     cursor: pointer;
+    
 
     &:hover {
         background-color: var(--semi-primary_admin);
@@ -459,4 +458,33 @@ overflow: hidden;
 }
 
 
+`
+
+const PopperRole = styled.div `
+        background-color: var(--secondary_admin);
+        width: 100px;
+        position: absolute;
+        height: auto;
+        border-radius: 5px;
+        top: calc(var(--btn-height));
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        padding: 5px 0;
+        z-index: 99;
+
+        .item-role{
+
+            padding: 5px 10px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            gap: 5px;
+            color: white;
+            cursor: pointer;
+
+            &:hover{
+                background-color: var(--hover-item_dark);
+            }
+
+        }
 `

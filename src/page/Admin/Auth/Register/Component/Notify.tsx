@@ -2,7 +2,7 @@ import { FC } from "react";
 import styled  from "styled-components";
 import { img } from "~/assert/img";
 import Button from "~/component/Button/Button";
-import ModalTemplate from "../../../../component/Modal/ModalTemplate";
+import ModalTemplate from "../../../../../component/Modal/ModalTemplate";
 
 interface NotifyPropType {
     handleClick: () => void

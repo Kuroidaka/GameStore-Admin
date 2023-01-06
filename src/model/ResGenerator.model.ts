@@ -6,5 +6,6 @@ export interface ResponseGenerator{
     status?:number,
     statusText?:string,
     token?: string,
-    msg?: string
+    msg?: string,
+    mg?: string
 }

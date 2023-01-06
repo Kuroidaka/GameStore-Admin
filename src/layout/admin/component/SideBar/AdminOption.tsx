@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import config from "~/config";
 import { useAppDispatch, useAppSelector } from "~/hook";
-import { logOut, selectUser } from "~/page/Admin/auth.slice";
+import { logOut, selectCurrentUser } from "~/page/Admin/Auth/auth.slice";
 
 interface AdminOptionProps {
     handleClickAdminInfo: () => void
@@ -15,7 +15,7 @@ interface AdminOptionProps {
 
 const AdminOption:FC<AdminOptionProps> = (props) => {
     const {handleClickAdminInfo, adminNavRef} = props
-    const currentUser = useAppSelector(selectUser)
+    const currentUser = useAppSelector(selectCurrentUser)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     

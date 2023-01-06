@@ -6,17 +6,19 @@ import { img } from "~/assert/img";
 import Avatar from "~/component/Avatar/Avatar";
 import Button from "~/component/Button/Button";
 import Input from "~/component/Input/Input";
-import ModalTemplate from "../../../../component/Modal/ModalTemplate";
+import ModalTemplate from "../../../../../component/Modal/ModalTemplate";
+import { useNavigate } from "react-router-dom";
+import config from "~/config";
 
 
 interface InputInfoPropType {
     setInputModal: React.Dispatch<React.SetStateAction<Boolean>>
-    setSuccessModal: React.Dispatch<React.SetStateAction<Boolean>>
+
 }
 
 
 const InputInfo:FC<InputInfoPropType> = (props) => {
-    const { setInputModal, setSuccessModal } = props
+    const { setInputModal } = props
     const [firstName, setFirstName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('')
     const [phone, setPhone] = useState<string>('')
@@ -25,6 +27,7 @@ const InputInfo:FC<InputInfoPropType> = (props) => {
     const inputFileRef = useRef<HTMLInputElement>(null)
     const [imgUploaded, setImgUploaded] = useState<File>()
     const [imgPreview, setImgPreview] = useState<string>(img.defaultAvatar)
+    const navigate = useNavigate()
 
     const handleClickUploadAvatar = () => {
         inputFileRef.current?.click()
@@ -52,9 +55,14 @@ const InputInfo:FC<InputInfoPropType> = (props) => {
             imgUploaded,
         }
 
+        
+
         console.log(data);
+
+        
+        navigate(config.adminRoutePath.login)
+
         setInputModal(false)
-        setSuccessModal(true)
         
     }
 
