@@ -142,8 +142,8 @@ const ManageUser = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className={`${user.Status? 'online' : 'offline'}`}>
-                                       <span>{user.Status? 'Online' : 'Offline'}</span> 
+                                    <td className={`${user.Status === 'Online' ? 'online' : 'offline'}`}>
+                                       <span>{user.Status=== 'Online' ? 'Online' : 'Offline'}</span> 
                                     </td>
     
                                     <td>{date}</td>

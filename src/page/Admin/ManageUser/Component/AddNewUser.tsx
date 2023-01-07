@@ -71,7 +71,6 @@ const AddNewUser:FC<addNewUserPropTypes> = (props) => {
             
             adminApi.register(data)
             .then((res: AxiosResponse<User> ) => {
-
                 const token = localStorage.getItem('token')
                 if(token){
                     userApi.getUserById(Number(res.data.id), token)
