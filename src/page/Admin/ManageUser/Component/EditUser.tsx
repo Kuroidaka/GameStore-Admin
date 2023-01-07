@@ -1,9 +1,11 @@
 import { ChangeEvent, FC, useRef, useState } from 'react';
 import styled from 'styled-components'
+import { userApi } from '~/api/admin/userApi';
 import { img } from '~/assert/img';
 import Avatar from '~/component/Avatar/Avatar';
 import Button from '~/component/Button/Button';
 import Input from '~/component/Input/Input';
+import SelectInput from '~/component/Select/Select';
 import { User } from '~/model/User.model';
 import { UserPropType } from '../ManageUser';
 
@@ -11,37 +13,49 @@ interface EditUserPropTypes {
     setIsEditNew:  React.Dispatch<React.SetStateAction<boolean>>
     setUserList:  React.Dispatch<React.SetStateAction<User[]>>
     userList: User[]
+    targetId: number
 }
 
-const permissionList = ['User', 'Manager', 'Admin']
+
+const permissionList = [
+    { label: 'Admin', value: 'Admin' },
+    { label: 'Manager', value: 'Manager' },
+]
 
 
 const EditUser:FC<EditUserPropTypes> = (props) => {
-    const { setIsEditNew, setUserList, userList } = props
+    const { setIsEditNew, setUserList, userList, targetId } = props
     const inputBtnRef = useRef<HTMLInputElement>(null)
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordCF, setPasswordCF] = useState('')
-    const [permis, setPermis] = useState<string>(permissionList[0])
+    const [permis, setPermis] = useState<string>(permissionList[0].value)
     const [imgUploaded, setImgUploaded] = useState<File>()
     const [imgPreview, setImgPreview] = useState<string>(img.defaultAvatar)
-    
+    const [pwCFError, setPwCFError] = useState<string>('')
 
     const handleSubmitAdd = () => {
-        const data = {
-            id: 1,    
-            username: username,
-            email: email,
-            role: permis,
-            phone: '',
-            status: true,
-            password: password,
-            avatar: imgPreview,
-            createDate: Date.now(),
-        }
 
+        if(password !== passwordCF){
+            return setPwCFError('Confirm password is not correct')
+        }
+            else {setPwCFError('')}
+        const data = {
+            User_Account_Password: password,
+            User_Account_Permission: permis,
+            id: targetId
+        }
         console.log(data);
+        
+        const token = localStorage.getItem('token')
+        if(token) {
+            userApi.update(data, token)
+            .then((res) => {
+                console.log(res);
+                setIsEditNew(false)
+            })
+        }
         
     }
 
@@ -90,17 +104,19 @@ const EditUser:FC<EditUserPropTypes> = (props) => {
                         <input ref={inputBtnRef} id='input-avatar' onInput={handlePostImg} type="file" style={{display: 'none' }} />
                     </div>
 
-                    <Input id='first-name'   
+                    {/* <Input id='first-name'   
                             setValue={setEmail} value={email} type='text' label='First Name' width={'100%'}/>
                     <Input id='last-name'   
-                            setValue={setEmail} value={email} type='text' label='Last Name' width={'100%'}/>
-                    <Input id='email'   
-                            setValue={setEmail} value={email} type='email' label='Email' width={'100%'}/>
+                            setValue={setEmail} value={email} type='text' label='Last Name' width={'100%'}/> */}
+                    {/* <Input id='email'   
+                            setValue={setEmail} value={email} type='email' label='Email' width={'100%'}/> */}
                     <Input id='password' 
                             setValue={setPassword} value={password} type='password' label='Password' width={'100%'}/>
-                    <Input  id='permission' 
-                            setValue={setPermis} type='select' label='Permission' permissionList={permissionList} />
-                   
+                    <Input id='password-confirm' 
+                                error={pwCFError}
+                                setValue={setPasswordCF} value={passwordCF} type='password' label='Password Confirm' width={'100%'}/>
+                    
+                    <SelectInput label='Permission' id='permission'  width='100px' value={permissionList} setValue={setPermis}/>
 
                 </div>
 

@@ -1,3 +1,4 @@
+import { User } from '~/model/User.model';
 import axiosClient from "../axiosClient"
 
 export interface userApiType{
@@ -7,6 +8,7 @@ export interface userApiType{
 interface searchType {
     User_Account_Name: string
 }
+
 
 
 export const userApi = {
@@ -38,6 +40,17 @@ export const userApi = {
         }
 
         return axiosClient.post(url, {ids}, config)
+    },
+    update: (data:User, token: string) => {
+        const url = '/user/update'
+
+        const config = {
+            headers: {
+                Authorization: 'Bearer ' + token
+              }
+        }
+
+        return axiosClient.post(url, data, config)
     }
    
 

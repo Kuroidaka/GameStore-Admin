@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, ReactNode, useState } from 'react';
 import styled from 'styled-components'
+import SelectInput from '../Select/Select';
 
 interface InputPropTypes {
     placeHD?: string
@@ -8,9 +9,8 @@ interface InputPropTypes {
     type: string
     width?: string
     value?: string
-    setValue: React.Dispatch<React.SetStateAction<string>>
+    setValue: React.Dispatch<React.SetStateAction<string>> 
     error?: string
-    permissionList?: any
 }
 
 interface InputStylePropTypes { 
@@ -18,36 +18,12 @@ interface InputStylePropTypes {
 }
 
 const Input:FC<InputPropTypes> = (props) => {
-    const { label, id, type, width, value, setValue, error, permissionList} = props
+    const { label, id, type, width, value, setValue, error} = props
 
     const handleInput = (e:ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
     }
-
-    const handleSelect = (e:ChangeEvent<HTMLSelectElement>) => {
-        setValue(e.target.value)
-        console.log(e.target.value);
-        
-    }
-
-    if(type === 'select' ) {
-        return  (
-        <Container>
-            <label htmlFor={id} className='label'>{label}</label>
-            <Select value={value} id={id} onInput={handleSelect}>
-                {
-                    permissionList.map((permission:any) => {
-                        return (
-                            <option key={permission} value={permission}>{permission}</option>
-                        )
-                    })
-                }
-
-            </Select>
-        </Container>
-    )
-    }
-    else 
+    
     return ( 
     <Container width={width}>
         <label htmlFor={id} className='label'>{label}</label>

@@ -46,20 +46,20 @@ const ManageUser = () => {
         setIsOpenOption(-1)
         setIsModalDeleteOpen(true)
     }
-    
+    const handleClickEditOption = (id:number) =>{
+        setTargetId(id)
+        setIsOpenOption(-1)
+        setIsEditNew(true)
+    }
 
     const handleClickOptionBtn = (idx:number) => {
         idx === isOpenOption ? setIsOpenOption(-1) : setIsOpenOption(idx)
     }
-
     const handleIsRuleOptionOpen = (idx:number) => {
         idx === isRoleOption ? setIsRoleOption(-1) : setIsRoleOption(idx)
     }
 
-    const handleClickEditOption = () => {
-        setIsEditNew(true)
-        setIsOpenOption(-1)
-    }
+    
 
     useEffect(() => {
         const data = {
@@ -76,7 +76,7 @@ const ManageUser = () => {
     return ( 
         <Container>
             { isAddNew && <AddNewUser setIsAddNew={setIsAddNew} userList={userList} setUserList={setUserList} />}
-            { isEditNew && <EditUser setIsEditNew={setIsEditNew} userList={userList} setUserList={setUserList} />}
+            { isEditNew && <EditUser setIsEditNew={setIsEditNew} userList={userList} setUserList={setUserList} targetId={targetId}/>}
             <DeleteConfirmModal 
                 targetId={targetId} 
                 isModalDeleteOpen={isModalDeleteOpen}  
@@ -150,7 +150,7 @@ const ManageUser = () => {
                                     <td>
 
                                         
-                                        <Tippy
+                                        {/* <Tippy
                                             offset={[0, 0]}
                                              interactive
                                              visible= {isRoleOption === idx}
@@ -168,16 +168,16 @@ const ManageUser = () => {
                                                             </div>
                                                         </PopperRole>
                                              }}
-                                        >
+                                        > */}
                                             <div className='role-btn' onClick={() =>handleIsRuleOptionOpen(idx)}>
                                             {(user.User_Account_Permission === 'Admin') && <icon.adminRole />}
                                             {(user.User_Account_Permission === 'User') && <icon.userRole />}
                                             <span>{user.User_Account_Permission}</span>
-                                            <icon.arrowDown />
+                                            {/* <icon.arrowDown /> */}
                                         
                                             </div>
 
-                                        </Tippy>
+                                        {/* </Tippy> */}
                                         
                                     </td>
                                     <td>
@@ -191,7 +191,7 @@ const ManageUser = () => {
                                             render={() => {
                                                 return (
                                                 <PopperOption>
-                                                    <div className="item" onClick={handleClickEditOption}>
+                                                    <div className="item" onClick={() => handleClickEditOption(Number(user.id))}>
                                                         <span>Edit User Information</span>
                                                     </div>
                                                     <div className="item delete" onClick={() => handleClickDeleteUser(Number(user.id))}>

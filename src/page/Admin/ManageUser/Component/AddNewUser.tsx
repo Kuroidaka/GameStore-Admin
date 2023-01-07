@@ -8,6 +8,7 @@ import { img } from '~/assert/img';
 import Avatar from '~/component/Avatar/Avatar';
 import Button from '~/component/Button/Button';
 import Input from '~/component/Input/Input';
+import SelectInput from '~/component/Select/Select';
 import { User } from '~/model/User.model';
 import { UserPropType } from '../ManageUser';
 
@@ -17,7 +18,10 @@ interface addNewUserPropTypes {
     userList: User[]
 }
 
-const permissionList = ['Manager', 'Admin']
+const permissionList = [
+    { label: 'Admin', value: 'Admin' },
+    { label: 'Manager', value: 'Manager' },
+]
 
 
 const AddNewUser:FC<addNewUserPropTypes> = (props) => {
@@ -26,7 +30,7 @@ const AddNewUser:FC<addNewUserPropTypes> = (props) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [passwordCF, setPasswordCF] = useState('')
-    const [permis, setPermis] = useState<string>(permissionList[0])
+    const [permis, setPermis] = useState<string>(permissionList[0].value)
     const [imgUploaded, setImgUploaded] = useState<File>()
     const [imgPreview, setImgPreview] = useState<string>(img.defaultAvatar)
     const [uNError, setUserNameError] = useState<string>('')
@@ -150,10 +154,11 @@ const AddNewUser:FC<addNewUserPropTypes> = (props) => {
                                 error={pwCFError}
                                 setValue={setPasswordCF} value={passwordCF} type='password' label='Password Confirm' width={'100%'}/>
 
-                        <Input  id='permission' 
-                                value={permis}
-                                setValue={setPermis} type='select' label='Permission' permissionList={permissionList} />
-                    
+                        {/* <Input  id='permission' 
+                                value={permis.value}
+                                setValue={setPermis} type='select' label='Permission' permissionList={permissionList} /> */}
+                                
+                        <SelectInput label='Permission' id='permission'  width='100px' value={permissionList} setValue={setPermis}/>
                     </div>
                         
 
