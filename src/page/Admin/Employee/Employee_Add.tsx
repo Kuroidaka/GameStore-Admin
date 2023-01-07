@@ -1,4 +1,5 @@
 import { Button, DatePicker, Form, Input, Modal, Space, Table } from 'antd';
+import styled from 'styled-components';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { employeeApi } from '../../../api/employee/employee.api';
@@ -20,7 +21,7 @@ interface employee {
 const ManageTeam = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [dataSource, setdataSource] = useState([]);
+    const [dataSource, setDataSource] = useState([]);
     const [selectModel, setSelectModel] = useState<employee>({})
     const [form] = Form.useForm();
     const formLayout = {
@@ -49,8 +50,8 @@ const ManageTeam = () => {
         },
     ];
     const handleSearch = () => {
-        employeeApi.search({}).then((result: any) => {
-            setdataSource(result.results)
+        employeeApi.search({}).then((res: any) => {
+            setDataSource(res.results)
         })
     }
 
@@ -95,7 +96,7 @@ const ManageTeam = () => {
     const handleOk = async (e: any): Promise<any> => {
         e.preventDefault();
         try {
-            employeeApi.update(selectModel).then((result) => {
+            employeeApi.create(selectModel).then((result) => {
                 if (!!result) {
                     setSelectModel({});
                 }
@@ -113,47 +114,72 @@ const ManageTeam = () => {
     };
 
     return (
-        <div style={{ marginTop: '20%' }}>
-            <Button type="primary" onClick={showModal}>
-                Add Employee
-            </Button>
-            <Modal title="Add employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <Form
-                    form={form}
-                    initialValues={{ layout: formLayout }}
-                    {...formLayout}
-                >
+        <Container >
+            <Content>
+                <Button type="primary" style={{backgroundColor: 'var(--third_admin)'}} onClick={showModal}>
+                    Add Employee
+                </Button>
+                <Modal title="Add employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                    <Form
+                        form={form}
+                        initialValues={{ layout: formLayout }}
+                        {...formLayout}
+                    >
 
-                    <Form.Item label="Employee Name">
-                        <Input onChange={handleEmployeeNameChange} />
-                    </Form.Item>
-                    <Form.Item label="Employee CI">
-                        <Input onChange={handleEmployeeCIChange} />
-                    </Form.Item>
-                    <Form.Item label="Employee Phone">
-                        <Input onChange={handleEmployeePhoneChange} />
-                    </Form.Item>
-                    <Form.Item label="Employee Email">
-                        <Input onChange={handleEmployeeEmailChange} />
-                    </Form.Item>
-                    <Form.Item label="Employee Birthday">
-                        <DatePicker onChange={handleEmployeeBirthDayChange} style={{ width: '100%' }} format="YYYY-MM-DD" />
-                    </Form.Item>
-                    <Form.Item label="Employee Avatar">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item label="Status">
-                        <Input onChange={handleEmployeeStatusChange} />
-                    </Form.Item>
-                </Form>
-            </Modal>
-            <Table
-                columns={columns}
-                scroll={{ x: 1300 }}
-                dataSource={dataSource}
-            />
-        </div>
+                        <Form.Item label="Employee Name">
+                            <Input onChange={handleEmployeeNameChange} />
+                        </Form.Item>
+                        <Form.Item label="Employee CI">
+                            <Input onChange={handleEmployeeCIChange} />
+                        </Form.Item>
+                        <Form.Item label="Employee Phone">
+                            <Input onChange={handleEmployeePhoneChange} />
+                        </Form.Item>
+                        <Form.Item label="Employee Email">
+                            <Input onChange={handleEmployeeEmailChange} />
+                        </Form.Item>
+                        <Form.Item label="Employee Birthday">
+                            <DatePicker onChange={handleEmployeeBirthDayChange} style={{ width: '100%' }} format="YYYY-MM-DD" />
+                        </Form.Item>
+                        <Form.Item label="Employee Avatar">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item label="Status">
+                            <Input onChange={handleEmployeeStatusChange} />
+                        </Form.Item>
+                    </Form>
+                </Modal>
+                <Table
+                    columns={columns}
+                    // scroll={{ x: auto }}
+                    dataSource={dataSource}
+                />
+            </Content>
+        </Container>
     );
 }
 
 export default ManageTeam;
+
+const Container = styled.div`
+    max-width: calc(100% - 40px);
+    width: 100%;
+    margin: 16px 20px;
+
+`
+
+const Content = styled.div `
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    box-shadow: rgb(0 0 0 / 25%) 0px 0.0625em 0.0625em, rgb(0 0 0 / 25%) 0px 0.125em 0.5em, rgb(255 255 255 / 10%) 0px 0px 0px 1px inset;
+    background-color: #ffffff;
+    border-radius: 10px;
+`

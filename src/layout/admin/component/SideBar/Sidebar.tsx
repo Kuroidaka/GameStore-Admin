@@ -9,7 +9,7 @@ import AdminOption from "./AdminOption";
 import { NavList } from "./NavList";
 import config from "~/config";
 import Avatar from "~/component/Avatar/Avatar";
-import { useAppSelector } from "~/hook";
+
 
 interface SidebarProps {
     sideBarRef: React.RefObject<HTMLDivElement>,

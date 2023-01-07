@@ -11,27 +11,42 @@ import Avatar from '~/component/Avatar/Avatar';
 import Tippy from '@tippyjs/react/headless';
 import { userApi } from '~/api/admin/userApi';
 import { User } from '~/model/User.model';
+import DeleteConfirmModal from './Component/DeleteConfirmModal';
+import { AxiosResponse } from 'axios';
+
 
 
 export interface UserPropType extends User {
     avatar: string | null
-    status: string | null
     phone: string | null
-
 
 }
 
+interface optionsType {
+    year: string
+    month: string
+    day: string
+}
+
 const ManageUser = () => {
-    const [userList, setUserList] = useState<UserPropType[]>([])
+    const [userList, setUserList] = useState<User[]>([])
     const [isAddNew, setIsAddNew] = useState<boolean>(false)
     const [isEditNew, setIsEditNew] = useState<boolean>(false)
     const [isRoleOption, setIsRoleOption] = useState<number>(-1)
     const [isOpenOption, setIsOpenOption] = useState<number>(-1)
-    
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean | undefined>(false);
+    const [targetId, setTargetId] = useState<number>(-1)
 
     const handleOpenAddNew = () => {
         setIsAddNew(true)
     }
+
+    const handleClickDeleteUser = (id:number) => {
+        setTargetId(id)
+        setIsOpenOption(-1)
+        setIsModalDeleteOpen(true)
+    }
+    
 
     const handleClickOptionBtn = (idx:number) => {
         idx === isOpenOption ? setIsOpenOption(-1) : setIsOpenOption(idx)
@@ -52,9 +67,9 @@ const ManageUser = () => {
         }
 
         userApi.search(data)
-        .then(res => {
-            console.log(res.data);
-            setUserList(res.data)
+        .then((res:AxiosResponse<User[]>) => {
+            console.log('get all user',res.data);
+            setUserList(res.data.reverse())
         })
     }, [])
 
@@ -62,6 +77,12 @@ const ManageUser = () => {
         <Container>
             { isAddNew && <AddNewUser setIsAddNew={setIsAddNew} userList={userList} setUserList={setUserList} />}
             { isEditNew && <EditUser setIsEditNew={setIsEditNew} userList={userList} setUserList={setUserList} />}
+            <DeleteConfirmModal 
+                targetId={targetId} 
+                isModalDeleteOpen={isModalDeleteOpen}  
+                setIsModalDeleteOpen={setIsModalDeleteOpen}
+                setUserList={setUserList}
+                />
 
             <header>
                 <div className="title">
@@ -95,8 +116,6 @@ const ManageUser = () => {
                             <tr>
                                 <th id='id' style={{textAlign: 'center'}}>ID</th>
                                 <th id='user'>User</th>
-                                <th id='phone'>Phone Number</th>
-                                <th id='email'>Email</th>
                                 <th id='status'>Status</th>
                                 <th id='date'>Create Date</th>
                                 <th id='role'>Access Level</th>
@@ -105,33 +124,34 @@ const ManageUser = () => {
                         </thead>
                         
                         <tbody>
-                        {userList.map((user, idx) => {
+                        {(userList.length >=1)  && userList.map((user, idx) => {
+
+                            if(user.createdAt){
+                            const date = new Date(user.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric"})
+                            
                             return (
-                                <tr key={idx} style={idx % 2 ===0 ? {backgroundColor: 'var(--light-bg)'}: {}}>
+                                <tr key={idx} style={idx % 2 === 0 ? {backgroundColor: 'var(--light-bg)'}: {}}>
                                     <td style={{textAlign: 'center'}}>{user.id}</td>
                                     <td>
                                         <div className="user">
-                                            <Avatar src={user.avatar ? user.avatar : img.defaultAvatar} width='40px'/>
+                                            <Avatar src={img.defaultAvatar} width='40px'/>
 
                                             <div className="info">
-                                                <div className="name">no name</div>
-                                                <div className="username">{user.User_Account_Name}</div>
+                                                <div className="name">{user.User_Account_Name}</div>
+                                                <div className="username"></div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{user.phone}</td>
-                                    <td>{user.phone}</td>
-                                    
-    
-                                    <td className={`${user.status? 'online' : 'offline'}`}>
-                                       <span>{user.status? 'Online' : 'Offline'}</span> 
+                                    <td className={`${user.Status? 'online' : 'offline'}`}>
+                                       <span>{user.Status? 'Online' : 'Offline'}</span> 
                                     </td>
     
-                                    <td>{user.createdAt}</td>
+                                    <td>{date}</td>
                                     <td>
 
                                         
                                         <Tippy
+                                            offset={[0, 0]}
                                              interactive
                                              visible= {isRoleOption === idx}
                                              placement='bottom-start'
@@ -144,7 +164,7 @@ const ManageUser = () => {
                                                             </div>
                                                             <div className='item-role'>
                                                                 <icon.userRole />
-                                                                <span>User</span>
+                                                                <span>Manager</span>
                                                             </div>
                                                         </PopperRole>
                                              }}
@@ -163,6 +183,7 @@ const ManageUser = () => {
                                     <td>
                                         <div className='option'>
                                             <Tippy
+                                            offset={[0, 0]}
                                             interactive
                                             visible= {isOpenOption === idx}
                                             placement='bottom'
@@ -173,7 +194,7 @@ const ManageUser = () => {
                                                     <div className="item" onClick={handleClickEditOption}>
                                                         <span>Edit User Information</span>
                                                     </div>
-                                                    <div className="item delete">
+                                                    <div className="item delete" onClick={() => handleClickDeleteUser(Number(user.id))}>
                                                         <span>Delete User</span>
                                                     </div>
                                                 </PopperOption>
@@ -187,6 +208,7 @@ const ManageUser = () => {
                                         </div>
                                     </td>
                                 </tr>)
+                            }
                         })}
                         </tbody>
                     </table>

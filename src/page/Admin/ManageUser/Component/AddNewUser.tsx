@@ -1,49 +1,46 @@
+import { AxiosResponse } from 'axios';
 import { ChangeEvent, FC, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components'
+import { adminApi } from '~/api/admin/authApi';
+import { userApi } from '~/api/admin/userApi';
 import { img } from '~/assert/img';
 import Avatar from '~/component/Avatar/Avatar';
 import Button from '~/component/Button/Button';
 import Input from '~/component/Input/Input';
+import { User } from '~/model/User.model';
 import { UserPropType } from '../ManageUser';
 
 interface addNewUserPropTypes {
     setIsAddNew:  React.Dispatch<React.SetStateAction<boolean>>
-    setUserList:  React.Dispatch<React.SetStateAction<UserPropType[]>>
-    userList: UserPropType[]
+    setUserList:  React.Dispatch<React.SetStateAction<User[]>>
+    userList: User[]
 }
 
-const permissionList = ['User', 'Manager', 'Admin']
+const permissionList = ['Manager', 'Admin']
 
 
 const AddNewUser:FC<addNewUserPropTypes> = (props) => {
     const { setIsAddNew, setUserList, userList } = props
     const inputBtnRef = useRef<HTMLInputElement>(null)
     const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordCF, setPasswordCF] = useState('')
     const [permis, setPermis] = useState<string>(permissionList[0])
     const [imgUploaded, setImgUploaded] = useState<File>()
     const [imgPreview, setImgPreview] = useState<string>(img.defaultAvatar)
     const [uNError, setUserNameError] = useState<string>('')
-    const [mailError, setMailError] = useState<string>('')
     const [pwError, setPwError] = useState<string>('')
     const [pwCFError, setPwCFError] = useState<string>('')
     const dispatch = useDispatch()
 
     const handleSubmitAdd = () => {
 
-        if(username === '' || email === '' || password === '' || password !== passwordCF) {
+        if(username === '' || password === '' || password !== passwordCF) {
             if(username === ''){
                 setUserNameError('Username is not empty')
             }
                 else { setUserNameError('') }
-    
-            if(email === ''){
-                setMailError('Email is not empty')
-            }
-                else { setMailError('') }
     
             if(password === ''){
                 setPwError('Password is not empty')
@@ -58,24 +55,37 @@ const AddNewUser:FC<addNewUserPropTypes> = (props) => {
         }
         else{
             setUserNameError('')
-            setMailError('')
             setPwCFError('')
             setPwError('')
             
-            // const data = {
-            //     id: 1,    
-            //     username: username,
-            //     email: email,
-            //     role: permis,
-            //     phone: '',
-            //     status: true,
-            //     password: password,
-            //     avatar: imgPreview,
-            //     createDate: Date.now(),
-            // }
+            const data = {
+                User_Account_Name: username,
+                User_Account_Password: password,
+                User_Account_Permission: permis,
+                Status: 'Offline',
+                // email: email,
+                // avatar: imgUploaded,
+            }
 
+            console.log(data);
+            
+            adminApi.register(data)
+            .then((res: AxiosResponse<User> ) => {
 
-            // setUserList([...userList, data])
+                const token = localStorage.getItem('token')
+                if(token){
+                    userApi.getUserById(Number(res.data.id), token)
+                    .then((res: AxiosResponse<User>) => {
+                        
+                        setUserList((prev: User[]) => [res.data, ...prev])
+                    })
+                }
+            })
+            .catch(e => {
+                console.log(e);
+                
+            })
+            
             setIsAddNew(false)
         }
     }
@@ -105,61 +115,58 @@ const AddNewUser:FC<addNewUserPropTypes> = (props) => {
 
     return ( 
         <Container>
-            <Layout onClick={handleClickOutSide}/>
+            <Layout onClick={handleClickOutSide}>
 
-            <div className="modal" >  
+                <div className="modal" onClick={(e) => e.stopPropagation()} >  
 
-                <div className="header">
-                    <h3>Add New User</h3>
-                </div>
+                    <div className="header">
+                        <h3>Add New User</h3>
+                    </div>
 
-                <div className="content">
+                    <div className="content">
 
-                <div className="avatar">
-                    <label htmlFor="input-avatar">
-                        <Avatar src={imgPreview} width='100px'/>
-                    </label>
+                    <div className="avatar">
+                        <label htmlFor="input-avatar">
+                            <Avatar src={imgPreview} width='100px'/>
+                        </label>
 
-                    <div className="button-box mt-8">
-                        <Button title='Upload' handleOnClick={handleClickInputAvatarBtn} />
+                        <div className="button-box mt-8">
+                            <Button title='Upload' handleOnClick={handleClickInputAvatarBtn} />
+
+                        </div>
+
+                            <p>Upload New Avatar</p>
+
+                        <input ref={inputBtnRef} id='input-avatar' onInput={handlePostImg} type="file" style={{display: 'none' }} />
+                    </div>
+
+                    <div className="input-info">
+                        <Input id='username' 
+                                error={uNError}
+                                setValue={setUsername} value={username} type='text' label='UserName' width={'100%'}/>
+                        <Input id='password' 
+                                error={pwError}
+                                setValue={setPassword} value={password} type='password' label='Password' width={'100%'}/>
+                        <Input id='password-confirm' 
+                                error={pwCFError}
+                                setValue={setPasswordCF} value={passwordCF} type='password' label='Password Confirm' width={'100%'}/>
+
+                        <Input  id='permission' 
+                                value={permis}
+                                setValue={setPermis} type='select' label='Permission' permissionList={permissionList} />
+                    
+                    </div>
+                        
 
                     </div>
 
-                        <p>Upload New Avatar</p>
-
-                    <input ref={inputBtnRef} id='input-avatar' onInput={handlePostImg} type="file" style={{display: 'none' }} />
-                </div>
-
-                <div className="input-info">
-                    <Input id='username' 
-                            error={uNError}
-                            setValue={setUsername} value={username} type='text' label='UserName' width={'100%'}/>
-                    <Input id='email' 
-                            error={mailError}    
-                            setValue={setEmail} value={email} type='email' label='Email' width={'100%'}/>
-                    <Input id='password' 
-                            error={pwError}
-                            setValue={setPassword} value={password} type='password' label='Password' width={'100%'}/>
-                    <Input id='password-confirm' 
-                            error={pwCFError}
-                            setValue={setPasswordCF} value={passwordCF} type='password' label='Password Confirm' width={'100%'}/>
-
-                    <Input  id='permission' 
-                            value={permis}
-                            setValue={setPermis} type='select' label='Permission' permissionList={permissionList} />
-                   
-                </div>
-                    
+                    <div className="button-box">
+                        <Button title='Cancel' cancel={true} handleOnClick={() => setIsAddNew(false)} />
+                        <Button title='Add New' handleOnClick={handleSubmitAdd} />
+                    </div>
 
                 </div>
-
-                <div className="button-box">
-                    <Button title='Cancel' cancel={true} handleOnClick={() => setIsAddNew(false)} />
-                    <Button title='Add New' handleOnClick={handleSubmitAdd} />
-                </div>
-
-            </div>
-
+            </Layout>
         </Container>
      );
 }
@@ -230,6 +237,11 @@ const Container = styled.div`
 `
 const Layout = styled.div`
     cursor: pointer;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     height: 100%;
     width: 100%;
     display: flex;

@@ -4,12 +4,13 @@ import { img } from '~/assert/img';
 import Avatar from '~/component/Avatar/Avatar';
 import Button from '~/component/Button/Button';
 import Input from '~/component/Input/Input';
+import { User } from '~/model/User.model';
 import { UserPropType } from '../ManageUser';
 
 interface EditUserPropTypes {
     setIsEditNew:  React.Dispatch<React.SetStateAction<boolean>>
-    setUserList:  React.Dispatch<React.SetStateAction<UserPropType[]>>
-    userList: UserPropType[]
+    setUserList:  React.Dispatch<React.SetStateAction<User[]>>
+    userList: User[]
 }
 
 const permissionList = ['User', 'Manager', 'Admin']
@@ -25,57 +26,23 @@ const EditUser:FC<EditUserPropTypes> = (props) => {
     const [permis, setPermis] = useState<string>(permissionList[0])
     const [imgUploaded, setImgUploaded] = useState<File>()
     const [imgPreview, setImgPreview] = useState<string>(img.defaultAvatar)
-    const [uNError, setUserNameError] = useState<string>('')
-    const [mailError, setMailError] = useState<string>('')
-    const [pwError, setPwError] = useState<string>('')
-    const [pwCFError, setPwCFError] = useState<string>('')
     
 
     const handleSubmitAdd = () => {
-
-        if(username === '' || email === '' || password === '' || password !== passwordCF) {
-            if(username === ''){
-                setUserNameError('Username is not empty')
-            }
-                else { setUserNameError('') }
-    
-            if(email === ''){
-                setMailError('Email is not empty')
-            }
-                else { setMailError('') }
-    
-            if(password === ''){
-                setPwError('Password is not empty')
-            }
-                else { setPwError('') }
-            
-            if(password !== passwordCF){
-                return setPwCFError('Confirm password is not correct')
-            }
-                else {setPwCFError('')}
-            return 
+        const data = {
+            id: 1,    
+            username: username,
+            email: email,
+            role: permis,
+            phone: '',
+            status: true,
+            password: password,
+            avatar: imgPreview,
+            createDate: Date.now(),
         }
-        else{
-            setUserNameError('')
-            setMailError('')
-            setPwCFError('')
-            setPwError('')
-            
-            const data = {
-                id: 1,    
-                username: username,
-                email: email,
-                role: permis,
-                phone: '',
-                status: true,
-                password: password,
-                avatar: imgPreview,
-                createDate: Date.now(),
-            }
 
-            console.log(data);
-            
-        }
+        console.log(data);
+        
     }
 
     const handleClickOutSide = () => {

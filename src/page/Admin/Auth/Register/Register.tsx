@@ -1,21 +1,22 @@
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import { FaFacebookF } from 'react-icons/fa'
-import { AiOutlineGooglePlus } from 'react-icons/ai'
+import { Link } from "react-router-dom";
+import { icon } from "~/assert/icon";
 import { ToastContainer, toast } from 'react-toastify';
-import { adminApi } from '~/api/admin/authApi'
 
 import "react-toastify/dist/ReactToastify.css";
 
-
 import config from "~/config";
-import Notify from "~/page/Admin/Auth/Register/Component/Notify";
 import InputInfo from "./Component/infoUser";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "~/hook";
+import { adminApi } from '~/api/admin/authApi'
+import { AxiosResponse } from "axios";
+import { User } from "~/model/User.model";
 interface RegisterProps {
 
+}
+
+interface registerResponse extends User {
+    msg: string 
 }
 
 const toastOption = {
@@ -35,18 +36,17 @@ const Register:FC<RegisterProps> = () => {
     const [password, setPassword] = useState<string>('')
     const [passwordCF, setPasswordCF] = useState<string>('')
     const [inputModal, setInputModal] = useState<Boolean>(false)
-    const [successModal, setSuccessModal] = useState<Boolean>(false)
     const [load, setLoad] = useState<Boolean>(false)
     const notify = useRef<any>(null)
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+    // const dispatch = useDispatch()
+    // const navigate = useNavigate()
 
     const toastLoading = () => {
         if(!toast.isActive(notify.current)) notify.current = toast.loading('Logging')
         else toast.update(notify.current, { render: 'Logging', isLoading: true})
     }
-    const toastError = () => toast.update(notify.current, { render: 'Error', type: "error", isLoading: false, ...toastOption})
-    const toastSuccess = () => toast.update(notify.current, { render: 'Success', type: "success", isLoading: false, ...toastOption})
+    // const toastError = () => toast.update(notify.current, { render: 'Error', type: "error", isLoading: false, ...toastOption})
+    const toastSuccess = () => toast.update(notify.current, { render: 'Successful', type: "success", isLoading: false, ...toastOption})
 
 
     
@@ -64,11 +64,13 @@ const Register:FC<RegisterProps> = () => {
             const data = {  
                 User_Account_Name: username,
                 User_Account_Password: password,
-                User_Account_Permission: 'admin'
+                User_Account_Permission: 'Admin',
+                Status: 'Offline'
             }
             
             adminApi.register(data)
-            .then(res => {
+            .then((res:AxiosResponse<registerResponse>) => {
+                console.log(res)
                 setLoad(false)
                 toastSuccess()
                 setInputModal(true) 
@@ -120,11 +122,11 @@ const Register:FC<RegisterProps> = () => {
                 <div className="link">
 
                     <div className="icon fb">
-                        <FaFacebookF />
+                        <icon.facebook />
                     </div>
 
                     <div className="icon gg">
-                        <AiOutlineGooglePlus/>
+                        <icon.google/>
                     </div>
                     
                 </div>

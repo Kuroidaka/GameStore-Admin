@@ -47,12 +47,11 @@ const InputInfo:FC<InputInfoPropType> = (props) => {
     }
     const handleDone = () => {
         const data = {
-            firstName,
-            lastName,
-            phone,
-            address,
-            birth,
-            imgUploaded,
+            Employee_Name: firstName + ' ' + lastName,
+            Employee_Avatar: imgUploaded,
+            Employee_Phone: phone,
+            Employee_BirthDay: birth,
+            // address,
         }
 
         
@@ -60,7 +59,7 @@ const InputInfo:FC<InputInfoPropType> = (props) => {
         console.log(data);
 
         
-        navigate(config.adminRoutePath.login)
+        // navigate(config.adminRoutePath.login)
 
         setInputModal(false)
         

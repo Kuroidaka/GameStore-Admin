@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 
 const axiosClient = axios.create({
@@ -16,9 +16,9 @@ axiosClient.interceptors.request.use(async config => {
     Promise.reject(error)
 })
 
-axiosClient.interceptors.response.use(res => {
+axiosClient.interceptors.response.use((res:AxiosResponse<any, any>) => {
     if( res && res.data ){
-        return res.data
+        return res
     }
 
     return res

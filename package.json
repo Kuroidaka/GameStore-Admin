@@ -19,6 +19,7 @@
     "@types/react-dom": "^18.0.9",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.26",
+    "antd": "^5.1.2",
     "axios": "^1.2.1",
     "babel-plugin-module-resolver": "^4.1.0",
     "customize-cra": "^1.0.0",

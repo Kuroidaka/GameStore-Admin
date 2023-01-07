@@ -17,26 +17,26 @@ export interface employeeApi {
 export const employeeApi = {
 
     create: (data:employeeApi) => {
-        const url = 'employee/create'
+        const url = '/employee/create'
         
         return axiosClient.post<employeeApi>(url, data)
     },
     update: (data:employeeApi) => {
-        const url = 'employee/update'
+        const url = '/employee/update'
         
         return axiosClient.post(url, data)
     },
     search: (data:employeeApi) => {
-        const url = 'employee/search'
+        const url = '/employee/search'
         
         return axiosClient.post(url, data)
     },
-     delete: (id:number) => {
-        const url = `employee/delete/${id}`
+    delete: (id:number) => {
+        const url = `/employee/delete/${id}`
         return axiosClient.get(url)
     },
    getById: (id:number) => {
-        const url = `employee/getById/${id}`
+        const url = `/employee/getById/${id}`
         return axiosClient.get(url)
     },
 

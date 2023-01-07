@@ -28,6 +28,17 @@ export const userApi = {
         
         return axiosClient.post(url, {data})
     },
+    delete: (ids:Number, token: string) => {
+        const url = '/user/delete'
+
+        const config = {
+            headers: {
+                Authorization: 'Bearer ' + token
+              }
+        }
+
+        return axiosClient.post(url, {ids}, config)
+    }
    
 
 }

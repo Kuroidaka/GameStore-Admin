@@ -24,18 +24,24 @@ function clearToken() {
 function* handleLogin(payload: loginPayload) {
 
         const data = payload
-        const res:ResponseGenerator = yield call(adminApi.login, data)
+        let res:ResponseGenerator = yield call(adminApi.login, data)
 
         console.log(res);
+        // res = res.data
+        
         
         if(res.msg) {
+
             yield put({type: loginFail.type, payload: res.msg})
         }
-        else if(res.token){
+        else if(res.data.token){
             // yield fork(storeToken, res.token)
-            localStorage.setItem('token', res.token)
-            const decode = jwt_decode<UserToken>(res.token)
-            const user:ResponseGenerator = yield call(userApi.getUserById, decode.id, res.token)
+
+            const token = res.data.token
+            localStorage.setItem('token', token)
+            const decode = jwt_decode<UserToken>(token)
+            const user:ResponseGenerator = yield call(userApi.getUserById, decode.id, token)
+            
             yield put({type: loginSuccess.type, payload:user.data})
             return res
         }
