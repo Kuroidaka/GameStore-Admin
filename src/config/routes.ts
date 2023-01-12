@@ -1,7 +1,10 @@
 
 // user
 export const routePath = {
- 
+    home: '/',
+    login: '/login',
+    register: '/register',
+    profile: '/profile',
 }
 
 // admin

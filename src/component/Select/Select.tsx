@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Select } from 'antd';
 
 interface SelectInputPropType {
@@ -12,6 +12,8 @@ interface SelectInputPropType {
     id: string
 }
 
+
+
 const SelectInput = (props:SelectInputPropType) => {
     const { width, value, setValue, label, id } = props
 
@@ -21,12 +23,12 @@ const SelectInput = (props:SelectInputPropType) => {
     };
 
     return (
-    <div>
+    <Fragment>
       <label htmlFor={id} className='label'>{label}</label>
       <Select
         id={id}
         defaultValue={value && value[0].value}
-        style={{ width: `${width}` }}
+        style={{ width: `${width}`}}
         onChange={handleChange}
         options={[
           {
@@ -35,7 +37,7 @@ const SelectInput = (props:SelectInputPropType) => {
           }
         ]}
       />
-    </div>
+    </Fragment>
     )
 }
 

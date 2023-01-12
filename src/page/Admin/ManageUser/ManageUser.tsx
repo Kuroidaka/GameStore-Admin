@@ -393,6 +393,7 @@ const Container = styled.div`
 
                                 .user{
                                 display: flex;
+                                flex-wrap: wrap;
                                 flex-direction: row;
                                 align-items: center;
                                 .img-wrap{

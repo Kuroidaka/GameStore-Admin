@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, useLocation, Location } from 'react-router-dom'
 import config from '~/config'
 import Home from '~/page/Admin/Home/Home'
 import Login from '~/page/Admin/Auth/Login/Login'
@@ -16,11 +16,13 @@ const AdminRoutes = () => {
     const currentUser = useAppSelector(selectCurrentUser)
     const LoggedIn = useAppSelector(selectLoggedIn)
     const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
-        if(!LoggedIn) {
+        if(!LoggedIn && location.pathname.split('/')[1] === 'admin') {
             navigate(config.adminRoutePath.login)
         }
+        
     }, [LoggedIn])
 
     return ( 

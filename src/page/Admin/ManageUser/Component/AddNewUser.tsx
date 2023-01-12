@@ -157,8 +157,9 @@ const AddNewUser:FC<addNewUserPropTypes> = (props) => {
                         {/* <Input  id='permission' 
                                 value={permis.value}
                                 setValue={setPermis} type='select' label='Permission' permissionList={permissionList} /> */}
-                                
-                        <SelectInput label='Permission' id='permission'  width='100px' value={permissionList} setValue={setPermis}/>
+                                <div className="permission" style={{marginTop: '20px'}}>
+                                    <SelectInput label='Permission' id='permission'  width='100px' value={permissionList} setValue={setPermis}/>
+                                </div>
                     </div>
                         
 
