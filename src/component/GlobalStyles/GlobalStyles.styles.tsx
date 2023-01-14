@@ -2,10 +2,17 @@ import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
     :root {
+
+         
         --primary: #64BBF3;
         --secondary: #469df9;
         --third: #343A40;
         
+        /* user */
+        --header-bar-height: 96px;
+
+
+        /* admin */
         --primary_admin: #EEEEEE;
         --semi-primary_admin: #d4d4d4;
         --secondary_admin: #5D6C7E;
@@ -35,6 +42,9 @@ export const GlobalStyles = createGlobalStyle`
         --light-bg: #f2f2f2;
         --header-height: 45px;
         --overlay-height: 300px;
+
+
+       
     }
     
     *{
