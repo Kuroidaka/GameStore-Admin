@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { employeeApi } from '../../../api/employee/employee.api';
-import DeleteComponent from './Employee_Delete'
-import EmployeeUpdate from './Employee_Update'
+import DeleteComponent from './employeeDelete'
+import EmployeeUpdate from './employeeUpdate'
 import './css/Employee.css';
+import { useAppDispatch, useAppSelector } from '~/hook';
+import { getById, search, selectEmployee } from './Service/employee.slice';
+// import { search } from './Service/employee.slice';
 interface employee {
     id?: number,
     Employee_Name?: string,
@@ -21,9 +24,12 @@ interface employee {
 const ManageTeam = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [dataSource, setDataSource] = useState([]);
+    const [dataSource, setDataSource] = useState<employee[]>([]);
     const [selectModel, setSelectModel] = useState<employee>({})
     const [form] = Form.useForm();
+    const dispatch = useAppDispatch()
+    const employeeData = useAppSelector(selectEmployee)
+
     const formLayout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
@@ -37,7 +43,7 @@ const ManageTeam = () => {
         { width: '200px', title: 'Employee BirthDay', dataIndex: 'Employee_BirthDay', key: 'Employee_BirthDay' },
         { width: '200px', title: 'Status', dataIndex: 'Status', key: 'Status' },
         {
-            width: '300px',
+            width: '400px',
             title: 'Action',
             dataIndex: '',
             key: 'x',
@@ -51,7 +57,7 @@ const ManageTeam = () => {
     ];
     const handleSearch = () => {
         employeeApi.search({}).then((res: any) => {
-            setDataSource(res.results)
+            setDataSource(res.data.results)
         })
     }
 
@@ -112,7 +118,6 @@ const ManageTeam = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-
     return (
         <Container >
             <Content>
@@ -149,6 +154,7 @@ const ManageTeam = () => {
                         </Form.Item>
                     </Form>
                 </Modal>
+               
                 <Table
                     columns={columns}
                     // scroll={{ x: auto }}

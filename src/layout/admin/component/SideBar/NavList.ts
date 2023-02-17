@@ -27,6 +27,18 @@ export const NavList = [
         Icon: AiOutlineTeam,
         route: config.adminRoutePath.addUser
     },
+    {
+        id: 4,
+        title: 'Manage Product',
+        Icon: AiOutlineTeam,
+        route: config.adminRoutePath.products
+    },
+    {
+        id: 5,
+        title: 'Manage Product Group',
+        Icon: AiOutlineTeam,
+        route: config.adminRoutePath.productsGroup
+    },
 
     
 ]

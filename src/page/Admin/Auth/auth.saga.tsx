@@ -1,6 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import jwt_decode from "jwt-decode";
-import { call, fork, put, take } from "redux-saga/effects";
+import { call, fork, put, select, take } from "redux-saga/effects";
 import { login, loginSuccess, loginPayload, logOut, loginFail } from "./auth.slice";
 import { adminApi } from "~/api/admin/authApi";
 import { userApi } from "~/api/admin/userApi";
@@ -58,10 +58,8 @@ function* handleLogout() {
 
 function* watchLoginFlow() {
     while(true){
-        
         const action:PayloadAction<loginPayload> = yield take(login.type)
         const res:ResponseGenerator = yield call(handleLogin, action.payload)
-
         const token = getToken()
         
         if(token){

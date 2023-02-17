@@ -70,7 +70,6 @@ const Register:FC<RegisterProps> = () => {
             
             adminApi.register(data)
             .then((res:AxiosResponse<registerResponse>) => {
-                console.log(res)
                 setLoad(false)
                 toastSuccess()
                 setInputModal(true) 

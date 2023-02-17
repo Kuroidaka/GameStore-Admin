@@ -21,7 +21,6 @@ const AdminOption:FC<AdminOptionProps> = (props) => {
     
     useEffect(() => {
         if(currentUser){
-            console.log(currentUser.User_Account_Name);
             
         }
  

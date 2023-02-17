@@ -17,4 +17,7 @@ export const adminRoutePath = {
     manageTeam: '/admin/manage-team',
     userContact: '/admin/user-contact',
     profile: '/admin/profile',
+    products: '/admin/products',
+    productsGroup: '/admin/productsGroup',
+
 }

@@ -71,7 +71,6 @@ const AddNewUser:FC<addNewUserPropTypes> = (props) => {
                 // avatar: imgUploaded,
             }
 
-            console.log(data);
             
             adminApi.register(data)
             .then((res: AxiosResponse<User> ) => {

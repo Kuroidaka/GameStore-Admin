@@ -1,9 +1,6 @@
-import { Button, DatePicker, Form, Input, Modal, Space, Table } from 'antd';
-import { ColumnsType } from 'antd/es/table';
-import { useEffect, useState } from 'react';
+import { DatePicker, Form, Input, Modal } from 'antd';
+import { useState } from 'react';
 import { employeeApi } from '../../../api/employee/employee.api';
-import DeleteComponent  from './Employee_Delete'
-import './css/Employee.css';
 interface employee {
     id?: number,
     Employee_Name?: string,
@@ -17,7 +14,7 @@ interface employee {
 interface getEmployeeResponse{
     data: employee[]
 }
-const EmployeeUpdate = (props:{id:any,onChange:any}) => {
+const ProductGroupUpdate = (props:{id:any,onChange:any}) => {
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataSource, setdataSource] = useState<employee>({});
@@ -78,13 +75,14 @@ const EmployeeUpdate = (props:{id:any,onChange:any}) => {
     const showModal = () => {
         employeeApi.getById(props.id).then(result => {
             if(!!result){
-                setdataSource(result.data)
+                console.log(result.data)
+                setdataSource(result.data.data)
             }
         })
         setIsModalOpen(true);
     };
     return (
-        <div style={{marginTop: '20%'}}>
+        <div >
             <a type="primary" onClick={showModal}>
                 Edit
             </a>
@@ -121,4 +119,4 @@ const EmployeeUpdate = (props:{id:any,onChange:any}) => {
         </div>
     );
 }
-export default EmployeeUpdate;
+export default ProductGroupUpdate;

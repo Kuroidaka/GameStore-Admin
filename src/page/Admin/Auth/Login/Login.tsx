@@ -1,25 +1,25 @@
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import { Link, redirect, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { ToastContainer, toast } from 'react-toastify';
+import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import styled from "styled-components";
 
-import config from '~/config'
 import { icon } from "~/assert/icon";
 import { img } from "~/assert/img";
-import { selectLogError, selectLoggedIn, selectLogMsg, selectCurrentUser, selectLogging } from "../auth.slice";
+import config from '~/config';
 import { useAppDispatch, useAppSelector } from "~/hook";
-import { login } from "../auth.slice";
+import { toastOption } from "~/model/toast.model";
+import { login, selectCurrentUser, selectLogError, selectLoggedIn, selectLogging, selectLogMsg } from "../auth.slice";
 
-const toastOption = {
-    position: toast.POSITION.TOP_RIGHT,
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-}
+// const toastOption = {
+//     position: toast.POSITION.TOP_RIGHT,
+//     autoClose: 5000,
+//     hideProgressBar: true,
+//     closeOnClick: true,
+//     pauseOnHover: true,
+//     draggable: true,
+//     progress: undefined,
+// }
 
 interface LoginProps {
 
