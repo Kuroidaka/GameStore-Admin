@@ -1,31 +1,22 @@
 import { Button, DatePicker, Form, Input, Modal, Space, Table } from 'antd';
-import styled from 'styled-components';
 import { ColumnsType } from 'antd/es/table';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { employeeApi } from '../../../api/employee/employee.api';
-import DeleteComponent from './employeeDelete'
-import EmployeeUpdate from './employeeUpdate'
-import './css/Employee.css';
+import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '~/hook';
-import { getById, search, selectEmployee } from './Service/employee.slice';
+import { employeeApi, employeeModel } from '../../../api/employee/employee.api';
+import './css/Employee.css';
+import DeleteComponent from './employeeDelete';
+import EmployeeUpdate from './employeeUpdate';
+import { selectEmployee } from './Service/employee.slice';
 // import { search } from './Service/employee.slice';
-interface employee {
-    id?: number,
-    Employee_Name?: string,
-    Employee_Phone?: string,
-    Employee_CI?: string,
-    Employee_Email?: string,
-    Employee_Avatar?: string,
-    Employee_BirthDay?: Date,
-    Status?: string,
-}
 
 
 const ManageTeam = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [dataSource, setDataSource] = useState<employee[]>([]);
-    const [selectModel, setSelectModel] = useState<employee>({})
+    const [dataSource, setDataSource] = useState<employeeModel[]>([]);
+    const [selectModel, setSelectModel] = useState<employeeModel>({})
     const [form] = Form.useForm();
     const dispatch = useAppDispatch()
     const employeeData = useAppSelector(selectEmployee)
@@ -34,13 +25,13 @@ const ManageTeam = () => {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
     }
-    const columns: ColumnsType<employee> = [
+    const columns: ColumnsType<employeeModel> = [
         { width: '200px', title: 'Employee Code', dataIndex: 'Employee_Code', key: 'Employee_Code' },
         { width: '200px', title: 'Employee Name', dataIndex: 'Employee_Name', key: 'Employee_Name' },
         { width: '200px', title: 'Employee Phone', dataIndex: 'Employee_Phone', key: 'Employee_Phone' },
         { width: '200px', title: 'Employee CI', dataIndex: 'Employee_CI', key: 'Employee_CI' },
         { width: '200px', title: 'Employee Email', dataIndex: 'Employee_Email', key: 'Employee_Email' },
-        { width: '200px', title: 'Employee BirthDay', dataIndex: 'Employee_BirthDay', key: 'Employee_BirthDay' },
+        { width: '200px', title: 'Employee BirthDay', dataIndex: 'Employee_BirthDay', key: 'Employee_BirthDay' ,render: (data) =><>{moment(data).format('DD/MM/YYYY')}</>},
         { width: '200px', title: 'Status', dataIndex: 'Status', key: 'Status' },
         {
             width: '400px',
@@ -60,7 +51,6 @@ const ManageTeam = () => {
             setDataSource(res.data.results)
         })
     }
-
     useEffect(() => {
         return handleSearch();
     }, []);
@@ -98,26 +88,38 @@ const ManageTeam = () => {
     const showModal = () => {
         setIsModalOpen(true);
     };
-
     const handleOk = async (e: any): Promise<any> => {
         e.preventDefault();
-        try {
-            employeeApi.create(selectModel).then((result) => {
-                if (!!result) {
-                    setSelectModel({});
-                }
-                handleSearch();
-            })
-        } catch (err) {
-            console.log(err)
+        if (!!selectModel.Employee_Name){
+            try {
+                employeeApi.create(selectModel).then((result) => {
+                    if (!!result) {
+                        setSelectModel({});
+                    }
+                    handleSearch();
+                })
+            } catch (err) {
+                console.log(err)
+            }
+    
+            setIsModalOpen(false);
         }
-
-        setIsModalOpen(false);
+       
     };
 
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const validateMessages = {
+        required: '${label} is required!',
+        types: {
+          email: '${label} is not a valid email!',
+          number: '${label} is not a valid number!',
+        },
+        number: {
+          range: '${label} must be between ${min} and ${max}',
+        },
+      };
     return (
         <Container >
             <Content>
@@ -127,11 +129,13 @@ const ManageTeam = () => {
                 <Modal title="Add employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                     <Form
                         form={form}
+                        validateMessages={validateMessages}
                         initialValues={{ layout: formLayout }}
+                        style={{ maxWidth: "800px" }}
                         {...formLayout}
                     >
 
-                        <Form.Item label="Employee Name">
+                        <Form.Item rules={[{ required: true }]} label="Employee Name">
                             <Input onChange={handleEmployeeNameChange} />
                         </Form.Item>
                         <Form.Item label="Employee CI">
@@ -140,14 +144,11 @@ const ManageTeam = () => {
                         <Form.Item label="Employee Phone">
                             <Input onChange={handleEmployeePhoneChange} />
                         </Form.Item>
-                        <Form.Item label="Employee Email">
+                        <Form.Item rules={[{ type: 'email' }]} label="Employee Email">
                             <Input onChange={handleEmployeeEmailChange} />
                         </Form.Item>
                         <Form.Item label="Employee Birthday">
                             <DatePicker onChange={handleEmployeeBirthDayChange} style={{ width: '100%' }} format="YYYY-MM-DD" />
-                        </Form.Item>
-                        <Form.Item label="Employee Avatar">
-                            <Input />
                         </Form.Item>
                         <Form.Item label="Status">
                             <Input onChange={handleEmployeeStatusChange} />

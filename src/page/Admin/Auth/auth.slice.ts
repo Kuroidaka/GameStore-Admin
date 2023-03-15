@@ -17,7 +17,6 @@ interface authState {
 
 const initialState: authState = {  
   currentUser: null,
-
   logging: false,
   loggedIn: false,
   logError: false,
@@ -46,18 +45,21 @@ export const authReducer = createSlice({
         state.logging = true
         state.logError = false
     },
+
     loginSuccess: (state, action: PayloadAction<User>) => {
         state.currentUser = action.payload
         state.logging = false
         state.loggedIn = true
         state.logError = false
     },
+
     loginFail: (state, action: PayloadAction<string>) => {
         state.logging = false
         state.loggedIn = false
         state.logError = true 
         state.msg = action.payload
     },
+    
     logOut: (state) => {
       state.currentUser = null
       state.loggedIn = false

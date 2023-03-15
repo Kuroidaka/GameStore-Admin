@@ -1,38 +1,48 @@
 import { DatePicker, Form, Input, Modal } from 'antd';
 import { useState } from 'react';
+import { productGroupApi, productGroupModel } from '~/api/productGroup/productGroup.api';
 import { employeeApi } from '../../../api/employee/employee.api';
-interface employee {
-    id?: number,
-    Employee_Name?: string,
-    Employee_Phone?: string,
-    Employee_CI?: string,
-    Employee_Email?: string,
-    Employee_Avatar?: string,
-    Employee_BirthDay?: Date,
-    Status?: string,
-}
-interface getEmployeeResponse{
-    data: employee[]
-}
+
 const ProductGroupUpdate = (props:{id:any,onChange:any}) => {
     
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [dataSource, setdataSource] = useState<employee>({});
-    const [selectModel, setSelectModel] = useState<employee>({})
+    const [dataSource, setdataSource] = useState<productGroupModel>({});
+    const [selectModel, setSelectModel] = useState<productGroupModel>({})
     const [form] = Form.useForm();
 
     const formLayout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
     }
-    const handleEmployeeNameChange = (e: any) => {
-        selectModel.Employee_Name = e.target.value;
-        setSelectModel(selectModel)
+    
+    const handleProductGroupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        selectModel.Product_Group_Name = e.target.value;
+        setSelectModel({
+            ...selectModel,
+            Product_Group_Name: e.target.value
+        })
     }
+    const handleProductGroupCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        selectModel.Product_Group_Code = e.target.value;
+        setSelectModel({
+            ...selectModel,
+            Product_Group_Code: e.target.value
+        })
+    }  
+   
+
+    const handleProductGroupStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        selectModel.Status = e.target.value;
+        setSelectModel({
+            ...selectModel,
+            Status: e.target.value
+        })
+    }
+    
     const handleOk = async (e: any): Promise<any> => {
         e.preventDefault();
         try {
-            employeeApi.update(selectModel).then((result) => {
+            productGroupApi.update(selectModel).then((result) => {
                 if (!!result) {
                     setSelectModel({});
                 }
@@ -47,33 +57,10 @@ const ProductGroupUpdate = (props:{id:any,onChange:any}) => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-    const handleEmployeePhoneChange = (e: any) => {
-        selectModel.Employee_Phone = e.target.value;
-        setSelectModel(selectModel)
-    }
-
-    const handleEmployeeEmailChange = (e: any) => {
-        selectModel.Employee_Email = e.target.value;
-        setSelectModel(selectModel)
-    }
-
-    const handleEmployeeCIChange = (e: any) => {
-        selectModel.Employee_CI = e.target.value;
-        setSelectModel(selectModel)
-    }
-
-    const handleEmployeeStatusChange = (e: any) => {
-        selectModel.Status = e.target.value;
-        setSelectModel(selectModel)
-    }
-
-    const handleEmployeeBirthDayChange = (value: any) => {
-        selectModel.Employee_BirthDay = value;
-        setSelectModel(selectModel)
-    }
+    
 
     const showModal = () => {
-        employeeApi.getById(props.id).then(result => {
+        productGroupApi.getById(props.id).then(result => {
             if(!!result){
                 console.log(result.data)
                 setdataSource(result.data.data)
@@ -87,34 +74,23 @@ const ProductGroupUpdate = (props:{id:any,onChange:any}) => {
                 Edit
             </a>
             <Modal title="Add employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <Form
-                    form={form}
-                    initialValues={{ layout: formLayout }}
-                    {...formLayout}
-                >
+            <Form
+                        form={form}
+                        initialValues={{ layout: formLayout }}
+                        {...formLayout}
+                    >
 
-                    <Form.Item label="Employee Name">
-                        <Input value={dataSource.Employee_Name} onChange={handleEmployeeNameChange} />
-                    </Form.Item>
-                    <Form.Item label="Employee CI">
-                        <Input value={dataSource.Employee_CI} onChange={handleEmployeeCIChange} />
-                    </Form.Item>
-                    <Form.Item label="Employee Phone">
-                        <Input value={dataSource.Employee_Phone} onChange={handleEmployeePhoneChange} />
-                    </Form.Item>
-                    <Form.Item label="Employee Email">
-                        <Input value={dataSource.Employee_Email} onChange={handleEmployeeEmailChange} />
-                    </Form.Item>
-                    <Form.Item label="Employee Birthday">
-                        <DatePicker onChange={handleEmployeeBirthDayChange} style={{ width: '100%' }} format="YYYY-MM-DD" />
-                    </Form.Item>
-                    <Form.Item label="Employee Avatar">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item label="Status">
-                        <Input value={dataSource.Status} onChange={handleEmployeeStatusChange} />
-                    </Form.Item>
-                </Form>
+                        <Form.Item label="Product Group Code">
+                            <Input disabled={true} value={dataSource.Product_Group_Code} onChange={handleProductGroupCodeChange} />
+                        </Form.Item>
+                        <Form.Item label="Product Group Name">
+                            <Input value={dataSource.Product_Group_Name} onChange={handleProductGroupNameChange} />
+                        </Form.Item>
+                        
+                        <Form.Item label="Status">
+                            <Input value={dataSource.Status} onChange={handleProductGroupStatusChange} />
+                        </Form.Item>
+                    </Form>
             </Modal>
         </div>
     );

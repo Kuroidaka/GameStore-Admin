@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import config from "~/config";
 import { useAppDispatch, useAppSelector } from "~/hook";
-import { logOut, selectCurrentUser } from "~/page/Admin/Auth/auth.slice";
-
+import { logOut, selectCurrentUser, selectLoggedIn } from "~/page/Admin/Auth/auth.slice";
+import { adminApi } from "~/api/admin/authApi";
 interface AdminOptionProps {
     handleClickAdminInfo: () => void
     adminNavRef: React.RefObject<HTMLDivElement>
@@ -18,6 +18,7 @@ const AdminOption:FC<AdminOptionProps> = (props) => {
     const currentUser = useAppSelector(selectCurrentUser)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
+    const loggedIn = useAppSelector(selectLoggedIn)
     
     useEffect(() => {
         if(currentUser){
@@ -27,12 +28,13 @@ const AdminOption:FC<AdminOptionProps> = (props) => {
         
     },[currentUser])
 
-    const handleLogout = () => {
-        console.log('dispatch logout');
-        
+    const handleLogout = async () => { 
         dispatch(logOut())
-        localStorage.removeItem("token");
-        navigate(config.adminRoutePath.login)
+        await adminApi.logout();
+        if(!loggedIn){
+            console.log("vao roi ne")
+            navigate(config.adminRoutePath.login)
+        }
     }
 
     return ( 

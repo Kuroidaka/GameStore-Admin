@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import { employeeApi } from '../../../api/employee/employee.api';
+import { productGroupApi } from '~/api/productGroup/productGroup.api';
 interface id {
     firstName: string;
     lastName: string;
@@ -14,7 +15,7 @@ const DeleteComponent = (props: {id:any,onChange:any}) => {
   };
 
   const handleOk = () => {
-    employeeApi.delete(props.id).then(result => {
+    productGroupApi.delete(props.id).then(result => {
         if(!!result){
             props.onChange();
         }

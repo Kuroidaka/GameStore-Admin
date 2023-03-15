@@ -6,8 +6,9 @@ import { productGroupApi, productGroupModel } from '~/api/productGroup/productGr
 
 const ProductGroupSelect = (props: any) => {
     const handleChange = (value: string) => {
-        console.log(`selected ${value}`);
+        props.onChange(value)
     };
+
     const [dataSource,setData] = useState<productGroupModel[]>([]); 
     const searchProductGroupList =  async () => {
         try {
@@ -34,6 +35,7 @@ const ProductGroupSelect = (props: any) => {
             <Form.Item label="Product Group">
                 <Select
                     style={{ width: "100%" }}
+                    value={props.value}
                     onChange={handleChange}
                     options={dataSource}
                 />

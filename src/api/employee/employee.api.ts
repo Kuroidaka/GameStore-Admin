@@ -3,6 +3,7 @@ import axiosClient from "../axiosClient"
 
 export interface employeeModel {
     id?: number,
+    Employee_Code?: string,
     Employee_Name?: string,
     Employee_Phone?: string,
     Employee_CI?: string,

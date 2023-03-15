@@ -1,5 +1,7 @@
 
+import { Type } from "react-toastify/dist/utils"
 import axiosClient from "../axiosClient"
+import type { UploadFile } from 'antd/es/upload/interface';
 
 export interface productModel {
     id?: number,
@@ -7,9 +9,9 @@ export interface productModel {
     Product_Name?: string,
     Product_Group_Code?: string,
     Product_Price?: number,
-    Product_Images?: string,
-    Product_Detail?: Date,
-    Product_Description?: Date,
+    Product_Images?: UploadFile,
+    Product_Detail?: string,
+    Product_Description?: string,
     Status?: string,
 }
 

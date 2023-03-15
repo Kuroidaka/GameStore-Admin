@@ -24,6 +24,22 @@ export const adminApi = {
         const url = '/user/login'
         
         return axiosClient.post(url, data)
-    }
+    },
 
+    logout:() => {
+        const url = '/user/logout'
+        
+        return axiosClient.get(url)
+    },
+
+    refreshToken:() => {
+        const url = '/user/login'
+        return axiosClient.get(url)
+    },
+
+    getUserInfor: () => {
+        const url = '/user/getUserInformation'
+        
+        return axiosClient.get(url)
+    }
 }
