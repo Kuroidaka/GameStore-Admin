@@ -2,19 +2,19 @@ import { Button, Form, Input, Modal, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { productGroupApi } from '~/api/productGroup/productGroup.api';
-import DeleteComponent from './ProductGroupDelete';
-import ProductGroupUpdate from './ProductGroupUpdate';
-import ProductGroupSearch from './ProductGroupSearch';
-import {productGroupModel} from '~/api/productGroup/productGroup.api'
+import { CustomerApi } from '~/api/customer/customer.api'
+import {CustomerModel} from '~/api/customer/customer.api'
 import handleValidUser from '../CommomHandler/token';
+import CustomerDelete from './CustomerDelete';
+import CustomerSearch from './CustomerSearch';
+import CustomerUpdate from './CustomerUpdate';
 
-const ProductGroupList = () => {
+const CustomerList = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [dataSource, setDataSource] = useState<productGroupModel[]>([]);
-    const [selectModel, setSelectModel] = useState<productGroupModel>({})
-    const [searchModel, setSearchModell] = useState<productGroupModel>({})
+    const [dataSource, setDataSource] = useState<CustomerModel[]>([]);
+    const [selectModel, setSelectModel] = useState<CustomerModel>({})
+    const [searchModel, setSearchModell] = useState<CustomerModel>({})
 
     const [form] = Form.useForm();
 
@@ -22,9 +22,12 @@ const ProductGroupList = () => {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
     }
-    const columns: ColumnsType<productGroupModel> = [
-        { width: '400px', title: 'Product Group Code', dataIndex: 'Product_Group_Code', key: 'Product_Group_Code' },
-        { width: '400px', title: 'Product Group Name', dataIndex: 'Product_Group_Name', key: 'Product_Group_Name' },
+    const columns: ColumnsType<CustomerModel> = [
+        { width: '400px', title: 'Customer Code', dataIndex: 'Customer_Code', key: 'Customer_Code' },
+        { width: '400px', title: 'Customer Name', dataIndex: 'Customer_Name', key: 'Customer_Name' },
+        { width: '400px', title: 'Customer Email', dataIndex: 'Customer_Email', key: 'Customer_Email' },
+        { width: '400px', title: 'Customer Phone', dataIndex: 'Customer_Phone', key: 'Customer_Phone' },
+
         { width: '240px', title: 'Status', dataIndex: 'Status', key: 'Status' },
         {
             width: '400px',
@@ -33,33 +36,43 @@ const ProductGroupList = () => {
             key: 'x',
             render: (_, recode) => {
                 return <Space>
-                    <DeleteComponent onChange={handleSearch} id={recode.id} />
-                    <ProductGroupUpdate onChange={handleSearch} id={recode.id} />
+                    <CustomerDelete onChange={handleSearch} id={recode.id} />
+                    <CustomerUpdate onChange={handleSearch} id={recode.id} />
                 </Space>
             },
         },
     ];
     const handleSearch = async ()  => {
-       const productGroup = await productGroupApi.search(searchModel);
-       setDataSource(productGroup.data.results)
+       const customer = await CustomerApi.search(searchModel);
+       setDataSource(customer.data.results)
     }
 
     useEffect(() => {
-        handleSearch();
         handleValidUser();
+        handleSearch();
     }, []);
 
-    const handleProductGroupNameChange = (e: any) => {
-        selectModel.Product_Group_Name = e.target.value;
+    const handleCustomerNameChange = (e: any) => {
+        selectModel.Customer_Name = e.target.value;
         setSelectModel(selectModel)
     }
-    const handleProductGroupCodeChange = (e: any) => {
-        selectModel.Product_Group_Code = e.target.value;
+    const handleCustomerCodeChange = (e: any) => {
+        selectModel.Customer_Code = e.target.value;
+
         setSelectModel(selectModel)
     }  
    
+    const handleCustomerEmailChange = (e: any) => {
+        selectModel.Customer_Email = e.target.value;
+        setSelectModel(selectModel)
+    }
 
-    const handleProductGroupStatusChange = (e: any) => {
+    const handleCustomerPhoneChange = (e: any) => {
+        selectModel.Customer_Phone = e.target.value;
+        setSelectModel(selectModel)
+    }
+
+    const handleCustomerStatusChange = (e: any) => {
         selectModel.Status = e.target.value;
         setSelectModel(selectModel)
     }
@@ -72,11 +85,14 @@ const ProductGroupList = () => {
     const handleOk = async (e: any): Promise<any> => {
         e.preventDefault();
         try {
-           const productGroup = await productGroupApi.create(selectModel)
-           if(!!productGroup) handleSearch();
+           const customer = await CustomerApi.create(selectModel)
+           if(!!customer){
+           }
         } catch (error) {
             
         }
+        handleSearch()
+
         setIsModalOpen(false);
     };
 
@@ -92,7 +108,7 @@ const ProductGroupList = () => {
     }
     return (
         <Container >
-          <ProductGroupSearch onChange={handleSearchModelChange}/>
+          <CustomerSearch onChange={handleSearchModelChange}/>
             <Content>
             <Button type="primary" style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onClick={handleSearch}>
                     Search
@@ -107,15 +123,20 @@ const ProductGroupList = () => {
                         {...formLayout}
                     >
 
-                        <Form.Item label="Product Group Code">
-                            <Input onChange={handleProductGroupCodeChange} />
+                        <Form.Item label="Customer Code">
+                            <Input onChange={handleCustomerCodeChange} />
                         </Form.Item>
-                        <Form.Item label="Product Group Name">
-                            <Input onChange={handleProductGroupNameChange} />
+                        <Form.Item label="Customer Name">
+                            <Input onChange={handleCustomerNameChange} />
                         </Form.Item>
-                        
+                        <Form.Item label="Customer Email">
+                            <Input onChange={handleCustomerEmailChange} />
+                        </Form.Item> 
+                        <Form.Item label="Customer Phone">
+                            <Input onChange={handleCustomerPhoneChange} />
+                        </Form.Item>
                         <Form.Item label="Status">
-                            <Input onChange={handleProductGroupStatusChange} />
+                            <Input onChange={handleCustomerStatusChange} />
                         </Form.Item>
                     </Form>
                 </Modal>
@@ -132,7 +153,7 @@ const ProductGroupList = () => {
     );
 }
 
-export default ProductGroupList;
+export default CustomerList;
 
 const Container = styled.div`
     max-width: calc(100% - 40px);

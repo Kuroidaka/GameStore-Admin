@@ -3,14 +3,12 @@ import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '~/hook';
 import { employeeApi, employeeModel } from '../../../api/employee/employee.api';
+import handleValidUser from '../CommomHandler/token';
 import './css/Employee.css';
 import DeleteComponent from './employeeDelete';
+import EmployeeSearch from './employeeSearch';
 import EmployeeUpdate from './employeeUpdate';
-import { selectEmployee } from './Service/employee.slice';
-// import { search } from './Service/employee.slice';
-
 
 const ManageTeam = () => {
 
@@ -18,8 +16,7 @@ const ManageTeam = () => {
     const [dataSource, setDataSource] = useState<employeeModel[]>([]);
     const [selectModel, setSelectModel] = useState<employeeModel>({})
     const [form] = Form.useForm();
-    const dispatch = useAppDispatch()
-    const employeeData = useAppSelector(selectEmployee)
+    const [searchModel, setSearchModel] = useState<employeeModel>({})
 
     const formLayout = {
         labelCol: { span: 8 },
@@ -47,35 +44,36 @@ const ManageTeam = () => {
         },
     ];
     const handleSearch = () => {
-        employeeApi.search({}).then((res: any) => {
+        employeeApi.search(searchModel).then((res) => {
             setDataSource(res.data.results)
         })
     }
     useEffect(() => {
-        return handleSearch();
+         handleSearch();
+         handleValidUser();
     }, []);
 
-    const handleEmployeeNameChange = (e: any) => {
+    const handleEmployeeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectModel.Employee_Name = e.target.value;
         setSelectModel(selectModel)
     }
 
-    const handleEmployeePhoneChange = (e: any) => {
+    const handleEmployeePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectModel.Employee_Phone = e.target.value;
         setSelectModel(selectModel)
     }
 
-    const handleEmployeeEmailChange = (e: any) => {
+    const handleEmployeeEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectModel.Employee_Email = e.target.value;
         setSelectModel(selectModel)
     }
 
-    const handleEmployeeCIChange = (e: any) => {
+    const handleEmployeeCIChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectModel.Employee_CI = e.target.value;
         setSelectModel(selectModel)
     }
 
-    const handleEmployeeStatusChange = (e: any) => {
+    const handleEmployeeStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectModel.Status = e.target.value;
         setSelectModel(selectModel)
     }
@@ -120,11 +118,23 @@ const ManageTeam = () => {
           range: '${label} must be between ${min} and ${max}',
         },
       };
+
+      const handleSearchModelChange = (value : any) : void => {
+        setSearchModel({
+            ...searchModel,
+            ...value
+        })
+    }
     return (
         <Container >
+          <EmployeeSearch onChange={handleSearchModelChange}/>
+
             <Content>
+            <Button type="primary" style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onClick={handleSearch}>
+                    Search
+                </Button>
                 <Button type="primary" style={{backgroundColor: 'var(--third_admin)'}} onClick={showModal}>
-                    Add Employee
+                    Add 
                 </Button>
                 <Modal title="Add employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                     <Form

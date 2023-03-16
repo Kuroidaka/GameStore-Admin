@@ -88,7 +88,6 @@ const EmployeeUpdate = (props: { id: any, onChange: any }) => {
         })
     }
     const showModal = () => {
-        debugger
         employeeApi.getById(props.id).then(result => {
             if (!!result) {
                 setSelectModel(result.data.data)

@@ -10,7 +10,8 @@ import ManageTeam from '~/page/Admin/Employee/employeeList'
 import ContactInfo from '~/page/Admin/ContactInfo/ContactInfo'
 import ProductList from '~/page/Admin/Product/ProductList'
 import ProductGroupList from '~/page/Admin/ProductGroup/ProductGroupList'
-
+import CustomerList from '~/page/Admin/Costomer/CustomerList'
+import CartList from '~/page/Admin/Cart/CartList'
 
 import { useAppSelector } from '~/hook'
 import { selectLoggedIn, selectCurrentUser } from './Auth/auth.slice'
@@ -43,6 +44,9 @@ const AdminRoutes = () => {
                 <Route path={config.adminRoutePath.userContact} element={<HeaderSideBar><ContactInfo /></HeaderSideBar>}/>
                 <Route path={config.adminRoutePath.products} element={<HeaderSideBar><ProductList /></HeaderSideBar>}/>
                 <Route path={config.adminRoutePath.productsGroup} element={<HeaderSideBar><ProductGroupList /></HeaderSideBar>}/>
+                <Route path={config.adminRoutePath.customer} element={<HeaderSideBar><CustomerList /></HeaderSideBar>}/>
+                <Route path={config.adminRoutePath.cart} element={<HeaderSideBar><CartList /></HeaderSideBar>}/>
+
 
             </Fragment>
             }

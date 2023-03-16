@@ -19,5 +19,7 @@ export const adminRoutePath = {
     profile: '/admin/profile',
     products: '/admin/products',
     productsGroup: '/admin/productsGroup',
+    customer: '/admin/customer',
+    cart: '/admin/cart',
 
 }

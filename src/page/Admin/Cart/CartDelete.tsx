@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import { productGroupApi } from '~/api/productGroup/productGroup.api';
+import { CartApi } from '~/api/cart/cart.api';
 interface id {
     firstName: string;
     lastName: string;
 }
-const DeleteComponent = (props: {id:any,onChange:any}) => {
+const CartDelete = (props: {id:any,onChange:any}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -14,7 +15,7 @@ const DeleteComponent = (props: {id:any,onChange:any}) => {
   };
 
   const handleOk = () => {
-    productGroupApi.delete(props.id).then(result => {
+    CartApi.delete(props.id).then(result => {
         if(!!result){
             props.onChange();
         }
@@ -38,4 +39,4 @@ const DeleteComponent = (props: {id:any,onChange:any}) => {
   );
 };
 
-export default DeleteComponent;
+export default CartDelete;

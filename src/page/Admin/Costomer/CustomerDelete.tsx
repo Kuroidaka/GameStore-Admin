@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
-import { productGroupApi } from '~/api/productGroup/productGroup.api';
+import { Modal } from 'antd';
+import { useState } from 'react';
+import { CustomerApi } from '~/api/customer/customer.api';
 interface id {
     firstName: string;
     lastName: string;
 }
-const DeleteComponent = (props: {id:any,onChange:any}) => {
+const CustomerDelete = (props: {id:any,onChange:any}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -14,7 +14,7 @@ const DeleteComponent = (props: {id:any,onChange:any}) => {
   };
 
   const handleOk = () => {
-    productGroupApi.delete(props.id).then(result => {
+    CustomerApi.delete(props.id).then(result => {
         if(!!result){
             props.onChange();
         }
@@ -31,11 +31,11 @@ const DeleteComponent = (props: {id:any,onChange:any}) => {
       <a type="primary" onClick={showModal}>
         Delete
       </a>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            Are you sure to delele employee? :)
+      <Modal title="Notification" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            Are you sure to delele? :)
       </Modal>
     </>
   );
 };
 
-export default DeleteComponent;
+export default CustomerDelete;

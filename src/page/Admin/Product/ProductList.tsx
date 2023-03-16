@@ -4,9 +4,10 @@ import type { UploadFile } from 'antd/es/upload/interface';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { adminApi } from '~/api/admin/authApi';
 import { productApi, productModel } from '~/api/product/product.api';
 import UploadImage from '~/component/UploadImage/UploadImage';
+import { ResponseGenerator } from '~/model/ResGenerator.model';
+import handleValidUser from '../CommomHandler/token';
 import ProductGroupSelect from '../ProductGroup/Controll/ProductGroupSelect';
 import DeleteComponent from './ProductDelete';
 import ProductSearch from './ProductSearch';
@@ -45,6 +46,13 @@ const ProductList = () => {
             },
         },
     ];
+    useEffect(() => {
+        handleValidUser();
+        
+        handleSearch();
+    }, []);
+
+ 
     const handleSearchModelChange = (value : any) : void => {
         setSearchModell({
             ...searchModel,
@@ -56,12 +64,10 @@ const ProductList = () => {
        setDataSource(product.data.results)
     }
 
-    useEffect(() => {
-        handleSearch();
-    }, []);
+  
 
     const onChangeTab = (key: string) => {
-        console.log(key);
+        
       };
 
     const onChangeDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -104,7 +110,6 @@ const ProductList = () => {
     const handleImageProduct = (value: Array<UploadFile>) => {
         // selectModel.Product_Images.push(value);
         selectModel.Product_Images = value[0];
-        console.log(selectModel)
         setSelectModel(selectModel)
     }
 
@@ -112,16 +117,14 @@ const ProductList = () => {
         setIsModalOpen(true);
     };
 
-    const handleSearchAction = (e:any) => {
 
-    }
 
     const handleOk = async (e: any): Promise<any> => {
         e.preventDefault();
         try {
-           const product = await productApi.create(selectModel)
-           
-           if(!!product){
+           let product:ResponseGenerator = await productApi.create(selectModel)
+            
+           if(!!product.data){
                 let form:any= new FormData();
                 form.append('product',selectModel.Product_Images?.originFileObj)
                 axios({
@@ -139,8 +142,6 @@ const ProductList = () => {
                       console.error(error)
                     })
                handleSearch();
-           }else {
-                await adminApi.refreshToken()
            }
         } catch (error) {
             
@@ -164,7 +165,7 @@ const ProductList = () => {
         >
 
             <Form.Item label="Product Code">
-                <Input  defaultValue="Product Code" onChange={handleProductCodeChange} />
+                <Input  onChange={handleProductCodeChange} />
             </Form.Item>
             <Form.Item label="Product Name">
                 <Input onChange={handleProductNameChange} />

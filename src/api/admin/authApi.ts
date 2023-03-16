@@ -33,7 +33,7 @@ export const adminApi = {
     },
 
     refreshToken:() => {
-        const url = '/user/login'
+        const url = '/user/refreshToken'
         return axiosClient.get(url)
     },
 
