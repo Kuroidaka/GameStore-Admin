@@ -84,20 +84,18 @@ const ManageTeam = () => {
     };
     const handleOk = async (e: any): Promise<any> => {
         e.preventDefault();
-        if (!!selectModel.Employee_Name){
-            try {
-                employeeApi.create(selectModel).then((result) => {
-                    if (!!result) {
-                        setSelectModel({});
-                    }
-                    handleSearch();
-                })
-            } catch (err) {
-                console.log(err)
-            }
-    
-            setIsModalOpen(false);
+        try {
+            employeeApi.create(selectModel).then((result) => {
+                if (!!result) {
+                    setSelectModel({});
+                }
+                handleSearch();
+            })
+        } catch (err) {
+            console.log(err)
         }
+
+        setIsModalOpen(false);
        
     };
 

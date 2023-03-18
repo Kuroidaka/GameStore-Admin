@@ -33,6 +33,7 @@ const CartList = () => {
         { width: '400px', title: 'Cart Code', dataIndex: 'Cart_Code', key: 'Cart_Code' },
         { width: '400px', title: 'Phone Number', dataIndex: 'Cart_PhoneNumber', key: 'Cart_PhoneNumber' },
         { width: '400px', title: 'Email', dataIndex: 'Cart_Email', key: 'Cart_Email' },
+        { width: '400px', title: 'Address', dataIndex: 'Address', key: 'Address' },
         { width: '400px', title: 'Method Pay', dataIndex: 'Cart_MethodPay', key: 'Cart_MethodPay' },
         { width: '400px', title: 'Amount', dataIndex: 'Cart_Amount', key: 'Cart_Amount' },
         { width: '400px', title: 'Note', dataIndex: 'Cart_Note', key: 'Cart_Note' },
@@ -99,6 +100,10 @@ const CartList = () => {
         selectModel.Cart_MethodPay = value;
         setSelectModel(selectModel)
     }
+    const handleCardAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        selectModel.Address = e.target.value;
+        setSelectModel(selectModel)
+    }
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -128,6 +133,7 @@ const CartList = () => {
             ...value
         })
     }
+    
     // Handle select row
     const rowSelection = {
         onChange: (selectedRowKeys: React.Key[] , selectedRows: CartModel[]) => {
@@ -137,8 +143,8 @@ const CartList = () => {
     // Combonent in add
     const items = [
         {
-            key: 'Cart Detail',
-            label: `Cart Detail`,
+            key: 'Order',
+            label: `Order`,
             children: <><Form
                 form={form}
                 initialValues={{ layout: formLayout }}
@@ -154,6 +160,9 @@ const CartList = () => {
                 </Form.Item>
                 <Form.Item label="Email">
                     <Input onChange={handleCardEmailChange} />
+                </Form.Item>
+                <Form.Item label="Address">
+                    <Input onChange={handleCardAddressChange} />
                 </Form.Item>
                 <Form.Item label="Note">
                     <Input onChange={handleCardNoteChange} />
@@ -175,7 +184,7 @@ const CartList = () => {
         },
         {
             key: '2',
-            label: `Cart Product`,
+            label: `Order Details`,
             children: <><CartAdd onChange={handleChangeProductList} /></>,
         },
     ];
@@ -193,7 +202,7 @@ const CartList = () => {
                 < CartUpdate customerModel={customerModel} onChange={handleSearch} id={selectedRowKeys}/>
                 < CartDelete style={{ backgroundColor: 'var(--third_admin)' , marginRight: 4}} onChange={handleSearch} id={selectedRowKeys}/>
 
-                <Modal title="Add Cart" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                <Modal title="Add Order" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                     <Tabs defaultActiveKey="1" items={items} />
                 </Modal>
                 <Table

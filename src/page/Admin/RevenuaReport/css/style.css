@@ -1,0 +1,25 @@
+.header_report{
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.Header_report_Adress{
+    margin-top: 8px;
+}
+.footer_repot{
+    display: flex;
+width: 80%;
+margin-top: 20px;
+justify-content: flex-end
+}
+.report_container{
+    position: relative;
+    height: auto;
+
+}
+
+.footer_report_content{
+    text-align: center;
+}
+
+

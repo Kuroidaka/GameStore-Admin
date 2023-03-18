@@ -5,7 +5,7 @@ export interface employeeModel {
     id?: number,
     Employee_Code?: string,
     Employee_Name?: string,
-    Employee_Phone?: string,
+    Employee_Phone?: string, 
     Employee_CI?: string,
     Employee_Email?: string,
     Employee_Avatar?: string,

@@ -21,5 +21,7 @@ export const adminRoutePath = {
     productsGroup: '/admin/productsGroup',
     customer: '/admin/customer',
     cart: '/admin/cart',
+    revenueReport: '/admin/revenueReport',
+
 
 }

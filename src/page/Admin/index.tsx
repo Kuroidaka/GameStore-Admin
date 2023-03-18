@@ -1,5 +1,6 @@
 import { Routes, Route, useNavigate, useLocation, Location } from 'react-router-dom'
 import config from '~/config'
+// Import component
 import Home from '~/page/Admin/Home/Home'
 import Login from '~/page/Admin/Auth/Login/Login'
 import Register from '~/page/Admin/Auth/Register/Register'
@@ -12,7 +13,8 @@ import ProductList from '~/page/Admin/Product/ProductList'
 import ProductGroupList from '~/page/Admin/ProductGroup/ProductGroupList'
 import CustomerList from '~/page/Admin/Costomer/CustomerList'
 import CartList from '~/page/Admin/Cart/CartList'
-
+import RevenueReportList from './RevenuaReport/RevenueReportList'
+// 
 import { useAppSelector } from '~/hook'
 import { selectLoggedIn, selectCurrentUser } from './Auth/auth.slice'
 import { Fragment, useEffect } from 'react'
@@ -46,6 +48,7 @@ const AdminRoutes = () => {
                 <Route path={config.adminRoutePath.productsGroup} element={<HeaderSideBar><ProductGroupList /></HeaderSideBar>}/>
                 <Route path={config.adminRoutePath.customer} element={<HeaderSideBar><CustomerList /></HeaderSideBar>}/>
                 <Route path={config.adminRoutePath.cart} element={<HeaderSideBar><CartList /></HeaderSideBar>}/>
+                <Route path={config.adminRoutePath.revenueReport} element={<HeaderSideBar><RevenueReportList /></HeaderSideBar>}/>
 
 
             </Fragment>

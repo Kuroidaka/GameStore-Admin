@@ -10,6 +10,7 @@ export interface CartModel {
     Customer_Code?: string,
     Cart_MethodPay? :string,
     Cart_Amount?: number,
+    Address?: string,
     Product_List?: CartDetailModel[],
     CartDetails? :CartDetailModel[],
     Status?: string,

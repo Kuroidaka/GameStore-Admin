@@ -45,7 +45,7 @@ const ProductList = () => {
     useEffect(() => {
         handleValidUser();
         
-        handleSearch();
+        // handleSearch();
     }, []);
 
  
@@ -150,7 +150,7 @@ const ProductList = () => {
         setIsModalOpen(false);
     };
     
-    console.log("rerender")
+
     const handleCancel = () => {
         setIsModalOpen(false);
     };
