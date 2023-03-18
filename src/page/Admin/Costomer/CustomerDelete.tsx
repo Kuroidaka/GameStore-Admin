@@ -1,11 +1,13 @@
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { useState } from 'react';
 import { CustomerApi } from '~/api/customer/customer.api';
-interface id {
-    firstName: string;
-    lastName: string;
+interface Props {
+  id: any,
+  onChange: () => void,
+  style: {}
 }
-const CustomerDelete = (props: {id:any,onChange:any}) => {
+
+const CustomerDelete = (props: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -28,9 +30,9 @@ const CustomerDelete = (props: {id:any,onChange:any}) => {
 
   return (
     <>
-      <a type="primary" onClick={showModal}>
-        Delete
-      </a>
+        <Button type="primary" style={props.style} onClick={showModal}>
+                    Delete
+                </Button>
       <Modal title="Notification" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             Are you sure to delele? :)
       </Modal>

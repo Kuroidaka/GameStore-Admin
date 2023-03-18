@@ -1,8 +1,8 @@
-import { Button, Form, Input, Modal, Space, Table, Tabs } from 'antd';
+import { Button, Form, Input, InputNumber, Modal, Space, Table, Tabs } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import type { UploadFile } from 'antd/es/upload/interface';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import styled from 'styled-components';
 import { productApi, productModel } from '~/api/product/product.api';
 import UploadImage from '~/component/UploadImage/UploadImage';
@@ -18,6 +18,8 @@ const ProductList = () => {
     const [dataSource, setDataSource] = useState<productModel[]>([]);
     const [selectModel, setSelectModel] = useState<productModel>({})
     const [searchModel, setSearchModell] = useState<productModel>({})
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>();
+    const [selectionType, setSelectionType] = useState<'checkbox'>('checkbox');
 
     const [form] = Form.useForm();
 
@@ -25,26 +27,20 @@ const ProductList = () => {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
     }
+    const styleButton = {
+        backgroundColor: 'var(--third_admin)',marginRight: 4        
+    }
     const columns: ColumnsType<productModel> = [
         { width: '200px', title: 'Product Code', dataIndex: 'Product_Code', key: 'Product_Code' },
         { width: '200px', title: 'Product Name', dataIndex: 'Product_Name', key: 'Product_Name' },
-        { width: '200px', title: 'Product Group', dataIndex: 'Product_Group_Code', key: 'Product_Group_Code' },
+        { width: '200px', title: 'Product Group', dataIndex: 'Product_Group', key: 'Product_Group', render: (value) => {
+            return <>{value.Product_Group_Name}</>
+        }, }, 
         { width: '200px', title: 'Product Price', dataIndex: 'Product_Price', key: 'Product_Price' },
         { width: '200px', title: 'Product Detail', dataIndex: 'Product_Detail', key: 'Product_Detail' },
         { width: '240px', title: 'Product Description', dataIndex: 'Product_Description', key: 'Product_Description' },
         { width: '200px', title: 'Status', dataIndex: 'Status', key: 'Status' },
-        {
-            width: '400px',
-            title: 'Action',
-            dataIndex: '',
-            key: 'x',
-            render: (_, recode) => {
-                return <Space>
-                    <DeleteComponent onChange={handleSearch} id={recode.id} />
-                    <ProductUpdate onChange={handleSearch} id={recode.id} />
-                </Space>
-            },
-        },
+ 
     ];
     useEffect(() => {
         handleValidUser();
@@ -76,12 +72,12 @@ const ProductList = () => {
     }
     
 
-    const handleProductNameChange = (e: any) => {
+    const handleProductNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectModel.Product_Name = e.target.value;
         setSelectModel(selectModel)
     }
 
-    const handleProductCodeChange = (e: any) => {
+    const handleProductCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectModel.Product_Code = e.target.value;
         setSelectModel(selectModel)
     }
@@ -91,25 +87,25 @@ const ProductList = () => {
         setSelectModel(selectModel)
     }
 
-    const handleProductPriceChange = (e: any) => {
-        selectModel.Product_Price = e.target.value;
+    const handleProductPriceChange = (value: number | null) => {
+        selectModel.Product_Price = value;
         setSelectModel(selectModel)
     }
 
-    const handleProductDetailChange = (e: any) => {
+    const handleProductDetailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectModel.Product_Detail = e.target.value;
         setSelectModel(selectModel)
     }
 
 
-    const handleProductStatusChange = (e: any) => {
+    const handleProductStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectModel.Status = e.target.value;
         setSelectModel(selectModel)
     }
 
     const handleImageProduct = (value: Array<UploadFile>) => {
         // selectModel.Product_Images.push(value);
-        selectModel.Product_Images = value[0];
+        selectModel.Product_Images_Request = value;
         setSelectModel(selectModel)
     }
 
@@ -121,12 +117,15 @@ const ProductList = () => {
 
     const handleOk = async (e: any): Promise<any> => {
         e.preventDefault();
+        console.log()
         try {
            let product:ResponseGenerator = await productApi.create(selectModel)
             
            if(!!product.data){
+            selectModel.Product_Images_Request?.forEach(item => {
                 let form:any= new FormData();
-                form.append('product',selectModel.Product_Images?.originFileObj)
+                
+                form.append('product',item.originFileObj)
                 axios({
                     method: 'post',
                     url: 'http://localhost:4000/api/v1/product/productImage',
@@ -141,6 +140,8 @@ const ProductList = () => {
                     .catch(error => {
                       console.error(error)
                     })
+            })
+               
                handleSearch();
            }
         } catch (error) {
@@ -149,9 +150,15 @@ const ProductList = () => {
         setIsModalOpen(false);
     };
     
-
+    console.log("rerender")
     const handleCancel = () => {
         setIsModalOpen(false);
+    };
+    // handle select row 
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[] , selectedRows: productModel[]) => {
+            setSelectedRowKeys(selectedRowKeys)
+        },
     };
 
     const items = [
@@ -172,7 +179,7 @@ const ProductList = () => {
             </Form.Item>
                 <ProductGroupSelect onChange={handleProductGroupChange} style={{ width: "100%" }}/>
             <Form.Item label="Product Price">
-                <Input onChange={handleProductPriceChange} />
+                <InputNumber max={Number.MAX_SAFE_INTEGER} style={{width: "100%"}}  onChange={handleProductPriceChange} />
             </Form.Item>
             <Form.Item label="Product Detail">
                 <Input onChange={handleProductDetailChange} />
@@ -181,7 +188,7 @@ const ProductList = () => {
                 <Input onChange={handleProductStatusChange} />
             </Form.Item>
             <Form.Item label="Image">
-                <UploadImage onChange={handleImageProduct}/>
+                <UploadImage data='' onChange={handleImageProduct}/>
             </Form.Item>
         </Form></>,
           },
@@ -203,12 +210,14 @@ const ProductList = () => {
 
             <Content>   
             <Control>
-            <Button type="primary" style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onClick={handleSearch}>
+            <Button type="primary" style={styleButton} onClick={handleSearch}>
                     Search
                 </Button>
-                <Button type="primary" style={{ backgroundColor: 'var(--third_admin)' }} onClick={showModal}>
+                <Button type="primary" style={styleButton} onClick={showModal}>
                     Add
                 </Button>
+                <ProductUpdate onChange={handleSearch} style={styleButton} id={selectedRowKeys} />
+                <DeleteComponent style={styleButton} onChange={handleSearch} id={selectedRowKeys} />
             </Control>
             
                 <Modal style={{width: "800px"}} title="ADD PRODUCT" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
@@ -219,13 +228,18 @@ const ProductList = () => {
                 <Table
                     columns={columns}
                     dataSource={dataSource}
+                    rowKey="id"
+                    rowSelection={{
+                        type: selectionType,
+                        ...rowSelection,
+                    }}
                 />
             </Content>
         </Container>
     );
 }
 
-export default ProductList;
+export default memo(ProductList);
 
 const Container = styled.div`
     max-width: calc(100% - 40px);

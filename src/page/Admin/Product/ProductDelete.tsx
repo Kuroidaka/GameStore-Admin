@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import { employeeApi } from '../../../api/employee/employee.api';
 import { productApi } from '~/api/product/product.api';
-interface id {
-    firstName: string;
-    lastName: string;
+interface Props {
+  id: any,
+  onChange: () => void,
+  style: {}
 }
-const DeleteComponent = (props: {id:any,onChange:any}) => {
+const DeleteComponent = (props: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -29,9 +30,9 @@ const DeleteComponent = (props: {id:any,onChange:any}) => {
 
   return (
     <>
-      <a type="primary" onClick={showModal}>
-        Delete
-      </a>
+      <Button type="primary" style={props.style} onClick={showModal}>
+                   Delete
+      </Button>
       <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             Are you sure to delele employee? :)
       </Modal>

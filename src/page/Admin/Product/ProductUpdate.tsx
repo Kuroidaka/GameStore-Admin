@@ -1,11 +1,15 @@
-import { Form, Input, Modal, Tabs, UploadFile } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Form, Input, InputNumber, Modal, Tabs, UploadFile } from 'antd';
+import { useState } from 'react';
 import { productApi, productModel } from '~/api/product/product.api';
 import UploadImage from '~/component/UploadImage/UploadImage';
 import ProductGroupSelect from '../ProductGroup/Controll/ProductGroupSelect';
 
-
-const ProductUpdate = (props: { id: any, onChange: any }) => {
+interface Props {
+    id: any,
+    onChange: () => void,
+    style: {}
+  }
+const ProductUpdate = (props: Props) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataSource, setDataSource] = useState<productModel>({});
@@ -64,10 +68,10 @@ const ProductUpdate = (props: { id: any, onChange: any }) => {
         })
     }
 
-    const handleProductPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleProductPriceChange = (value: number | null) => {
         setDataSource({
            ...dataSource,
-           Product_Price : Number.parseInt(e.target.value)
+           Product_Price : value
         })
     }
 
@@ -87,7 +91,7 @@ const ProductUpdate = (props: { id: any, onChange: any }) => {
     }
 
     const handleImageProduct = (value: Array<UploadFile>) => {
-        dataSource.Product_Images = value[0];
+        dataSource.Product_Images_Request = value;
         setDataSource(dataSource)
     }
 
@@ -100,7 +104,6 @@ const ProductUpdate = (props: { id: any, onChange: any }) => {
         })
         setIsModalOpen(true);
     };
-
     const items = [
         {
             key: '1',
@@ -125,7 +128,7 @@ const ProductUpdate = (props: { id: any, onChange: any }) => {
                 </Form.Item>
                 <ProductGroupSelect value={dataSource.Product_Group_Code} onChange={handleProductGroupChange} style={{ width: "100%" }} />
                 <Form.Item label="Product Price">
-                    <Input value={dataSource.Product_Price} onChange={handleProductPriceChange} />
+                    <InputNumber style={{width: "100%"}} value={dataSource.Product_Price} onChange={handleProductPriceChange} />
                 </Form.Item>
                 <Form.Item label="Product Detail">
                     <Input value={dataSource.Product_Detail} onChange={handleProductDetailChange} />
@@ -134,7 +137,7 @@ const ProductUpdate = (props: { id: any, onChange: any }) => {
                     <Input value={dataSource.Status} onChange={handleProductStatusChange} />
                 </Form.Item>
                 <Form.Item label="Image">
-                    <UploadImage disabled={true} data={dataSource} onChange={handleImageProduct} />
+                    <UploadImage  data={dataSource.Product_Images || ''} onChange={handleImageProduct} />
                 </Form.Item>
             </Form>
         </Form></>,
@@ -152,14 +155,14 @@ const ProductUpdate = (props: { id: any, onChange: any }) => {
     ]
 
     return (
-        <div >
-            <a type="primary" onClick={showModal}>
-                Edit
-            </a>
+        <>
+            <Button type="primary" style={props.style} onClick={showModal}>
+                    Edit
+            </Button>
             <Modal title="Add employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             <Tabs defaultActiveKey="1" items={items} onChange={() => {}} />
             </Modal>
-        </div>
+        </>
     );
 }
 export default ProductUpdate;

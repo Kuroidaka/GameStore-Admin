@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import { productGroupApi } from '~/api/productGroup/productGroup.api';
 import { CartApi } from '~/api/cart/cart.api';
-interface id {
-    firstName: string;
-    lastName: string;
+interface Props {
+  id: any,
+  onChange: () => void,
+  style: {}
 }
-const CartDelete = (props: {id:any,onChange:any}) => {
+
+const CartDelete = (props:Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -14,13 +16,18 @@ const CartDelete = (props: {id:any,onChange:any}) => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    CartApi.delete(props.id).then(result => {
-        if(!!result){
-            props.onChange();
+  const handleOk = async () => {
+    try {
+      CartApi.delete(props.id).then(result => {
+        if (!!result) {
+          props.onChange();
         }
-    })
-    setIsModalOpen(false);
+      })
+      setIsModalOpen(false);
+    } catch (e) {
+      console.log(e)
+    }
+
   };
 
   const handleCancel = () => {
@@ -29,11 +36,11 @@ const CartDelete = (props: {id:any,onChange:any}) => {
 
   return (
     <>
-      <a type="primary" onClick={showModal}>
-        Delete
-      </a>
+       <Button type="primary" style={props.style}>
+                    Delete
+                </Button>
       <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            Are you sure to delele employee? :)
+        Are you sure to delele employee? :)
       </Modal>
     </>
   );

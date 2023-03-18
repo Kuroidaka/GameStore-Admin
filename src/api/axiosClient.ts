@@ -2,11 +2,10 @@ import axios, { AxiosResponse } from "axios";
 
 
 const axiosClient = axios.create({
-    baseURL: 'http://192.168.8.1:4000/api/v1',
+    baseURL: 'http://localhost:4000/api/v1',
     withCredentials: true,
     headers: {
         'content-type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
 })
 

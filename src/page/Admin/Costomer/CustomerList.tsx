@@ -10,7 +10,8 @@ import CustomerSearch from './CustomerSearch';
 import CustomerUpdate from './CustomerUpdate';
 
 const CustomerList = () => {
-
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>();
+    const [selectionType, setSelectionType] = useState<'checkbox'>('checkbox');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataSource, setDataSource] = useState<CustomerModel[]>([]);
     const [selectModel, setSelectModel] = useState<CustomerModel>({})
@@ -29,18 +30,6 @@ const CustomerList = () => {
         { width: '400px', title: 'Customer Phone', dataIndex: 'Customer_Phone', key: 'Customer_Phone' },
 
         { width: '240px', title: 'Status', dataIndex: 'Status', key: 'Status' },
-        {
-            width: '400px',
-            title: 'Action',
-            dataIndex: '',
-            key: 'x',
-            render: (_, recode) => {
-                return <Space>
-                    <CustomerDelete onChange={handleSearch} id={recode.id} />
-                    <CustomerUpdate onChange={handleSearch} id={recode.id} />
-                </Space>
-            },
-        },
     ];
     const handleSearch = async ()  => {
        const customer = await CustomerApi.search(searchModel);
@@ -106,6 +95,12 @@ const CustomerList = () => {
             ...value
         })
     }
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[] , selectedRows: CustomerModel[]) => {
+            setSelectedRowKeys(selectedRowKeys)
+        },
+    };
+
     return (
         <Container >
           <CustomerSearch onChange={handleSearchModelChange}/>
@@ -113,9 +108,11 @@ const CustomerList = () => {
             <Button type="primary" style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onClick={handleSearch}>
                     Search
                 </Button>
-                <Button type="primary" style={{ backgroundColor: 'var(--third_admin)' }} onClick={showModal}>
+                <Button type="primary" style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onClick={showModal}>
                     Add
                 </Button>
+                    <CustomerUpdate style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onChange={handleSearch} id={selectedRowKeys} />
+                <CustomerDelete style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onChange={handleSearch} id={selectedRowKeys} />
                 <Modal title="Add Product Group" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                     <Form
                         form={form}
@@ -142,8 +139,13 @@ const CustomerList = () => {
                 </Modal>
                 <Table
                     columns={columns}
+                    rowKey="id"
                     // scroll={{ x: auto }}
                     dataSource={dataSource}
+                    rowSelection={{
+                        type: selectionType,
+                        ...rowSelection,
+                    }}
                 />
             </Content>
             

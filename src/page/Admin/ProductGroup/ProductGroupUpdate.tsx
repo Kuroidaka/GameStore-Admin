@@ -1,9 +1,14 @@
-import { DatePicker, Form, Input, Modal } from 'antd';
-import { useState } from 'react';
+import { Button, DatePicker, Form, Input, Modal } from 'antd';
+import React, { useState } from 'react';
 import { productGroupApi, productGroupModel } from '~/api/productGroup/productGroup.api';
 import { employeeApi } from '../../../api/employee/employee.api';
+interface Props {
+    id: any,
+    onChange: () => void,
+    style: {}
+}
 
-const ProductGroupUpdate = (props:{id:any,onChange:any}) => {
+const ProductGroupUpdate = (props:Props) => {
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataSource, setdataSource] = useState<productGroupModel>({});
@@ -45,6 +50,7 @@ const ProductGroupUpdate = (props:{id:any,onChange:any}) => {
             productGroupApi.update(selectModel).then((result) => {
                 if (!!result) {
                     setSelectModel({});
+                    props.onChange();
                 }
                 // handleSearch();
             })
@@ -69,10 +75,10 @@ const ProductGroupUpdate = (props:{id:any,onChange:any}) => {
         setIsModalOpen(true);
     };
     return (
-        <div >
-            <a type="primary" onClick={showModal}>
-                Edit
-            </a>
+        < >
+             <Button type="primary" style={props.style} onClick={showModal}>
+                    Update
+                </Button>
             <Modal title="Add employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             <Form
                         form={form}
@@ -92,7 +98,7 @@ const ProductGroupUpdate = (props:{id:any,onChange:any}) => {
                         </Form.Item>
                     </Form>
             </Modal>
-        </div>
+        </>
     );
 }
 export default ProductGroupUpdate;

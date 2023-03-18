@@ -1,10 +1,15 @@
-import { Form, Input, Modal } from 'antd';
+import { Button, Form, Input, Modal } from 'antd';
 import { useEffect, useState } from 'react';
 import { CustomerApi, CustomerModel } from '~/api/customer/customer.api';
 // import './css/Customer.css';
 
+interface Props {
+    id: any,
+    onChange: () => void,
+    style: {}
+}
 
-const CustomerUpdate = (props: { id: any, onChange: any }) => {
+const CustomerUpdate = (props: Props) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -24,6 +29,7 @@ const CustomerUpdate = (props: { id: any, onChange: any }) => {
             CustomerApi.update(selectModel).then((result) => {
                 if (!!result) {
                     setSelectModel({});
+                    props.onChange()
                 }
             })
         } catch (err) {
@@ -80,10 +86,10 @@ const CustomerUpdate = (props: { id: any, onChange: any }) => {
     };
 
     return (
-        <div >
-            <a type="primary" onClick={showModal}>
-                Edit
-            </a>
+        < >
+            <Button type="primary" style={props.style} onClick={showModal}>
+                    Edit
+                </Button>
             <Modal title="Edit employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <Form
                     form={form}
@@ -109,7 +115,7 @@ const CustomerUpdate = (props: { id: any, onChange: any }) => {
                     </Form.Item>
                 </Form>
             </Modal>
-        </div>
+        </>
     );
 }
 export default CustomerUpdate;

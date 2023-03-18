@@ -17,11 +17,18 @@ const ManageTeam = () => {
     const [selectModel, setSelectModel] = useState<employeeModel>({})
     const [form] = Form.useForm();
     const [searchModel, setSearchModel] = useState<employeeModel>({})
-
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>();
+    const [selectionType, setSelectionType] = useState<'checkbox'>('checkbox');
     const formLayout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
     }
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[] , selectedRows: employeeModel[]) => {
+            setSelectedRowKeys(selectedRowKeys)
+        },
+    };
+
     const columns: ColumnsType<employeeModel> = [
         { width: '200px', title: 'Employee Code', dataIndex: 'Employee_Code', key: 'Employee_Code' },
         { width: '200px', title: 'Employee Name', dataIndex: 'Employee_Name', key: 'Employee_Name' },
@@ -30,18 +37,7 @@ const ManageTeam = () => {
         { width: '200px', title: 'Employee Email', dataIndex: 'Employee_Email', key: 'Employee_Email' },
         { width: '200px', title: 'Employee BirthDay', dataIndex: 'Employee_BirthDay', key: 'Employee_BirthDay' ,render: (data) =><>{moment(data).format('DD/MM/YYYY')}</>},
         { width: '200px', title: 'Status', dataIndex: 'Status', key: 'Status' },
-        {
-            width: '400px',
-            title: 'Action',
-            dataIndex: '',
-            key: 'x',
-            render: (_, recode) => {
-                return <Space>
-                    <DeleteComponent onChange={handleSearch} id={recode.id} />
-                    <EmployeeUpdate onChange={handleSearch} id={recode.id}/>
-                </Space>
-            },
-        },
+     
     ];
     const handleSearch = () => {
         employeeApi.search(searchModel).then((res) => {
@@ -133,9 +129,11 @@ const ManageTeam = () => {
             <Button type="primary" style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onClick={handleSearch}>
                     Search
                 </Button>
-                <Button type="primary" style={{backgroundColor: 'var(--third_admin)'}} onClick={showModal}>
+                <Button type="primary"  style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onClick={showModal}>
                     Add 
                 </Button>
+                    <EmployeeUpdate   style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onChange={handleSearch} id={selectedRowKeys}/>
+                <DeleteComponent  style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onChange={handleSearch} id={selectedRowKeys} />
                 <Modal title="Add employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                     <Form
                         form={form}
@@ -168,6 +166,11 @@ const ManageTeam = () => {
                
                 <Table
                     columns={columns}
+                    rowSelection={{
+                        type: selectionType,
+                        ...rowSelection,
+                    }}
+                    rowKey="id"
                     // scroll={{ x: auto }}
                     dataSource={dataSource}
                 />

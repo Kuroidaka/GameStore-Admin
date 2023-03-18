@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { InputRef, Select } from 'antd';
+import { InputNumber, InputRef, Select } from 'antd';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import { productApi, productModel } from '~/api/product/product.api';
+import { CartDetailModel } from '~/api/cart/cart.api';
 // import ProductSelector from '../Product/Controller/Product_Selector';
 
 
@@ -11,8 +12,6 @@ const EditableContext = React.createContext<FormInstance<any> | null>(null);
 interface Item {
   key: string;
   name: string;
-  age: string;
-  address: string;
 }
 
 interface EditableRowProps {
@@ -109,13 +108,14 @@ interface DataType {
   address: string;
 }
 interface Props {
-  onChange: (value: productModel[]) => void
+  onChange: (value: CartDetailModel[]) => void,
+  dataSource?: productModel[]
 }
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 const CartAdd = (props: Props) => {
   const [productList, setProductList] = useState<productModel[]>([]);
-  const [dataSource, setDataSource] = useState<productModel[]>([]);
+  const [dataSource, setDataSource] = useState<CartDetailModel[]>([]);
   const getProductList  = async () => {
       const productList = await productApi.search({});
       const result =  productList.data.results;
@@ -128,35 +128,50 @@ const CartAdd = (props: Props) => {
       setProductList(dataResult);
   }
   useEffect(() => {
+   
     getProductList();
   },[])
-  const [count, setCount] = useState(2);
-
+// Handle get list cart detail  when use component update
+  useEffect(() => {
+    if(!!props.dataSource){
+      setDataSource(props.dataSource);
+    }
+    
+  },[props?.dataSource])
+  const [count, setCount] = useState(0);
   const handleDelete = (id: React.Key) => {
     const newData = dataSource.filter((item) => item.id !== id);
     setDataSource(newData);
   };
   const handleChangeProduct = (value: string) => {
-    dataSource[dataSource.length - 1].Product_Code = value;
+    dataSource[dataSource.length - 1].Cart_Detail_Product = value;
     // setDataSource(dataSource);
-    // props.onChange(dataSource)
+    props.onChange(dataSource)
+  }
+
+  const handleQuantity = (value : number | null) => {
+    dataSource[dataSource.length - 1].Cart_Detail_Quantity = value;
+    props.onChange(dataSource)
   }
 
   const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
     {
       title: 'Product Name',
-      dataIndex: 'Product Name',
+      key: 'Cart_Detail_Product',
+      dataIndex: 'Cart_Detail_Product',
       width: '50%',
-      render: () => {
-        return (<Select options={productList} onChange={handleChangeProduct} style={{width: '100%'}}/>)
+      render: (data) => {
+        return (<Select value={data} options={productList} onChange={handleChangeProduct} style={{width: '100%'}}/>)
       }
     },
     {
       title: 'Quantity',
       width: '20%',
-      dataIndex: 'Quantity',
-      render: () => {
-        return (<Input   style={{width: '100%'}}/>)
+      key: 'Cart_Detail_Quantity',
+      dataIndex: 'Cart_Detail_Quantity',
+      render: (data,record) => {
+        console.log(record)
+        return (<InputNumber  value={data} onChange={handleQuantity}  style={{width: '100%'}}/>)
 
       }
     },
@@ -173,17 +188,14 @@ const CartAdd = (props: Props) => {
   ];
 
   const handleAdd = () => {
-    const newData: productModel = {
-      // key: count,
-      // name: `Edward King ${count}`,
-      // age: '32',
-      // address: `London, Park Lane no. ${count}`,
+    const newData: CartDetailModel = {
+      key: count
     };
     setDataSource([...dataSource, newData]);
-    setCount(count + 1);
+    setCount(count+1);
   };
 
-  const handleSave = (row: productModel) => {
+  const handleSave = (row: CartDetailModel) => {
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.id === item.id);
     const item = newData[index];
@@ -215,8 +227,7 @@ const CartAdd = (props: Props) => {
         handleSave,
       }),
     };
-  });
-  console.log(dataSource)
+  })
   return (
     <div>
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>

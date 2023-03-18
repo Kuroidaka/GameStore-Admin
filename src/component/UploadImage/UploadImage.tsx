@@ -9,31 +9,37 @@ const getBase64 = (file: RcFile): Promise<string> =>
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
-const UploadImage = (props: any) => {
+interface Props{
+  data: string,
+  onChange : (value: Array<UploadFile>) => void
+}
+const UploadImage = (props: Props) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  useEffect(  () => {
-    const fileList: UploadFile[] = [
-      {
-        uid: '0',
-        name: props.data?.Product_Images,
-        status: 'done',
-        url: `http://localhost:4000/product/${props.data?.Product_Images}`,
-        percent: 33,
-      },
-    ]
-    if(!!props.data){
-
-      setFileList(fileList)
-    }
-  },[props.data])
+  useEffect(() => {
+      if(props.data !== ''){
+        const emptyList: UploadFile[] = [];
+        const listPreConvert = props.data.split(",");
+          listPreConvert.forEach((item:string,index:number) => {
+            const file :UploadFile = {
+                  // key: index,
+                  uid: `${index}`,
+                  name: item,
+                  status: 'done',
+                  url: `http://localhost:4000/product/${item}`,
+                }
+                emptyList.push(file);
+          })
+          setFileList([...emptyList])
+      }
+  }, [props.data])
 
 
   const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
     props.onChange(newFileList);
-    
-  };
 
+  };
+  
   return (
 
     <Upload
@@ -42,7 +48,7 @@ const UploadImage = (props: any) => {
       onChange={onChange}
       name={"product"}
     >
-      {fileList.length < 3 && ' Upload'}
+      {fileList.length < 3 && 'Upload'}
     </Upload>
 
   );

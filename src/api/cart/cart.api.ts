@@ -1,6 +1,4 @@
-import { PayloadAction } from "@reduxjs/toolkit";
-import axiosClient from "../axiosClient"
-import { productModel } from "../product/product.api";
+import axiosClient from "../axiosClient";
 
 export interface CartModel {
     id?: number,
@@ -11,13 +9,20 @@ export interface CartModel {
     Cart_Note?: string,
     Customer_Code?: string,
     Cart_MethodPay? :string,
+    Cart_Amount?: number,
     Product_List?: CartDetailModel[],
+    CartDetails? :CartDetailModel[],
     Status?: string,
 }
 
 export interface CartDetailModel {
     id?: number,
-    Product_Code?: string,
+    key?: number,
+    Cart_Detail_Product?: string,
+    Cart_Detail_Amount?: string,
+    Cart_Detail_Price?: string,
+    Cart_Detail_Quantity?: number | null,
+
 }
 
 export const CartApi = {

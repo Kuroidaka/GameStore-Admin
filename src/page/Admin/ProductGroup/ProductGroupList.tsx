@@ -10,7 +10,8 @@ import {productGroupModel} from '~/api/productGroup/productGroup.api'
 import handleValidUser from '../CommomHandler/token';
 
 const ProductGroupList = () => {
-
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>();
+    const [selectionType, setSelectionType] = useState<'checkbox'>('checkbox');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataSource, setDataSource] = useState<productGroupModel[]>([]);
     const [selectModel, setSelectModel] = useState<productGroupModel>({})
@@ -23,21 +24,9 @@ const ProductGroupList = () => {
         wrapperCol: { span: 16 },
     }
     const columns: ColumnsType<productGroupModel> = [
-        { width: '400px', title: 'Product Group Code', dataIndex: 'Product_Group_Code', key: 'Product_Group_Code' },
-        { width: '400px', title: 'Product Group Name', dataIndex: 'Product_Group_Name', key: 'Product_Group_Name' },
-        { width: '240px', title: 'Status', dataIndex: 'Status', key: 'Status' },
-        {
-            width: '400px',
-            title: 'Action',
-            dataIndex: '',
-            key: 'x',
-            render: (_, recode) => {
-                return <Space>
-                    <DeleteComponent onChange={handleSearch} id={recode.id} />
-                    <ProductGroupUpdate onChange={handleSearch} id={recode.id} />
-                </Space>
-            },
-        },
+        { width: '600px', title: 'Product Group Code', dataIndex: 'Product_Group_Code', key: 'Product_Group_Code' },
+        { width: '600px', title: 'Product Group Name', dataIndex: 'Product_Group_Name', key: 'Product_Group_Name' },
+        { width: '400px', title: 'Status', dataIndex: 'Status', key: 'Status' },
     ];
     const handleSearch = async ()  => {
        const productGroup = await productGroupApi.search(searchModel);
@@ -90,6 +79,12 @@ const ProductGroupList = () => {
             ...value
         })
     }
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[] , selectedRows: productGroupModel[]) => {
+            setSelectedRowKeys(selectedRowKeys)
+        },
+    };
+
     return (
         <Container >
           <ProductGroupSearch onChange={handleSearchModelChange}/>
@@ -97,9 +92,11 @@ const ProductGroupList = () => {
             <Button type="primary" style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onClick={handleSearch}>
                     Search
                 </Button>
-                <Button type="primary" style={{ backgroundColor: 'var(--third_admin)' }} onClick={showModal}>
+                <Button type="primary" style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onClick={showModal}>
                     Add
                 </Button>
+                    <ProductGroupUpdate style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onChange={handleSearch} id={selectedRowKeys} />
+                <DeleteComponent style={{ backgroundColor: 'var(--third_admin)',marginRight: 4}} onChange={handleSearch} id={selectedRowKeys} />
                 <Modal title="Add Product Group" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                     <Form
                         form={form}
@@ -121,7 +118,11 @@ const ProductGroupList = () => {
                 </Modal>
                 <Table
                     columns={columns}
-                    // scroll={{ x: auto }}
+                    rowSelection={{
+                        type: selectionType,
+                        ...rowSelection,
+                    }}
+                    rowKey="id"
                     dataSource={dataSource}
                 />
             </Content>

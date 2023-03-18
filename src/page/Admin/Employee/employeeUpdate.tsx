@@ -1,12 +1,16 @@
-import { DatePicker, Form, Input, Modal } from 'antd';
+import { Button, DatePicker, Form, Input, Modal } from 'antd';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { employeeApi, employeeModel } from '../../../api/employee/employee.api';
 import './css/Employee.css';
 
-
-const EmployeeUpdate = (props: { id: any, onChange: any }) => {
+interface Props {
+    id: any,
+    onChange: () => void,
+    style: {}
+  }
+const EmployeeUpdate = (props: Props) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -28,6 +32,7 @@ const EmployeeUpdate = (props: { id: any, onChange: any }) => {
             employeeApi.update(selectModel).then((result) => {
                 if (!!result) {
                     setSelectModel({});
+                    props.onChange()
                 }
             })
         } catch (err) {
@@ -97,10 +102,10 @@ const EmployeeUpdate = (props: { id: any, onChange: any }) => {
     };
 
     return (
-        <div >
-            <a type="primary" onClick={showModal}>
-                Edit
-            </a>
+        < >
+             <Button type="primary"  style={props.style} onClick={showModal}>
+                    Edit 
+                </Button>
             <Modal title="Edit employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <Form
                     form={form}
@@ -130,7 +135,7 @@ const EmployeeUpdate = (props: { id: any, onChange: any }) => {
                     </Form.Item>
                 </Form>
             </Modal>
-        </div>
+        </>
     );
 }
 export default EmployeeUpdate;
