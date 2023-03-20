@@ -48,7 +48,7 @@ const UploadImage = (props: Props) => {
       onChange={onChange}
       name={"product"}
     >
-      {fileList.length < 3 && 'Upload'}
+      {fileList.length < 6 && 'Upload'}
     </Upload>
 
   );

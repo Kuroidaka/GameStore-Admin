@@ -2,7 +2,7 @@ import { Collapse, Input, Form, Col, Row } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { useState } from 'react';
 import { productModel } from '~/api/product/product.api';
-// import { Form } from 'react-router-dom';
+import ProductSelector from './Controller/Product_Selector';
 import ProductGroupSelect from '../ProductGroup/Controll/ProductGroupSelect';
 
 const { Panel } = Collapse;
@@ -13,27 +13,27 @@ const ProductSearch = (props : any) => {
     const [form] = Form.useForm();
     const [searchModel, setSearchModell] = useState<productModel>({})
 
-    const handleProductCodeChange = (e: any) => {
-        searchModel.Product_Code = e.target.value
+    const handleProductCodeChange = (value: string) => {
+        searchModel.Product_Code = value
         props.onChange(searchModel);
     }
 
-    const handleProductNameChange = (e: any) => {
+    const handleProductNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         searchModel.Product_Name = e.target.value
         props.onChange(searchModel);
     }
 
-    const handleProductPriceChange = (e: any) => {
-        searchModel.Product_Price = e.target.value
+    const handleProductPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        searchModel.Product_Price = Number.parseInt(e.target.value)
         props.onChange(searchModel);
     }
 
-    const handleProductDetailChange = (e: any) => {
+    const handleProductDetailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         searchModel.Product_Detail = e.target.value
         props.onChange(searchModel);
     }
 
-    const handleStatusChange = (e: any) => {
+    const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         searchModel.Status = e.target.value
         props.onChange(searchModel);
     }
@@ -61,9 +61,9 @@ const ProductSearch = (props : any) => {
                 >
                     <Row>
                         <Col span={12}>  
-                        <Form.Item label="Product Code">
-                            <Input onChange={handleProductCodeChange} />
-                        </Form.Item></Col>
+                            <ProductSelector onChange={handleProductCodeChange} />
+               
+                        </Col>
                         <Col span={12}><Form.Item label="Product Name">
                             <Input onChange={handleProductNameChange}/>
                         </Form.Item></Col>

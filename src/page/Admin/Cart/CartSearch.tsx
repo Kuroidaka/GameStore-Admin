@@ -7,23 +7,24 @@ import { CustomerApi, CustomerModel } from '~/api/customer/customer.api';
 
 const { Panel } = Collapse;
 
-interface props {
+interface Props {
     onChange: () => void
 }
 
 const CartSearch = (props: any) => {
+    const { onChange } = props
     const [form] = Form.useForm();
     const [searchModel, setSearchModell] = useState<CartModel>({})
     const [cardModel, setCardModel] = useState<CartModel[]>([])
     const [customerModel, setCustomerModel] = useState<CustomerModel[]>([])
     const listMethodPay = [
-        {value: "Cash", label: "Cash"},
-        {value: "Online", label: "Online"},
+        { value: "Cash", label: "Cash" },
+        { value: "Online", label: "Online" },
     ]
     useEffect(() => {
         const setCustomer = async () => {
             const customer = await CustomerApi.search({});
-            const result =  customer.data.results.map((item :CustomerModel)=> {
+            const result = customer.data.results.map((item: CustomerModel) => {
                 return {
                     value: item.Customer_Code,
                     label: item.Customer_Name
@@ -33,7 +34,7 @@ const CartSearch = (props: any) => {
         }
         const setCart = async () => {
             const customer = await CartApi.search({});
-            const result =  customer.data.results.map((item :CartModel)=> {
+            const result = customer.data.results.map((item: CartModel) => {
                 return {
                     value: item.Cart_Code,
                     label: item.Cart_Name
@@ -46,39 +47,42 @@ const CartSearch = (props: any) => {
     }, [])
     const handleCardCodeChange = (value: string) => {
         searchModel.Cart_Code = value
-        props.onChange(searchModel);
+        onChange(searchModel);
+    }
+    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        searchModel.Address = e.target.value
+        onChange(searchModel)
     }
 
-   
     const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         searchModel.Cart_PhoneNumber = e.target.value
-        props.onChange(searchModel);
+        onChange(searchModel);
     }
 
     const handleCardEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         searchModel.Cart_Email = e.target.value
-        props.onChange(searchModel);
+        onChange(searchModel);
     }
 
     const handleCardNoteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         searchModel.Cart_Note = e.target.value
-        props.onChange(searchModel);
+        onChange(searchModel);
     }
 
     const handleCardMethodPayChange = (value: string) => {
         searchModel.Cart_MethodPay = value
-        props.onChange(searchModel);
+        onChange(searchModel);
     }
 
     const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         searchModel.Status = e.target.value
-        props.onChange(searchModel);
+        onChange(searchModel);
     }
 
-    
+
     const handleCustomerChange = (value: string) => {
         searchModel.Customer_Code = value
-        props.onChange(searchModel);
+        onChange(searchModel);
     }
 
 
@@ -98,10 +102,11 @@ const CartSearch = (props: any) => {
                         <Row>
                             <Col span={12}>
                                 <Form.Item label="Card Code">
-                                <Select 
-                                     onChange={handleCardCodeChange}
-                                     options={cardModel}
-                                      />
+                                    <Select
+                                        onChange={handleCardCodeChange}
+                                        options={cardModel}
+                                        allowClear={true}
+                                    />
                                 </Form.Item></Col>
                             <Col span={12}>
                                 <Form.Item label="Phone Number">
@@ -125,22 +130,29 @@ const CartSearch = (props: any) => {
                         <Row>
                             <Col span={12}>
                                 <Form.Item label="Method Pay">
-                                <Select 
-                                     onChange={handleCardMethodPayChange}
-                                     options={listMethodPay}
-                                      />
+                                    <Select
+                                        onChange={handleCardMethodPayChange}
+                                        options={listMethodPay}
+                                        allowClear
+                                    />
                                 </Form.Item></Col>
                             <Col span={12}>
                                 <Form.Item label="Customer">
-                                    <Select 
-                                     onChange={handleCustomerChange}
-                                     options={customerModel}
-                                      />
+                                    <Select
+                                        onChange={handleCustomerChange}
+                                        options={customerModel}
+                                        allowClear
+                                    />
                                 </Form.Item>
                             </Col>
                         </Row>
 
                         <Row>
+                            <Col span={12}>
+                                <Form.Item label="Address">
+                                    <Input onChange={handleAddressChange} />
+                                </Form.Item>
+                            </Col>
                             <Col span={12}>
                                 <Form.Item label="Status">
                                     <Input onChange={handleStatusChange} />

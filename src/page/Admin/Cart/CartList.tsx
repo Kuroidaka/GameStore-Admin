@@ -185,7 +185,7 @@ const CartList = () => {
         {
             key: '2',
             label: `Order Details`,
-            children: <><CartAdd onChange={handleChangeProductList} /></>,
+            children: <><CartAdd disabled={false} onChange={handleChangeProductList} /></>,
         },
     ];
     return (

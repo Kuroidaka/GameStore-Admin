@@ -1,7 +1,6 @@
 import { Form, Select } from 'antd';
 import { useEffect, useState } from 'react';
-import { productModel } from '~/api/product/product.api';
-import { productGroupApi, productGroupModel } from '~/api/productGroup/productGroup.api';
+import { productApi, productModel } from '~/api/product/product.api';
 
 
 
@@ -11,14 +10,14 @@ const ProductSelector = (props: any) => {
     };
 
     const [dataSource,setData] = useState<productModel[]>([]); 
-    const searchProductGroupList =  async () => {
+    const getProductList =  async () => {
         try {
-            const productGroupList = await productGroupApi.search({});
-            const data = productGroupList.data.results;
+            const productList = await productApi.search({});
+            const data = productList.data.results;
             const result = data.map((item : productModel) => {
                 return {
                     value: item.Product_Code,
-                    label: item.Product_Name,
+                    label: item.Product_Code,
                 }
             })
             if(result.length > 0){
@@ -29,15 +28,16 @@ const ProductSelector = (props: any) => {
         }
     }
     useEffect(() => {
-        searchProductGroupList();
+        getProductList();
     }, [])
     return (
         <div>
-            <Form.Item label="Product Group">
+            <Form.Item label="Product Code">
                 <Select
                     // name={props?.name}
                     style={{ width: "100%" }}
                     value={props.value}
+                    allowClear={true}
                     onChange={handleChange}
                     options={dataSource}
                 />

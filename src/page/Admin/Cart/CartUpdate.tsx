@@ -122,23 +122,23 @@ const CartUpdate = (props: Props) => {
                     {...formLayout}
                 >
 
-                    <Form.Item label="Card Code">
+                    <Form.Item label="Order Code">
                         <Input disabled={true} value={dataSource.Cart_Code} onChange={handleCardCodeChange} />
                     </Form.Item>
 
-                    <Form.Item label="Card Number">
+                    <Form.Item label=" Number">
                         <Input value={dataSource.Cart_PhoneNumber} onChange={handleCardNumberChange} />
                     </Form.Item>
-                    <Form.Item label="Card Email">
+                    <Form.Item label=" Email">
                         <Input value={dataSource.Cart_Email} onChange={handleCardEmailChange} />
                     </Form.Item>
-                    <Form.Item label="Card Note">
+                    <Form.Item label=" Note">
                         <Input value={dataSource.Cart_Note} onChange={handleCardNoteChange} />
                     </Form.Item>
-                    <Form.Item label="Card Method Pay">
+                    <Form.Item label=" Method Pay">
                         <Input value={dataSource.Cart_MethodPay} onChange={handleCardMethodPayChange} />
                     </Form.Item>
-                    <Form.Item label="Tổng tiền">
+                    <Form.Item label="Order Amount">
                         <InputNumber  value={dataSource.Cart_Amount} style={{ width: "100%" }} disabled={true} />
                     </Form.Item>
                     <Form.Item label="Customer">
@@ -153,7 +153,7 @@ const CartUpdate = (props: Props) => {
         {
             key: '2',
             label: `Cart Product`,
-            children: <><CartAdd dataSource={dataSource.CartDetails} onChange={handleChangeProductList} /></>,
+            children: <><CartAdd disabled={true} dataSource={dataSource.CartDetails} onChange={handleChangeProductList} /></>,
         },
     ];
     return (
@@ -161,7 +161,7 @@ const CartUpdate = (props: Props) => {
               <Button type="primary"  style={{ backgroundColor: 'var(--third_admin)',marginRight: 4 }} onClick={showModal}>
                 Edit
               </Button>
-            <Modal title="Add employee" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="Edit order" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <Tabs defaultActiveKey="1" items={items} />
 
             </Modal>

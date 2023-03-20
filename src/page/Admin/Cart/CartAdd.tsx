@@ -109,7 +109,8 @@ interface DataType {
 }
 interface Props {
   onChange: (value: CartDetailModel[]) => void,
-  dataSource?: productModel[]
+  dataSource?: productModel[],
+  disabled: boolean
 }
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
@@ -139,13 +140,12 @@ const CartAdd = (props: Props) => {
     
   },[props?.dataSource])
   const [count, setCount] = useState(0);
-  const handleDelete = (id: React.Key) => {
-    const newData = dataSource.filter((item) => item.id !== id);
+  const handleDelete = (id: number) => {
+    const newData = dataSource.filter((item,index) => item.key !== id);
     setDataSource(newData);
   };
   const handleChangeProduct = (value: string) => {
     dataSource[dataSource.length - 1].Cart_Detail_Product = value;
-    // setDataSource(dataSource);
     props.onChange(dataSource)
   }
 
@@ -161,7 +161,7 @@ const CartAdd = (props: Props) => {
       dataIndex: 'Cart_Detail_Product',
       width: '50%',
       render: (data) => {
-        return (<Select value={data} options={productList} onChange={handleChangeProduct} style={{width: '100%'}}/>)
+        return (<Select disabled={props.disabled} value={data} options={productList} onChange={handleChangeProduct} style={{width: '100%'}}/>)
       }
     },
     {
@@ -170,20 +170,21 @@ const CartAdd = (props: Props) => {
       key: 'Cart_Detail_Quantity',
       dataIndex: 'Cart_Detail_Quantity',
       render: (data,record) => {
-        console.log(record)
-        return (<InputNumber  value={data} onChange={handleQuantity}  style={{width: '100%'}}/>)
+        return (<InputNumber  disabled={props.disabled} value={data} onChange={handleQuantity}  style={{width: '100%'}}/>)
 
       }
     },
     {
       title: 'action',
-      dataIndex: 'delete',
-      render: () =>
-        (
-          <Popconfirm title="Sure to delete?" onConfirm={() => {}}>
-            <a>Delete</a>
+      dataIndex: 'key',
+      render: (id,record: CartDetailModel) =>
+       {
+        return  (
+          <Popconfirm  disabled={props.disabled} title="Sure to delete?" onConfirm={() => handleDelete(id || record?.key)}>
+            <a>x</a>
           </Popconfirm>
         )
+       }
     },
   ];
 
@@ -230,7 +231,7 @@ const CartAdd = (props: Props) => {
   })
   return (
     <div>
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+      <Button disabled={props.disabled} onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
         Add Product
       </Button>
       <Table
