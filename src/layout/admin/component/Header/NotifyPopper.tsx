@@ -1,42 +1,40 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { img } from "~/assert/img";
-
+import { io } from "socket.io-client";
+import { notifyApi } from "~/api/notification/notification.api";
+import { Modal } from "antd";
+import NotifyConfirm from "./NotifyConfirm";
+import { socketHandler } from "~/page/Admin/CommomHandler/handleSocket";
 const NotifyPopper = () => {
-
-    return (  
+    const [dataSource, setDataSource] = useState([]);
+    useEffect(() => {
+        socketHandler.requireNotify();
+        // var socket = io("http://localhost:8888/");
+        // socket.on("getData", async (var1) => {
+        //     const result = await notifyApi.search({});
+        //     setDataSource(result.data.results);
+        // })
+    }, [])
+ 
+    return (
         <Container>
             <div className="title">
                 Notification
             </div>
-
             <div className="item-list">
-                <div className="item">
-                    <img src={img.logo} alt="" />
+            {dataSource ? dataSource.map((item: any) => {
+                return (
+                    <NotifyConfirm data={item}/>
 
-                    <div className="content">
-                        <h5>Welcome you to admin page hahahahahah</h5>
-                        <p>1 hour ago</p>
-                    </div>
-                </div>
-
-                <div className="item">
-                    <img src={img.logo} alt="" />
-
-                    <div className="content">
-                        <h5>Welcome you to admin page hahahahahah</h5>
-                        <p>1 hour ago</p>
-                    </div>
-                </div>
-
-                <div className="show-all">
-                    <p>Show all Notifications</p>
-                </div>
+               )
+            }) : ''}
             </div>
 
         </Container>
     );
 }
- 
+
 export default NotifyPopper;
 
 const Container = styled.div`
