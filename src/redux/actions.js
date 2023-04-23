@@ -1,5 +1,11 @@
 import * as types from "./actionTypes";
-import { auth, googleAuthProvider, facebookAuthProvider } from "../firebase";
+import { 
+  auth,
+  googleAuthProvider,
+  facebookAuthProvider
+} from "../firebase";
+
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, signInWithPopup } from "firebase/auth";
 
 export const addToBasket = (item) => ({
   type: types.ADD_TO_BASKET,
@@ -92,12 +98,11 @@ export const setBasketEmpty = () => ({
 export const registerInitiate = (email, password, displayName) => {
   return function (dispatch) {
     dispatch(registerStart());
-    auth
-      .createUserWithEmailAndPassword(email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
         // user.displayName = displayName;
         // dispatch(registerSuccess({ user, additionalData: { displayName } }));
-        user.updateProfile({
+        updateProfile({
           displayName,
         });
         dispatch(registerSuccess({ user, additionalData: { displayName } }));
@@ -109,8 +114,7 @@ export const registerInitiate = (email, password, displayName) => {
 export const loginInitiate = (email, password) => {
   return function (dispatch) {
     dispatch(loginStart());
-    auth
-      .signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
         dispatch(loginSuccess(user));
       })
@@ -121,8 +125,7 @@ export const loginInitiate = (email, password) => {
 export const googleSignInInitiate = () => {
   return function (dispatch) {
     dispatch(googleSignInStart());
-    auth
-      .signInWithPopup(googleAuthProvider)
+    signInWithPopup(auth, googleAuthProvider)
       .then(({ user }) => {
         dispatch(googleSignInSuccess(user));
       })
@@ -133,8 +136,7 @@ export const googleSignInInitiate = () => {
 export const fbSignInInitiate = () => {
   return function (dispatch) {
     dispatch(fbSignInStart());
-    auth
-      .signInWithPopup(facebookAuthProvider.addScope("user_birthday, email"))
+    signInWithPopup(auth, facebookAuthProvider.addScope("user_birthday, email"))
       .then((result) => {
         dispatch(fbSignInSuccess(result.user));
       })
@@ -145,8 +147,7 @@ export const fbSignInInitiate = () => {
 export const logOutInitiate = () => {
   return function (dispatch) {
     dispatch(logoutStart());
-    auth
-      .signOut()
+    signOut(auth)
       .then((resp) => dispatch(logoutSuccess()))
       .catch((error) => dispatch(logoutError(error.message)));
   };

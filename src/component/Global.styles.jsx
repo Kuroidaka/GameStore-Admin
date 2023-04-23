@@ -3,8 +3,9 @@ import { createGlobalStyle } from "styled-components";
 export const GlobalStyles = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900;1000&family=Roboto&display=swap');
     :root {
-         
-       
+        --text-color: #2F353F;
+        --first-color: rebeccapurple;
+        --second-color: #f4e9ff
     }
     
     *, *:before, *:after {
