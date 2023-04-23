@@ -9,8 +9,9 @@ const InputField = (props) => {
     placeholder,
     value,
     onChange,
-    required
-
+    required,
+    errorText,
+    errorState = false
    } = props
 
    const [typeInput, setType] = useState({
@@ -18,6 +19,7 @@ const InputField = (props) => {
         origin: type,
         hide: true
     })
+    const [error, setError] = useState(errorState)
 
    const handleClickEye = () => {
         const {currentType, origin} = typeInput
@@ -32,12 +34,11 @@ const InputField = (props) => {
                 return {...prev, currentType:origin, hide: true}
             })
         }
-
    }
 
   return (
-    <Container className="input_bar-box">
-      <div className="input_bar-wrapper">
+    <Container className="input_bar-box" error={error}>
+      <div className={`input_bar-wrapper ${error && 'error'}`}>
         <input
           type={typeInput.currentType}
           autoComplete="new-password"
@@ -57,8 +58,8 @@ const InputField = (props) => {
             }
             </div>
         }
-       
       </div>
+      <div className={`notify ${ error && 'show'}`}>{errorText}</div>
     </Container>
   )
 }
@@ -70,12 +71,12 @@ const Container = styled.div`
 
   margin: 20px 0;
   width: 100%;
+  position: relative;
 
   .input_bar-wrapper {
     width: 100%;
     height: var(--input-height);
-    background-color: transparent;
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid #e3e3e3;
     position: relative;
     display: flex;
 
@@ -92,12 +93,15 @@ const Container = styled.div`
       padding: 10px;
       padding-top: 20px;
       background-color: transparent;
+      z-index: 2;
 
       &:focus ~ .input_bar-placeholder {
         font-size: 12px;
         transform: translateY(0);
         top: 1px;
       }
+
+      
     }
 
     .input_bar-placeholder {
@@ -112,7 +116,7 @@ const Container = styled.div`
       transition: all linear 0.1s;
       line-height: 1;
       font-weight: 500;
-      z-index: -1;
+      z-index: 1;
     }
 
     .icon {
@@ -131,6 +135,25 @@ const Container = styled.div`
       top: 1px;
     }
 
+    &.error {
+        border-bottom: 1px solid red;
 
+        .input_bar-placeholder {
+            color: red;
+        }
+    }
+  }
+
+  .notify{
+    color: red;
+    position: absolute;
+    z-index: -1;
+    font-size: 0ch;
+    transition: all linear .2s;
+    &.show {
+        bottom: -20px;
+        left: 10px;
+        font-size: 11px;
+    }
   }
 `

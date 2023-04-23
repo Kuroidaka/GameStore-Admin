@@ -87,11 +87,11 @@ const Register = (props) => {
       />
 
       <Action>
-        <Button title='Sign in' active={true} width='250px'/>
+        <Button title={data.button1} active={true} width='250px'/>
       </Action>
     </form>
       <Action>
-        <Button title='Sign up New Account' normal={true} width='250px' onClick={toggleForm}/>
+        <Button title={data.button2} normal={true} width='250px' onClick={toggleForm}/>
       </Action>
   </RegisterForm>
   )
@@ -102,8 +102,8 @@ const data = {
   displayName: "Your full name",
   password: "Your password",
   passwordConfirm: "Confirm your password",
-  button1: "",
-  
+  button1: "Next",
+  button2: "Already have account"
 }
 
 export default Register;

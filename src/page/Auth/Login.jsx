@@ -56,6 +56,8 @@ const SignIn = (props) => {
         value={email}
         onChange={handleChange}
         required
+        errorState={false}
+        errorText="input your email"
       />
 
       <InputField 
