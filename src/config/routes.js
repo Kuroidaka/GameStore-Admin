@@ -1,4 +1,3 @@
 export const adminRoutePath = {
-    login: '/login',
-    register: '/register',
+    auth: '/auth',
 }

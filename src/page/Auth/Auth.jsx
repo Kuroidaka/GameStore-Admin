@@ -4,7 +4,7 @@ import {
   registerInitiate,
 } from "~/redux/actions";
 import { useSelector } from "react-redux";
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import SignIn from "./Login";
 import Register from "./Register";
 
@@ -64,7 +64,6 @@ const SlideBoard = styled.div `
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     right: 0;
-    ${({form}) => 
-        form ? 'transform: translateX(-100%);' : 'transform: translateX(0%);' 
+    ${({form}) => form === true ? 'transform: translateX(-100%);' : 'transform: translateX(0%);' 
     }
 `

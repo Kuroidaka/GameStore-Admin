@@ -3,8 +3,6 @@ import { GlobalStyles } from './component/Global.styles';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Load from './component/load';
 import config from './config';
-import Login from './page/Auth/Login';
-import Register from './page/Auth/Register';
 import styled from 'styled-components';
 import Auth from './page/Auth/Auth';
 
@@ -21,7 +19,7 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
-  const {login, register} = config.adminRoutePath
+  const {auth } = config.adminRoutePath
 
   return (
     <Suspense fallback={<Load/>}>
@@ -30,8 +28,7 @@ function App() {
         <ScrollToTopOnLocationChange />
       
           <Routes>
-              <Route path={login} element={<Auth/>} />
-              <Route path={register} element={<Register /> }/>
+              <Route path={auth} element={<Auth/>} />
           </Routes>
        
       </Container>
