@@ -1,0 +1,118 @@
+/* sign in FORM */
+#register-form {
+    width: 412px;
+    margin: 10vh auto;
+    background-color: #f3f3f3;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  #register-form form {
+    width: 100%;
+    max-width: 410px;
+    padding: 15px;
+    margin: auto;
+  }
+  #register-form .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+  }
+  #register-form .form-control:focus {
+    z-index: 2;
+  }
+  #register-form .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  #register-form .form-signin input[type="password"] {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  
+  #register-form .social-login {
+    width: 390px;
+    margin: 0 auto;
+    margin-bottom: 14px;
+  }
+  #register-form .social-btn {
+    font-weight: 100;
+    color: white;
+    width: 190px;
+    font-size: 0.9rem;
+  }
+  
+  #register-form a {
+    display: block;
+    padding-top: 10px;
+    color: lightseagreen;
+  }
+  
+  #logreg-form .lines {
+    width: 200px;
+    border: 1px solid red;
+  }
+  
+  #register-form button[type="submit"] {
+    margin-top: 10px;
+  }
+  
+  #register-form .facebook-btn {
+    background-color: #3c589c;
+    margin-right: 5px;
+  }
+  
+  #register-form .google-btn {
+    background-color: #df4b3b;
+  }
+
+  
+  #register-form .form-signup .social-btn {
+    width: 210px;
+  }
+  
+  #register-form .form-signup input {
+    margin-bottom: 2px;
+  }
+  
+  .form-signup .social-login {
+    width: 210px !important;
+    margin: 0 auto;
+  }
+  
+  /* Mobile */
+  
+  @media screen and (max-width: 500px) {
+    #register-form {
+      width: 300px;
+    }
+  
+    #register-form .social-login {
+      width: 200px;
+      margin: 0 auto;
+      margin-bottom: 10px;
+    }
+    #register-form .social-btn {
+      font-size: 1.3rem;
+      font-weight: 100;
+      color: white;
+      width: 200px;
+      height: 56px;
+    }
+    #register-form .social-btn:nth-child(1) {
+      margin-bottom: 5px;
+    }
+    #register-form .social-btn span {
+      display: none;
+    }
+    #register-form .facebook-btn:after {
+      content: "Facebook";
+    }
+  
+    #register-form .google-btn:after {
+      content: "Google+";
+    }
+  }
+  
