@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import InputField from "~/component/InputField";
 import Button from "~/component/Button";
+//use npm install validator to validation input
+import isEmpty from "validator/lib/isEmpty"
 
 
 
@@ -18,6 +20,8 @@ const SignIn = (props) => {
     email: "",
     password: "",
   });
+  
+  const [ validationMsg, setValidationMsg ] = useState('')
 
   const { email, password } = state;
 
@@ -41,6 +45,28 @@ const SignIn = (props) => {
     dispatch(loginInitiate(email, password));
     setState({ email: "", password: "" });
   };
+  
+  //Validate input 
+  const validateAll = () => {
+    const msg = {}
+    if (isEmpty(email)) {
+      msg.email = "Please input your email address"
+    } 
+
+    if (isEmpty(password)) {
+      msg.password = "Please enter your password"
+    }
+
+    setValidationMsg(msg)
+        if (Object.keys(msg).length > 0) return false
+        return true
+  }
+  
+  const onSubmitLogin = () => {
+    const isValid = validateAll()
+    if (!isValid) return 
+    //Call API Login
+  } 
 
   return (
     <SignInForm>
