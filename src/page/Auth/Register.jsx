@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import InputField from "~/component/InputField";
 import Button from "~/component/Button";
+import isEmpty from "validator/lib/isEmpty"
+
 
 const Register = (props) => {
   const { user, toggleForm } = props
@@ -18,6 +20,8 @@ const Register = (props) => {
     password: "",
     passwordConfirm: "",
   });
+  
+  const [ validationMsg, setValidationMsg ] = useState('')
 
   const navigate = useNavigate();
 
@@ -44,6 +48,25 @@ const Register = (props) => {
     dispatch(registerInitiate(email, password, displayName));
     setState({ displayName: "", email: "", password: "", passwordConfirm: "" });
   };
+  
+  const validateAll = () => {
+    const msg = {}
+    if (isEmpty(email)) {
+      msg.email = "Please input your email address"
+    } 
+
+    if (isEmpty(password)) {
+      msg.password = "Please enter your password"
+    }
+    
+    if (isEmpty(displayName)) {
+      msg.displayName = "Please enter your displayName"
+    }
+
+    setValidationMsg(msg)
+        if (Object.keys(msg).length > 0) return false
+        return true
+  }
 
   return (
     <RegisterForm>
@@ -77,7 +100,8 @@ const Register = (props) => {
         onChange={handleChange}
         required
       />
-       <InputField 
+       <div>
+          <InputField 
         type="password"
         name="passwordConfirm"
         placeholder={data.passwordConfirm}
@@ -85,6 +109,8 @@ const Register = (props) => {
         onChange={handleChange}
         required
       />
+      <p className="text-red-400 text-xs italic">{validationMsg.diplayName}</p>
+       </ div>
 
       <Action>
         <Button title={data.button1} active={true} width='250px'/>
