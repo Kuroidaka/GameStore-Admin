@@ -59,14 +59,24 @@ const Register = (props) => {
       msg.password = "Please enter your password"
     }
     
+    if (isEmpty(passwordConfirm)) {
+      msg.displayName = "Please enter your passwordConfirm"
+    }
+    
     if (isEmpty(displayName)) {
       msg.displayName = "Please enter your displayName"
     }
-
+    
     setValidationMsg(msg)
         if (Object.keys(msg).length > 0) return false
         return true
   }
+  
+  const onSubmitRegister = () => {
+    const isValid = validateAll()
+    if (!isValid) return 
+    //Call API Register
+  } 
 
   return (
     <RegisterForm>
@@ -76,15 +86,19 @@ const Register = (props) => {
 
     <form onSubmit={handleSubmit}>
 
-      <InputField 
+      <div>
+          <InputField 
         type="email"
         name="email"
         placeholder={data.email}
         value={email}
         onChange={handleChange}
         required
-      />
-       <InputField 
+        />
+        <p className="text-red-400 text-xs italic">{validationMsg.email}</p>
+      </ div>
+      <div>
+          <InputField 
         type="text"
         name="displayName"
         placeholder={data.displayName}
@@ -92,7 +106,11 @@ const Register = (props) => {
         onChange={handleChange}
         required
       />
-       <InputField 
+          <p className="text-red-400 text-xs italic">{validationMsg.password}</p>
+        </ div>
+
+        <div>
+          <InputField 
         type="password"
         name="password"
         placeholder={data.password}
@@ -100,6 +118,9 @@ const Register = (props) => {
         onChange={handleChange}
         required
       />
+          <p className="text-red-400 text-xs italic">{validationMsg.passwordConfirm}</p>
+        </ div>
+    
        <div>
           <InputField 
         type="password"
