@@ -75,25 +75,33 @@ const SignIn = (props) => {
     </Logo>
 
     <form onSubmit={handleSubmit}>
-      <InputField 
-        type="email"
-        name="email"
-        placeholder="Email address"
-        value={email}
-        onChange={handleChange}
-        required
-        errorState={false}
-        errorText="input your email"
-      />
+      <div>
+          <InputField
+            type="email"
+            id="inputEmail"
+            className="form-control"
+            placeholder="Email address"
+            value={email}
+            name="email"
+            onChange={handleChange}
+            required
+          />
+          <p className="text-red-400 text-xs italic">{validationMsg.email}</p>
+          </div>
 
-      <InputField 
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={password}
-        onChange={handleChange}
-        required
-      />
+       <div>
+            <InputField 
+            type="password"
+            id="inputPassword"
+            className="form-control"
+            placeholder="Password"
+            value={password}
+            name="password"
+            onChange={handleChange}
+            required
+          />
+          <p className="text-red-400 text-xs italic">{validationMsg.password}</p>
+      </div>
 
       <Action>
         <Button title='Sign in' active={true} width='250px'/>
