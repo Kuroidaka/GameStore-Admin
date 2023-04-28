@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { icon } from '~/assert/icon/icon'
 
@@ -8,10 +8,11 @@ const InputField = (props) => {
     name,
     placeholder,
     value,
-    onChange,
+    onInput,
     required,
     errorText,
-    errorState = false
+    errorState = false,
+    setError
    } = props
 
    const [typeInput, setType] = useState({
@@ -19,7 +20,15 @@ const InputField = (props) => {
         origin: type,
         hide: true
     })
-    const [error, setError] = useState(errorState)
+    const [state, setState] = useState({
+      error: false,
+      msg: ''
+    })
+
+
+    useEffect(() => { 
+      setState({error: errorState, msg: errorText})
+    }, [errorState, errorText]);
 
    const handleClickEye = () => {
         const {currentType, origin} = typeInput
@@ -36,15 +45,22 @@ const InputField = (props) => {
         }
    }
 
+   const handleInputValue = (e) => {
+      setState({error: false, msg: ''})
+      setError({[e.target.getAttribute('name')]: ''})
+      onInput(e)
+
+   }
+
   return (
-    <Container className="input_bar-box" error={error}>
-      <div className={`input_bar-wrapper ${error && 'error'}`}>
+    <Container className="input_bar-box" state={state}>
+      <div className={`input_bar-wrapper ${state.error && 'error'}`}>
         <input
           type={typeInput.currentType}
           autoComplete="new-password"
           className="input_bar"
           name={name}
-          onChange={onChange}
+          onInput={handleInputValue}
           value={value}
           placeholder=" "
           required={required}
@@ -59,7 +75,7 @@ const InputField = (props) => {
             </div>
         }
       </div>
-      <div className={`notify ${ error && 'show'}`}>{errorText}</div>
+      <div className={`notify ${ state.error && 'show'}`}>{errorText}</div>
     </Container>
   )
 }

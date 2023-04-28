@@ -15,7 +15,7 @@ import isEmpty from "validator/lib/isEmpty"
 
 const SignIn = (props) => {
   const { user, toggleForm } = props 
-
+  const msg = {}
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -35,7 +35,7 @@ const SignIn = (props) => {
     }
   }, [user, navigate]);
 
-  const handleChange = (e) => {
+  const handleInput = (e) => {
     let { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
@@ -48,7 +48,7 @@ const SignIn = (props) => {
   
   //Validate input 
   const validateAll = () => {
-    const msg = {}
+    
     if (isEmpty(email)) {
       msg.email = "Please input your email address"
     } 
@@ -62,7 +62,8 @@ const SignIn = (props) => {
         return true
   }
   
-  const onSubmitLogin = () => {
+  const onSubmitLogin = (e) => {
+    e.preventDefault()
     const isValid = validateAll()
     if (!isValid) return 
     //Call API Login
@@ -74,8 +75,7 @@ const SignIn = (props) => {
       <h1>LOGO</h1>
     </Logo>
 
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form onSubmit={onSubmitLogin}>
           <InputField
             type="email"
             id="inputEmail"
@@ -83,25 +83,23 @@ const SignIn = (props) => {
             placeholder="Email address"
             value={email}
             name="email"
-            onChange={handleChange}
-            required
+            onInput={handleInput}
+            errorText={validationMsg.email}
+            errorState={validationMsg.email !== '' && validationMsg.email !== undefined ? true : false}
+            setError={setValidationMsg}
           />
-          <p className="text-red-400 text-xs italic">{validationMsg.email}</p>
-          </div>
-
-       <div>
-            <InputField 
+          <InputField 
             type="password"
             id="inputPassword"
             className="form-control"
             placeholder="Password"
             value={password}
             name="password"
-            onChange={handleChange}
-            required
+            onInput={handleInput}
+            errorText={validationMsg.password}
+            errorState={validationMsg.password !== '' && validationMsg.password !== undefined ? true : false}
+            setError={setValidationMsg}
           />
-          <p className="text-red-400 text-xs italic">{validationMsg.password}</p>
-      </div>
 
       <Action>
         <Button title='Sign in' active={true} width='250px'/>
