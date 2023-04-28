@@ -17,13 +17,13 @@ const SignIn = (props) => {
   const { user, toggleForm } = props 
   const msg = {}
   const [state, setState] = useState({
-    email: "",
+    username: "",
     password: "",
   });
   
   const [ validationMsg, setValidationMsg ] = useState('')
 
-  const { email, password } = state;
+  const { username, password } = state;
 
   const navigate = useNavigate();
 
@@ -42,15 +42,15 @@ const SignIn = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginInitiate(email, password));
-    setState({ email: "", password: "" });
+    dispatch(loginInitiate(username, password));
+    setState({ username: "", password: "" });
   };
   
   //Validate input 
   const validateAll = () => {
     
-    if (isEmpty(email)) {
-      msg.email = "Please input your email address"
+    if (isEmpty(username)) {
+      msg.username = "Please input your username address"
     } 
 
     if (isEmpty(password)) {
@@ -77,22 +77,22 @@ const SignIn = (props) => {
 
     <form onSubmit={onSubmitLogin}>
           <InputField
-            type="email"
-            id="inputEmail"
+            type="username"
+            id="inputUsername"
             className="form-control"
-            placeholder="Email address"
-            value={email}
-            name="email"
+            placeholder={data.username}
+            value={username}
+            name="username"
             onInput={handleInput}
-            errorText={validationMsg.email}
-            errorState={validationMsg.email !== '' && validationMsg.email !== undefined ? true : false}
+            errorText={validationMsg.username}
+            errorState={validationMsg.username !== '' && validationMsg.username !== undefined ? true : false}
             setError={setValidationMsg}
           />
           <InputField 
             type="password"
             id="inputPassword"
             className="form-control"
-            placeholder="Password"
+            placeholder={data.password}
             value={password}
             name="password"
             onInput={handleInput}
@@ -112,7 +112,10 @@ const SignIn = (props) => {
   )
 }
 
-
+const data = {
+  username: 'Username',
+  password: 'Input Password',
+}
 
 
 export default SignIn;

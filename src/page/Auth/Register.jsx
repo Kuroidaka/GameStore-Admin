@@ -12,7 +12,7 @@ const Register = (props) => {
   const { user, toggleForm } = props
   const msg = {}
   const [state, setState] = useState({
-    displayName: '',
+    // displayName: '',
     email: '',
     password: '',
     passwordConfirm: '',
@@ -28,7 +28,12 @@ const Register = (props) => {
     }
   }, [user, navigate])
 
-  const { displayName, email, password, passwordConfirm } = state
+  const { 
+    // displayName,
+    email,
+    password,
+    passwordConfirm
+  } = state
 
   const dispatch = useDispatch()
 
@@ -42,7 +47,7 @@ const Register = (props) => {
     if (password !== passwordConfirm) {
       return
     }
-    dispatch(registerInitiate(email, password, displayName))
+    dispatch(registerInitiate(email, password,/*displayName*/))
     setState({ displayName: '', email: '', password: '', passwordConfirm: '' })
   }
 
@@ -59,9 +64,9 @@ const Register = (props) => {
       msg.passwordConfirm = 'Please enter your passwordConfirm'
     }
 
-    if (isEmpty(displayName)) {
-      msg.displayName = 'Please enter your displayName'
-    }
+    // if (isEmpty(displayName)) {
+    //   msg.displayName = 'Please enter your displayName'
+    // }
 
     if (!equals(passwordConfirm, password)) {
       msg.passwordConfirm = 'Password confirm must match'
@@ -99,7 +104,7 @@ const Register = (props) => {
           setError={setValidationMsg}
         />
 
-        <InputField
+        {/* <InputField
           type="text"
           name="displayName"
           placeholder={data.displayName}
@@ -108,7 +113,7 @@ const Register = (props) => {
           errorState={validationMsg.displayName !== '' && validationMsg.displayName !== undefined ? true : false}
           errorText={validationMsg.displayName}
           setError={setValidationMsg}
-        />
+        /> */}
 
         <InputField
           type="password"
@@ -150,8 +155,8 @@ const Register = (props) => {
 
 const data = {
   email: 'Email Address',
-  displayName: 'Your full name',
   password: 'Your password',
+  // displayName: 'Your full name',
   passwordConfirm: 'Confirm your password',
   button1: 'Next',
   button2: 'Already have account',
