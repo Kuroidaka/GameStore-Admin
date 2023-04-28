@@ -5,6 +5,8 @@ import Load from './component/load';
 import config from './config';
 import styled from 'styled-components';
 import Auth from './page/Auth/Auth';
+import SideBarLayout from './layout/Sidebar.layout';
+import Dashboard from './page/Dashboard/Home';
 
 
 function ScrollToTopOnLocationChange() {
@@ -19,7 +21,7 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
-  const {auth } = config.adminRoutePath
+  const { auth, dashboard } = config.adminRoutePath
 
   return (
     <Suspense fallback={<Load/>}>
@@ -29,6 +31,7 @@ function App() {
       
           <Routes>
               <Route path={auth} element={<Auth/>} />
+              <Route path={dashboard} element={<SideBarLayout><Dashboard/></SideBarLayout>} />
           </Routes>
        
       </Container>
