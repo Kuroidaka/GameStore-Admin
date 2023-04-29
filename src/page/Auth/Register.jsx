@@ -7,12 +7,13 @@ import InputField from '~/component/InputField'
 import Button from '~/component/Button'
 import isEmpty from 'validator/lib/isEmpty'
 import equals from 'validator/lib/equals'
+import { auth } from '~/api/auth.api'
 
 const Register = (props) => {
   const { user, toggleForm } = props
   const msg = {}
   const [state, setState] = useState({
-    displayName: '',
+    username: '',
     email: '',
     password: '',
     passwordConfirm: '',
@@ -28,7 +29,12 @@ const Register = (props) => {
     }
   }, [user, navigate])
 
-  const { displayName, email, password, passwordConfirm } = state
+  const { 
+    username,
+    email,
+    password,
+    passwordConfirm
+  } = state
 
   const dispatch = useDispatch()
 
@@ -42,8 +48,8 @@ const Register = (props) => {
     if (password !== passwordConfirm) {
       return
     }
-    dispatch(registerInitiate(email, password, displayName))
-    setState({ displayName: '', email: '', password: '', passwordConfirm: '' })
+    dispatch(registerInitiate(email, password,/*username*/))
+    setState({ username: '', email: '', password: '', passwordConfirm: '' })
   }
 
   const validateAll = () => {
@@ -59,8 +65,8 @@ const Register = (props) => {
       msg.passwordConfirm = 'Please enter your passwordConfirm'
     }
 
-    if (isEmpty(displayName)) {
-      msg.displayName = 'Please enter your displayName'
+    if (isEmpty(username)) {
+      msg.username = 'Please enter your username'
     }
 
     if (!equals(passwordConfirm, password)) {
@@ -78,7 +84,7 @@ const Register = (props) => {
     if (!isValid) {
       return
     }
-    // Call API Register
+   
   }
 
   return (
@@ -101,12 +107,12 @@ const Register = (props) => {
 
         <InputField
           type="text"
-          name="displayName"
-          placeholder={data.displayName}
-          value={displayName}
+          name="username"
+          placeholder={data.username}
+          value={username}
           onInput={handleInput}
-          errorState={validationMsg.displayName !== '' && validationMsg.displayName !== undefined ? true : false}
-          errorText={validationMsg.displayName}
+          errorState={validationMsg.username !== '' && validationMsg.username !== undefined ? true : false}
+          errorText={validationMsg.username}
           setError={setValidationMsg}
         />
 
@@ -150,8 +156,8 @@ const Register = (props) => {
 
 const data = {
   email: 'Email Address',
-  displayName: 'Your full name',
   password: 'Your password',
+  username: 'Your username',
   passwordConfirm: 'Confirm your password',
   button1: 'Next',
   button2: 'Already have account',
