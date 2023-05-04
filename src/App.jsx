@@ -5,6 +5,7 @@ import Load from './component/load';
 import config from './config';
 import styled from 'styled-components';
 import Auth from './page/Auth/Auth';
+import AdminManagementPage from './page/Account/Account';
 
 
 function ScrollToTopOnLocationChange() {
@@ -19,16 +20,17 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
-  const {auth } = config.adminRoutePath
+  const { auth, admin } = config.adminRoutePath
 
   return (
     <Suspense fallback={<Load/>}>
       <Container>
         <GlobalStyles />
         <ScrollToTopOnLocationChange />
-      
+          
           <Routes>
               <Route path={auth} element={<Auth/>} />
+              <Route path={admin} element={<AdminManagementPage/>} />
           </Routes>
        
       </Container>

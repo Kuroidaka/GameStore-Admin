@@ -2,6 +2,29 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { icon } from '~/assert/icon/icon'
 
+
+/*
+USE CASE:
+
+ <InputField
+        //basic
+            type="username"
+            id="inputUsername"
+            className="form-control"
+            placeholder={data.username}
+            value={username}
+            name="username"
+            onInput={handleInput}
+
+        //validation error
+            errorText={validationMsg.username}
+            errorState={validationMsg.username !== '' && validationMsg.username !== undefined ? true : false}
+            setError={setValidationMsg}
+          />
+          
+*/
+
+
 const InputField = (props) => {
   const { 
     type="text",
