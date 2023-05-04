@@ -6,6 +6,7 @@ import config from './config';
 import styled from 'styled-components';
 import Auth from './page/Auth/Auth';
 import AdminManagementPage from './page/Account/Account';
+import HeaderLayout from './Layout/Header';
 
 
 function ScrollToTopOnLocationChange() {
@@ -30,7 +31,11 @@ function App() {
           
           <Routes>
               <Route path={auth} element={<Auth/>} />
-              <Route path={admin} element={<AdminManagementPage/>} />
+              <Route path={admin} element={
+                <HeaderLayout>
+                  <AdminManagementPage/>
+                </HeaderLayout>
+              } />
           </Routes>
        
       </Container>
