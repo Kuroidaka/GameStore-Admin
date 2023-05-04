@@ -19,7 +19,7 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
-  const {auth } = config.adminRoutePath
+  const { auth } = config.adminRoutePath
 
   return (
     <Suspense fallback={<Load/>}>

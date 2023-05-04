@@ -1,17 +1,40 @@
-import { applyMiddleware } from "redux";
-import { legacy_createStore as createStore } from 'redux';
-import logger from "redux-logger";
-import thunk from "redux-thunk";
-// import { persistStore } from "redux-persist";
+import { combineReducers, configureStore } from "@reduxjs/toolkit"
+import authReducer from './auth/auth.slice'
 
-import rootReducer from "./root-reducer";
+import {
+    persistStore,
+    persistReducer,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER,
+  } from 'redux-persist'
 
-const middleware = [thunk];
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+const persistConfig = {
+    key: 'root',
+    version: 1,
+    storage,
+  }
 
-if (process.env.NODE_ENV === "development") {
-  middleware.push(logger);
-}
+const rootReducer = combineReducers({ 
+    auth: authReducer, 
+})
 
-export const store = createStore(rootReducer, applyMiddleware(...middleware));
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+ 
 
-// export const persistor = persistStore(store);
+export const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+          immutableCheck: { warnAfter: 128 },
+          serializableCheck: { warnAfter: 128 },
+        },
+      }),
+  })
+
+export const persistor = persistStore(store)

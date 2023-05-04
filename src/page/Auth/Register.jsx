@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { loginInitiate, registerInitiate } from '~/redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
@@ -48,7 +47,6 @@ const Register = (props) => {
     if (password !== passwordConfirm) {
       return
     }
-    dispatch(registerInitiate(email, password,/*username*/))
     setState({ username: '', email: '', password: '', passwordConfirm: '' })
   }
 

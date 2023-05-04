@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  loginInitiate,
-  registerInitiate,
-} from "~/redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -10,6 +6,7 @@ import InputField from "~/component/InputField";
 import Button from "~/component/Button";
 //use npm install validator to validation input
 import isEmpty from "validator/lib/isEmpty"
+import { loginService } from "~/redux/auth/auth.service";
 
 
 
@@ -42,7 +39,6 @@ const SignIn = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginInitiate(username, password));
     setState({ username: "", password: "" });
   };
   
@@ -67,6 +63,7 @@ const SignIn = (props) => {
     const isValid = validateAll()
     if (!isValid) return 
     //Call API Login
+    loginService({username, password}, dispatch, navigate)
   } 
 
   return (
