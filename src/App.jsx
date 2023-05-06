@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import Auth from './page/Auth/Auth';
 import AdminManagementPage from './page/Account/Account';
 import HeaderLayout from './Layout/Header';
+import GameManage from './page/GameManage/GameManage';
 
 
 function ScrollToTopOnLocationChange() {
@@ -21,7 +22,7 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
-  const { auth, admin } = config.adminRoutePath
+  const { auth, admin, gameManage } = config.adminRoutePath
 
   return (
     <Suspense fallback={<Load/>}>
@@ -36,6 +37,12 @@ function App() {
                   <AdminManagementPage/>
                 </HeaderLayout>
               } />
+              <Route path={gameManage} element={
+                <HeaderLayout>
+                  <GameManage/>
+                </HeaderLayout>
+              } />
+
           </Routes>
        
       </Container>
