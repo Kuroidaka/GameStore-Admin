@@ -8,10 +8,13 @@ import isEmpty from 'validator/lib/isEmpty'
 import equals from 'validator/lib/equals'
 import { auth } from '~/api/auth.api'
 import { RegisterService } from '~/redux/auth/auth.service'
+import config from '~/config'
 
 const Register = (props) => {
   const { user, toggleForm } = props
-  const msg = {}
+
+  const { dashboard } = config.adminRoutePath
+  
   const [state, setState] = useState({
     username: '',
     email: '',
@@ -41,6 +44,8 @@ const Register = (props) => {
 
  
   const validateAll = () => {
+    const msg = {}
+
     if (isEmpty(email)) {
       msg.email = 'Please input your email address'
     }
@@ -66,15 +71,26 @@ const Register = (props) => {
     return true
   }
 
-  const onSubmitRegister = (e) => {
+  const onSubmitRegister = async (e) => {
     e.preventDefault()
     const isValid = validateAll()
     if (!isValid) {
       return
     }
    
-    RegisterService({username, email, password}, dispatch, navigate)
-    
+    const { status, data } = await RegisterService({username, email, password}, dispatch, navigate)
+
+    const { msg } = data
+    // validate response status
+    switch (status) {
+      case 200:
+        navigate(dashboard)
+        break;
+      case 404:
+        setValidationMsg({username : msg})
+        break;
+      default:
+    }
   }
 
   return (
