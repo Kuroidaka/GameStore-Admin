@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchBox from '../component/SearchBox';
 import Avatar from '../component/Avatar';
+import UserMenu, { PopperUserMenu } from '../component/UserMenu';
 import { icon } from '../assert/icon/icon';
 
 const HeaderLayout = (props) => {
@@ -20,13 +21,9 @@ const HeaderLayout = (props) => {
 
         </ActionWrapper>
 
-        <AvatarWrapper>
-          
-          <PopperUserMenu>
-            <div>test</div>
-          </PopperUserMenu>
-
+        <AvatarWrapper> 
           <Avatar />
+          <UserMenu />
         </AvatarWrapper>
       </Header>
       {children}
@@ -59,6 +56,10 @@ const AvatarWrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  
+  &:hover ${PopperUserMenu} {
+    display: block;
+  }
 `;
 
 const ActionWrapper = styled.div`
@@ -80,17 +81,4 @@ const ActionWrapper = styled.div`
     }
 
   }
-`
-
-const PopperUserMenu = styled.div`
-  position: absolute;
-  top: 110%;
-  right: 0;
-  width: 200px;
-  height: 200px;
-  background-color: #545454;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  z-index: 99;
-
 `
