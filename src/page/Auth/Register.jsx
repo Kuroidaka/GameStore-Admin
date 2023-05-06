@@ -7,6 +7,7 @@ import Button from '~/component/Button'
 import isEmpty from 'validator/lib/isEmpty'
 import equals from 'validator/lib/equals'
 import { auth } from '~/api/auth.api'
+import { RegisterService } from '~/redux/auth/auth.service'
 
 const Register = (props) => {
   const { user, toggleForm } = props
@@ -22,11 +23,7 @@ const Register = (props) => {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (user) {
-      navigate('/')
-    }
-  }, [user, navigate])
+  const dispatch = useDispatch()
 
   const { 
     username,
@@ -35,21 +32,14 @@ const Register = (props) => {
     passwordConfirm
   } = state
 
-  const dispatch = useDispatch()
+ 
 
   const handleInput = (e) => {
     let { name, value } = e.target
     setState({ ...state, [name]: value })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (password !== passwordConfirm) {
-      return
-    }
-    setState({ username: '', email: '', password: '', passwordConfirm: '' })
-  }
-
+ 
   const validateAll = () => {
     if (isEmpty(email)) {
       msg.email = 'Please input your email address'
@@ -83,6 +73,8 @@ const Register = (props) => {
       return
     }
    
+    RegisterService({username, email, password}, dispatch, navigate)
+    
   }
 
   return (
