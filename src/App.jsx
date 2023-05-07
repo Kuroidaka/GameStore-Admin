@@ -5,7 +5,7 @@ import Load from './component/load';
 import config from './config';
 import styled from 'styled-components';
 import Auth from './page/Auth/Auth';
-
+import Navbar from "./component/navbar";
 
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation();
