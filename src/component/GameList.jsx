@@ -64,9 +64,6 @@ const Table = styled.table`
 `;
 
 const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #f5f5f5;
-  }
   &:hover {
     background-color: #f5f5f5;
   }
