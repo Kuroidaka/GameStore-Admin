@@ -16,8 +16,7 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: 'Nunito', sans-serif;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 1.3rem;
     }
     html {

@@ -4,6 +4,7 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Load from './component/load';
 import config from './config';
 import styled from 'styled-components';
+import BookingOrder from './page/BookingOrder/BookingOrder';
 
 const Auth = React.lazy(() => import('./page/Auth/Auth'));
 const Home = React.lazy(() => import('./page/Home'));
@@ -25,21 +26,21 @@ function App() {
 
   const { pathname } = useLocation()
 
-  const { auth, dashboard } = config.adminRoutePath
+  const { auth, dashboard, order } = config.adminRoutePath
 
 
   const token = localStorage.getItem('token')
 
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    if(token) {
-      pathname === auth && (navigate(dashboard))
-    }
-    else {
-      navigate(auth)
-    }
-  }, []);
+  //   if(token) {
+  //     pathname === auth && (navigate(dashboard))
+  //   }
+  //   else {
+  //     navigate(auth)
+  //   }
+  // }, []);
 
   return (
     <Suspense fallback={<Load/>}>
@@ -47,9 +48,10 @@ function App() {
         <GlobalStyles />
         <ScrollToTopOnLocationChange />
 
-          <Routes>
+          <Routes >
           
-              {token ? (
+              <Route path={order} element={<BookingOrder />} />
+              {/* {token ? (
                 <Fragment>
                   <Route path={dashboard} element={<Home/>} />
                 </Fragment>
@@ -57,7 +59,7 @@ function App() {
                 <Route path={auth} replace element={<Auth/>} />
               )
 
-              }
+              } */}
              
           </Routes>
        
