@@ -1,13 +1,13 @@
+import Button from "~/component/Button";
+import InputField from "~/component/InputField";
+import { loginService } from "~/redux/auth/auth.service";
+import config from "~/config";
+
 import React, { useState, useEffect } from "react";
-import {
-  loginInitiate,
-  registerInitiate,
-} from "~/redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import InputField from "~/component/InputField";
-import Button from "~/component/Button";
+
 //use npm install validator to validation input
 import isEmpty from "validator/lib/isEmpty"
 
@@ -15,7 +15,7 @@ import isEmpty from "validator/lib/isEmpty"
 
 const SignIn = (props) => {
   const { user, toggleForm } = props 
-  const msg = {}
+  
   const [state, setState] = useState({
     username: "",
     password: "",
@@ -25,30 +25,20 @@ const SignIn = (props) => {
 
   const { username, password } = state;
 
+  const { dashboard } = config.adminRoutePath
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
 
   const handleInput = (e) => {
     let { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(loginInitiate(username, password));
-    setState({ username: "", password: "" });
-  };
   
   //Validate input 
   const validateAll = () => {
-    
+    const msg = {}
     if (isEmpty(username)) {
       msg.username = "Please input your username address"
     } 
@@ -62,11 +52,26 @@ const SignIn = (props) => {
         return true
   }
   
-  const onSubmitLogin = (e) => {
+  const onSubmitLogin = async (e) => {
     e.preventDefault()
     const isValid = validateAll()
     if (!isValid) return 
     //Call API Login
+    const { status, data } = await loginService({username, password}, dispatch, navigate)
+    const { msg } = data
+    // validate response status
+    switch (status) {
+      case 200:
+        navigate(dashboard)
+        break;
+      case 401:
+        setValidationMsg({password : msg})
+        break;
+      case 404:
+        setValidationMsg({username : msg})
+        break;
+      default:
+    }
   } 
 
   return (
@@ -115,6 +120,7 @@ const SignIn = (props) => {
 const data = {
   username: 'Username',
   password: 'Input Password',
+  error: 'Password or Username is incorrect',
 }
 
 

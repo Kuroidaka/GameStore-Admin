@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  loginInitiate,
-  registerInitiate,
-} from "~/redux/actions";
 import { useSelector } from "react-redux";
 import styled from 'styled-components';
 import SignIn from "./Login";
@@ -22,7 +18,7 @@ const Auth = () => {
     return (
         <Container>
         <div id="logreg-forms">
-            <SlideBoard form={form} >
+            <SlideBoard form={form.toString()} >
             
             </SlideBoard> 
             <SignIn user={user} toggleForm={toggleForm}/>
@@ -64,6 +60,6 @@ const SlideBoard = styled.div `
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     right: 0;
-    ${({form}) => form === true ? 'transform: translateX(-100%);' : 'transform: translateX(0%);' 
+    ${({form}) => form === 'true' ? 'transform: translateX(-100%);' : 'transform: translateX(0%);' 
     }
 `

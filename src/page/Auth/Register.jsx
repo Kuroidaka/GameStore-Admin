@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { loginInitiate, registerInitiate } from '~/redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
@@ -8,10 +7,14 @@ import Button from '~/component/Button'
 import isEmpty from 'validator/lib/isEmpty'
 import equals from 'validator/lib/equals'
 import { auth } from '~/api/auth.api'
+import { RegisterService } from '~/redux/auth/auth.service'
+import config from '~/config'
 
 const Register = (props) => {
   const { user, toggleForm } = props
-  const msg = {}
+
+  const { dashboard } = config.adminRoutePath
+  
   const [state, setState] = useState({
     username: '',
     email: '',
@@ -23,11 +26,7 @@ const Register = (props) => {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (user) {
-      navigate('/')
-    }
-  }, [user, navigate])
+  const dispatch = useDispatch()
 
   const { 
     username,
@@ -36,23 +35,17 @@ const Register = (props) => {
     passwordConfirm
   } = state
 
-  const dispatch = useDispatch()
+ 
 
   const handleInput = (e) => {
     let { name, value } = e.target
     setState({ ...state, [name]: value })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (password !== passwordConfirm) {
-      return
-    }
-    dispatch(registerInitiate(email, password,/*username*/))
-    setState({ username: '', email: '', password: '', passwordConfirm: '' })
-  }
-
+ 
   const validateAll = () => {
+    const msg = {}
+
     if (isEmpty(email)) {
       msg.email = 'Please input your email address'
     }
@@ -78,13 +71,26 @@ const Register = (props) => {
     return true
   }
 
-  const onSubmitRegister = (e) => {
+  const onSubmitRegister = async (e) => {
     e.preventDefault()
     const isValid = validateAll()
     if (!isValid) {
       return
     }
    
+    const { status, data } = await RegisterService({username, email, password}, dispatch, navigate)
+
+    const { msg } = data
+    // validate response status
+    switch (status) {
+      case 200:
+        navigate(dashboard)
+        break;
+      case 404:
+        setValidationMsg({username : msg})
+        break;
+      default:
+    }
   }
 
   return (
