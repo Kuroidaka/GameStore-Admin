@@ -16,11 +16,13 @@ export default SearchBar;
 const SearchBarContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 50%;
+  flex: 1; /* Added */
+  max-width: 400px; /* Added */
   height: 4rem;
   background-color: #f5f5f5;
   border-radius: 2rem;
   padding: 0.5rem 1rem;
+  margin-right: 1rem; /* Updated */
 `;
 
 const SearchIcon = styled(FaSearch)`
