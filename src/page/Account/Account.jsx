@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { icon } from '~/assert/icon/icon'
 import Button from '~/component/Button'
 // import Avatar from '~/component/Avatar/Avatar';

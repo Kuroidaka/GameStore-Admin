@@ -26,6 +26,8 @@ const HeaderLayout = (props) => {
           <UserMenu />
         </AvatarWrapper>
       </Header>
+
+      
       {children}
     </Container>
   );

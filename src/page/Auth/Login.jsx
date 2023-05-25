@@ -6,7 +6,7 @@ import config from "~/config";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 //use npm install validator to validation input
 import isEmpty from "validator/lib/isEmpty"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import SignIn from "./Login";
 import Register from "./Register";
 

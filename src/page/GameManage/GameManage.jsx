@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import GameManageHeader from "../../component/GameManageHeader";
 import SearchBar from "../../component/SearchBar";
 import GameList from "../../component/GameList";
@@ -21,8 +21,7 @@ const GameManage = () => {
 export default GameManage;
 
 const Container = styled.div`
-    display: flex;
-    flex-direction: column;
+
 `;
 
 const SearchBarWrapper = styled.div`

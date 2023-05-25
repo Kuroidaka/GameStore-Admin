@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import InputField from '~/component/InputField'
 import Button from '~/component/Button'
 import isEmpty from 'validator/lib/isEmpty'

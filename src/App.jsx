@@ -3,14 +3,14 @@ import { GlobalStyles } from './component/Global.styles';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Load from './component/load';
 import config from './config';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import AdminManagementPage from './page/Account/Account';
-import HeaderLayout from './Layout/Header';
-import GameManage from './page/GameManage/GameManage';
 
-const Auth = React.lazy(() => import('./page/Auth/Auth'));
-const Home = React.lazy(() => import('./page/Home'));
+import GameManage from './page/GameManage/GameManage';
+import HeaderLayout from './Layout/Header';
+import Auth from './page/Auth/Auth';
+import Home from './page/Home';
 
 
 function ScrollToTopOnLocationChange() {
@@ -44,13 +44,10 @@ function App() {
   }, []);
 
   return (
-    <Suspense fallback={<Load/>}>
       <Container>
         <GlobalStyles />
         <ScrollToTopOnLocationChange />
-
           <Routes>
-          
               {token ? (
                 <Fragment>
                   <Route path={dashboard} element={<Home/>} />
@@ -60,13 +57,11 @@ function App() {
               ) : (
                 <Route path={auth} replace element={<Auth/>} />
               )
-
               }
-             
           </Routes>
-       
+
       </Container>
-    </Suspense>
+
   );
 }
 
