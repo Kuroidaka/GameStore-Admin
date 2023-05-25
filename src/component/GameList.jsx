@@ -1,94 +1,125 @@
 import React from "react";
 import styled from "styled-components";
-import { mockGameData } from "./mockData";
+import { FiSettings } from "react-icons/fi";
 
-function getStatusColor(status) {
-    switch (status) {
-      case "Released":
-        return "blue";
-      case "In development":
-        return "orange";
-      case "Cancelled":
-        return "red";
-      default:
-        return "black";
-    }
-}
+const GameListContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
 
-const GameList = () => {
-  const StyledStock = styled.span`
-    font-weight: bold;
-    color: ${props => props.stock < 10 ? "red" : "blue"};
-  `;  
+const GameSquare = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border: 1px solid black;
+  border-right: 1px solid black;
+  width: 50%;
+  height: 15rem;
+  margin-left: 2rem;
+`;
+
+const GameLogo = styled.img`
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 1rem;
+  border: 1px solid black;
+`;
+
+const GameInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+  margin-left: 1rem;
+`;
+
+const GameTitle = styled.div`
+  font-weight: bold;
+  margin: 0;
+`;
+
+const GameDescription = styled.div`
+  margin: 0;
+  max-width: 300px;
+  overflow-wrap: break-word;
+`;
+
+const GamePlatform = styled.div`
+  margin-top: 0.5rem;
+  width: 80px;
+  background-color: red;
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+`;
+
+
+
+const GameDetails = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+`;
+
+const GameDate = styled.div`
+  margin-top: 2.5rem;
+  margin-right: 1rem;
+`;
+
+const SettingsButton = styled.button`
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: 	#F8F8FF;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #333;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
+const SettingsIcon = styled(FiSettings)`
+    width: 2rem;
+    height: 2rem;
+    font-size: 100px; /* Increase the font size for a larger icon */
+`;
+
+const GameList = ({ games }) => {
   return (
-    <Table>
-      <thead>
-        <TableRow>
-          <TableHeader>Product Name</TableHeader>
-          <TableHeader>Status</TableHeader>
-          <TableHeader>Price</TableHeader>
-          <TableHeader>Sales</TableHeader>
-          <TableHeader>Earnings</TableHeader>
-          <TableHeader>Stock</TableHeader>
-        </TableRow>
-      </thead>
-      <tbody>
-        {mockGameData.map((game) => (
-          <TableRow key={game.id}>
-            <TableData>
-                <img src={game.imageSrc} alt={game.productName} />
-                {game.productName}    
-            </TableData>
-            <TableData style={{ color: getStatusColor(game.status),fontWeight: "bold" }}>{game.status}</TableData>
-            <TableData>{game.price}</TableData>
-            <TableData>{game.sales}</TableData>
-            <TableData style={{ fontWeight: "bold" }}>{game.earnings}</TableData>
-            <TableData>
-                <StyledStock stock={game.stock}>{game.stock}</StyledStock>
-            </TableData>
-          </TableRow>
-        ))}
-      </tbody>
-    </Table>
+    <GameListContainer>
+      {games.map((game) => (
+        <GameSquare key={game.id}>
+          <div>
+            <GameLogo src={game.image} alt="Game Logo" />
+            <GamePlatform>{game.platform}</GamePlatform>
+          </div>
+          <GameInfo>
+            <GameTitle>{game.title}</GameTitle>
+            <GameDescription>{game.description}</GameDescription>
+            <GameDetails>
+              <GameDate>Create: {game.createDate}</GameDate>
+              <GameDate>Last Modified: {game.modifyDate}</GameDate>
+              <SettingsButton>
+                <SettingsIcon />
+              </SettingsButton>
+            </GameDetails>
+          </GameInfo>
+        </GameSquare>
+      ))}
+    </GameListContainer>
   );
 };
 
 export default GameList;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-left: 2rem;
-  margin-right: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-`;
-
-const TableRow = styled.tr`
-  &:hover {
-    background-color: #f5f5f5;
-  }
-`;
-
-const TableHeader = styled.th`
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #333333;
-  padding: 1.2rem 1.6rem;
-  border-bottom: 3px solid #dddddd;
-  text-align: left;
-`;
-
-const TableData = styled.td`
-    font-size: 1.5rem;
-    color: #333333;
-    padding: 1.2rem 1.6rem;
-    border-bottom: 1px solid #dddddd;
-
-    img {
-        width: 4rem;
-        height: 4rem;
-        margin-right: 1.6rem;
-        border-radius: 0.8rem;
-      }
-
-`;
