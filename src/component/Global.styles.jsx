@@ -5,20 +5,24 @@ export const GlobalStyles = createGlobalStyle`
     :root {
         --text-color: #2F353F;
         --first-color: rebeccapurple;
-        --second-color: #f4e9ff
+        --second-color: #f4e9ff;
+
+        /* size */
+
+        --header-height: 60px;
     }
     
     *, *:before, *:after {
-    -webkit-box-sizing: border-box!important;
-    box-sizing: border-box!important;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: 'Nunito', sans-serif;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.3rem;
+        -webkit-box-sizing: border-box!important;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: 'Nunito', sans-serif;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.3rem;
     }
     html {
         font-size: 62.5%;

@@ -8,7 +8,7 @@ import styled from 'styled-components/macro';
 import AdminManagementPage from './page/Account/Account';
 
 import GameManage from './page/GameManage/GameManage';
-import HeaderLayout from './Layout/Header';
+import HeaderLayout from './Layout/MainLayout';
 import Auth from './page/Auth/Auth';
 import Home from './page/Home';
 
@@ -50,7 +50,7 @@ function App() {
           <Routes>
               {token ? (
                 <Fragment>
-                  <Route path={dashboard} element={<Home/>} />
+                  <Route path={dashboard} element={<HeaderLayout><Home/></HeaderLayout>} />
                   <Route path={admin} element={<HeaderLayout><AdminManagementPage/></HeaderLayout>} />
                   <Route path={gameManage} element={<HeaderLayout><GameManage/></HeaderLayout>} />
                 </Fragment>

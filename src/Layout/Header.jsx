@@ -6,10 +6,9 @@ import UserMenu, { PopperUserMenu } from '../component/UserMenu';
 import { icon } from '../assert/icon/icon';
 
 const HeaderLayout = (props) => {
-  const { children } = props;
+
 
   return (
-    <Container>
       <Header>
         <SearchBoxWrapper>
           <SearchBox />
@@ -26,24 +25,23 @@ const HeaderLayout = (props) => {
           <UserMenu />
         </AvatarWrapper>
       </Header>
-
-      
-      {children}
-    </Container>
   );
 };
 
 export default HeaderLayout;
 
-const Container = styled.div``;
 
 const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: var(--header-height);
+    width: 100vw;
+    position: relative;
+    z-index: 99;
 `;
 
 const SearchBoxWrapper = styled.div`
