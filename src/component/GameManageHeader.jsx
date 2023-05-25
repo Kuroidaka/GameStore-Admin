@@ -1,32 +1,35 @@
 import React from "react";
 import styled from "styled-components";
+import SearchBar from "./SearchBar";
+import SortOptions from "./SortOptions";
+import ShowOptions from "./ShowOptions";
 
 const GameManageHeader = () => {
   return (
     <Header>
       <HeaderContent>
-        <HeaderText>Game Products</HeaderText>
-        <ButtonWrapper>
-          <Button>Import</Button>
-          <Button>Export</Button>
-        </ButtonWrapper>
+        <HeaderText>Game Management</HeaderText>
       </HeaderContent>
       <OptionsWrapper>
         <Options>
           <OptionCell>
-            <Option>Overview</Option>
+            <Option>All Game</Option>
           </OptionCell>
           <OptionCell>
-            <Option>New Game</Option>
+            <ShowOptions />
           </OptionCell>
           <OptionCell>
-            <Option>Analytics</Option>
-          </OptionCell>
-          <OptionCell>
-            <Option>Settings</Option>
+            <SortOptions />
           </OptionCell>
         </Options>
+        <SearchBarWrapper>
+          <SearchBar />
+        </SearchBarWrapper>
+        <ButtonWrapper>
+        <Button>Add Game</Button>
+      </ButtonWrapper>
       </OptionsWrapper>
+      
     </Header>
   );
 };
@@ -50,12 +53,14 @@ const HeaderContent = styled.div`
 const HeaderText = styled.div`
   font-size: 2.5rem;
   font-weight: bold;
-  margin-left : 4rem;
+  margin-left: 4rem;
   color: #333333;
 `;
 
 const ButtonWrapper = styled.div`
   display: flex;
+  justify-content: center;
+  margin-top: 1rem;
 `;
 
 const Button = styled.button`
@@ -74,8 +79,13 @@ const Button = styled.button`
 `;
 
 const OptionsWrapper = styled.div`
-  background-color: #f5f5f5;
-
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
 `;
 
 const Options = styled.ul`
@@ -84,10 +94,10 @@ const Options = styled.ul`
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
-  margin-left: 3.5rem;
 `;
 
 const OptionCell = styled.li`
+  background-color: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,4 +115,12 @@ const Option = styled.div`
   margin-top: 1rem;
   margin-bottom: 1rem;
   cursor: pointer;
+`;
+
+const SearchBarWrapper = styled.div`
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  margin: 0 1rem;
+  margin-left: 5rem;
 `;
