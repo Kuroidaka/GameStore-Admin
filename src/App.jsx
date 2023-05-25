@@ -5,6 +5,10 @@ import Load from './component/load';
 import config from './config';
 import styled from 'styled-components';
 
+import AdminManagementPage from './page/Account/Account';
+import HeaderLayout from './Layout/Header';
+import GameManage from './page/GameManage/GameManage';
+
 const Auth = React.lazy(() => import('./page/Auth/Auth'));
 const Home = React.lazy(() => import('./page/Home'));
 
@@ -21,12 +25,10 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
+  const { auth, admin, gameManage, dashboard } = config.adminRoutePath
   const navigate = useNavigate()
 
   const { pathname } = useLocation()
-
-  const { auth, dashboard } = config.adminRoutePath
-
 
   const token = localStorage.getItem('token')
 
@@ -52,6 +54,8 @@ function App() {
               {token ? (
                 <Fragment>
                   <Route path={dashboard} element={<Home/>} />
+                  <Route path={admin} element={<HeaderLayout><AdminManagementPage/></HeaderLayout>} />
+                  <Route path={gameManage} element={<HeaderLayout><GameManage/></HeaderLayout>} />
                 </Fragment>
               ) : (
                 <Route path={auth} replace element={<Auth/>} />

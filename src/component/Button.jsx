@@ -1,6 +1,46 @@
 import styled from 'styled-components'
 
+/*
+============================================================================================================
+USE CASE: 
+============================================================================================================
+- active 
+<Button 
+    title="..."
+    active={true}
+    onClick={() => ...}
 
+    />
+
+- outline
+<Button
+    title="..."
+    outline={true}
+    onClick={() => ...}
+    />
+
+- disable
+<Button
+    title="..."
+    disable={true}
+    onClick={() => ...}
+    />
+
+- normal
+<Button
+    title="..."
+    normal={true}
+    onClick={() => ...}
+    />
+
+- cancel
+<Button
+    title="..."
+    cancel={true}
+    onClick={() => ...}
+    />
+============================================================================================================
+*/
 
 const Button = (props)  => {
     const { 
