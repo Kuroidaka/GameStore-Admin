@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components/macro'
 import { icon } from '~/assert/icon/icon'
-import Button from '~/component/Button'
+import Button from '~/component/template/Button.template'
 // import Avatar from '~/component/Avatar/Avatar';
 // import Tippy from '@tippyjs/react/headless';
 
