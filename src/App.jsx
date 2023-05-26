@@ -1,5 +1,5 @@
 import React, { Fragment, Suspense, useEffect } from 'react';
-import { GlobalStyles } from './component/Global.styles';
+import { GlobalStyles } from './GlobalStyle/Global.styles';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Load from './component/load';
 import config from './config';

@@ -3,7 +3,8 @@ import styled from 'styled-components/macro'
 import { icon } from '~/assert/icon/icon'
 import Button from '~/component/template/Button.template'
 
-import InputBox from '~/component/template/InputSelect.template'
+import InputSelect from '~/component/template/InputSelect.template'
+import Tab from '~/component/template/Tabview.template'
 
 
 
@@ -32,13 +33,11 @@ const Order = () => {
         </HeaderActionWrapper>
       </Header>
 
-      <FilterSection>
-        <InputBox options={options} title='Date range'/>
-        <InputBox options={options} title='Status'/>
-      </FilterSection>
-
+    
       
+      <Tab> 
 
+      </Tab>
 
     
 
@@ -78,13 +77,3 @@ flex-direction: row;
 justify-content: space-between;
 `
 
-const FilterSection = styled.div`
-width: 100%;
-height: 60px;
-display: flex;
-justify-content: flex-end;
-align-items: center;
-padding: 0 20px;
-gap: 10px;
-
-`

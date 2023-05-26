@@ -13,6 +13,8 @@
     "firebase": "^9.20.0",
     "install": "^0.13.0",
     "npm": "^9.6.5",
+    "primeflex": "^3.3.0",
+    "primereact": "^9.5.0",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
     "react-dom": "^18.2.0",
