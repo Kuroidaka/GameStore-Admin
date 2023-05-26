@@ -6,7 +6,7 @@ export const GlobalStyles = createGlobalStyle`
         --text-color: #2F353F;
         --first-color: rebeccapurple;
         --second-color: #f4e9ff;
-
+        --border-color: #dadada;
         /* size */
 
         --header-height: 60px;

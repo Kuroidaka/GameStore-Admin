@@ -1,0 +1,43 @@
+export const mockGameData = [
+    {
+      id: 1,
+      productName: "Assassin's Creed Valhalla",
+      status: "Released",
+      price: "$60",
+      sales: "100,000",
+      earnings: "$6,000,000",
+      imageSrc: "https://th.bing.com/th/id/OIP.Q8aY6MOFkZoE9jHgDcJqjwHaHa?pid=ImgDet&rs=1",
+      stock: "10",
+    },
+    {
+      id: 2,
+      productName: "Cyberpunk 2077",
+      status: "In development",
+      price: "$50",
+      sales: "200,000",
+      earnings: "$10,000,000",
+      imageSrc: "https://th.bing.com/th/id/OIP.3W7RxYZijpt2a0AOc4mLWQHaEK?pid=ImgDet&rs=1",
+      stock: "5",
+    },
+    {
+      id: 3,
+      productName: "Call of Duty: Modern Warfare",
+      status: "Cancelled",
+      price: "$70",
+      sales: "150,000",
+      earnings: "$10,500,000",
+      imageSrc: "https://orig00.deviantart.net/4249/f/2012/140/1/f/modern_warfare_3_prestige_3_emblem_by_papaoscarzulu-d50flx5.png",
+      stock: "20",
+    },
+    {
+      id: 4,
+      productName: "Grand Theft Auto V",
+      status: "Out of stock",
+      price: "$40",
+      sales: "500,000",
+      earnings: "$20,000,000",
+      imageSrc: "https://th.bing.com/th/id/OIP.uzuFTlkPcYeSXu-T6IqXxwHaEK?pid=ImgDet&rs=1",
+      stock: "0",
+    },
+  ];
+  

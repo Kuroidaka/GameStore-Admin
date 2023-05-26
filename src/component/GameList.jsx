@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { mockGameData } from "./mockData";
+import { mockGameData } from "../assert/mockData";
 
 function getStatusColor(status) {
     switch (status) {

@@ -1,5 +1,5 @@
-import Button from "~/component/Button";
-import InputField from "~/component/InputField";
+import Button from "~/component/template/Button.template";
+import InputField from "~/component/template/InputField.template";
 import { loginService } from "~/redux/auth/auth.service";
 import config from "~/config";
 
