@@ -1,39 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-
-
+import Select from 'react-select';
+import { icon } from '~/assert/icon/icon'
 
 // InputBox component
 const InputBox = (props) => {
-  const { optionList, onChange } = props
+  const { options, onChange, width, height, title } = props;
+
+  const [selectedOption, setSelectedOption] = useState(null);
 
   return (
-    <InputBoxContainerWrapper>
-    
+    <InputBoxContainerWrapper width={width} height={height}>
+      <Select
+        defaultValue={selectedOption}
+        onChange={setSelectedOption}
+        options={options}
+        placeholder={title}
+      />
     </InputBoxContainerWrapper>
   );
 };
 
-const InputBoxContainerWrapper = styled.div` 
+const InputBoxContainerWrapper = styled.div`
   position: relative;
-  width: 125px;
-  height: 30px;
+  width: ${({ width }) => (width ? `${width}` : `200px`)};
   border-radius: 10px;
-  border : 1px solid var(--border-color);
-
-`
-
-const InputBoxContainer = styled.select`
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  outline: none;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
 `;
-
-
 
 
 export default InputBox;

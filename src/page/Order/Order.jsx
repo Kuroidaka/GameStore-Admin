@@ -33,12 +33,11 @@ const Order = () => {
       </Header>
 
       <FilterSection>
-
-        <InputBox options={options} />
+        <InputBox options={options} title='Date range'/>
+        <InputBox options={options} title='Status'/>
+      </FilterSection>
 
       
-        
-      </FilterSection>
 
 
     
@@ -53,17 +52,17 @@ const Container = styled.div`
   height: calc(100vh - var(--header-height));
 `
 const Header = styled.header`
-  padding: 16px 20px;
-  position: relative;
+padding: 16px 20px;
+position: relative;
 
-  .title {
-    font-size: 2rem;
-    font-weight: 900;
-  }
-  .description {
-    color: var(--secondary_admin);
-    font-size: 1.4rem;
-  }
+.title {
+  font-size: 2rem;
+  font-weight: 900;
+}
+.description {
+  color: var(--secondary_admin);
+  font-size: 1.4rem;
+}
 `
 
 const HeaderActionWrapper = styled.div`
@@ -83,5 +82,9 @@ const FilterSection = styled.div`
 width: 100%;
 height: 60px;
 display: flex;
-justify-content: space-between;
+justify-content: flex-end;
+align-items: center;
+padding: 0 20px;
+gap: 10px;
+
 `
