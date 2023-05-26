@@ -1,12 +1,12 @@
-import Button from "~/component/Button";
-import InputField from "~/component/InputField";
+import Button from "~/component/template/Button.template";
+import InputField from "~/component/template/InputField.template";
 import { loginService } from "~/redux/auth/auth.service";
 import config from "~/config";
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 //use npm install validator to validation input
 import isEmpty from "validator/lib/isEmpty"

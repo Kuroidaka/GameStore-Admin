@@ -3,14 +3,15 @@ import { GlobalStyles } from './component/Global.styles';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Load from './component/load';
 import config from './config';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import AdminManagementPage from './page/Account/Account';
-import HeaderLayout from './Layout/Header';
-import GameManage from './page/GameManage/GameManage';
 
-const Auth = React.lazy(() => import('./page/Auth/Auth'));
-const Home = React.lazy(() => import('./page/Home'));
+import GameManage from './page/GameManage/GameManage';
+import HeaderLayout from './Layout/MainLayout';
+import Auth from './page/Auth/Auth';
+import Home from './page/Home';
+import Order from './page/Order/Order';
 
 
 function ScrollToTopOnLocationChange() {
@@ -25,7 +26,7 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
-  const { auth, admin, gameManage, dashboard } = config.adminRoutePath
+  const { auth, admin, gameManage, dashboard, order } = config.adminRoutePath
   const navigate = useNavigate()
 
   const { pathname } = useLocation()
@@ -44,29 +45,25 @@ function App() {
   }, []);
 
   return (
-    <Suspense fallback={<Load/>}>
       <Container>
         <GlobalStyles />
         <ScrollToTopOnLocationChange />
-
           <Routes>
-          
               {token ? (
                 <Fragment>
-                  <Route path={dashboard} element={<Home/>} />
+                  <Route path={dashboard} element={<HeaderLayout><Home/></HeaderLayout>} />
                   <Route path={admin} element={<HeaderLayout><AdminManagementPage/></HeaderLayout>} />
                   <Route path={gameManage} element={<HeaderLayout><GameManage/></HeaderLayout>} />
+                  <Route path={order} element={<HeaderLayout><Order/></HeaderLayout>} />
                 </Fragment>
               ) : (
                 <Route path={auth} replace element={<Auth/>} />
               )
-
               }
-             
           </Routes>
-       
+
       </Container>
-    </Suspense>
+
   );
 }
 
