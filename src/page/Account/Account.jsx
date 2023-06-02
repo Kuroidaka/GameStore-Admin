@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components/macro'
 import { icon } from '~/assert/icon/icon'
 import Button from '~/component/template/Button.template'
-import Tab from '~/component/template/Tabview.template'
+import Tab from '~/page/Order/component/TabViewOrder'
 // import Avatar from '~/component/Avatar/Avatar';
 // import Tippy from '@tippyjs/react/headless';
 
@@ -32,7 +32,7 @@ const ManageUser = () => {
         <div className="description">Managing user's state</div>
       </Header>
 
-      <Tab />
+      {/* <Tab /> */}
     </Container>
   )
 }

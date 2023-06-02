@@ -8,10 +8,8 @@ export const loginService = async (data, dispatch, navigate) => {
     const res = await auth.login(data)
         
     if(res.status === 200){
-        console.log(2)
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('user', JSON.stringify(res.data.user))
-        console.log(res.data.token)
         dispatch(loginSuccess(data))
     }
 

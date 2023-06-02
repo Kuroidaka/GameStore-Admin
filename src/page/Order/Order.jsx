@@ -4,19 +4,14 @@ import { icon } from '~/assert/icon/icon'
 import Button from '~/component/template/Button.template'
 
 import InputSelect from '~/component/template/InputSelect.template'
-import Tab from '~/component/template/Tabview.template'
+import Tab from '~/page/Order/component/TabViewOrder'
 
 
 
 const Order = () => {
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawdawd ad awd awd awberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ]
 
   const handleSelect = () => {
-    console.log("select")
+
   }
   
   return (
@@ -32,14 +27,7 @@ const Order = () => {
             </HeaderAction>
         </HeaderActionWrapper>
       </Header>
-
-    
-      
-      <Tab> 
-
-      </Tab>
-
-    
+    <Tab />
 
     </Container>
   )
