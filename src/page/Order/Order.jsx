@@ -1,17 +1,26 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import styled from 'styled-components/macro'
 import { icon } from '~/assert/icon/icon'
 import Button from '~/component/template/Button.template'
 
-import InputSelect from '~/component/template/InputSelect.template'
+import config from '~/config'
 import Tab from '~/page/Order/component/TabViewOrder'
 
 
 
 const Order = () => {
 
+  const { createOrder } = config.adminRoutePath
+
+  const navigate = useNavigate()
+
   const handleSelect = () => {
 
+  }
+
+  const handleClickCreateOrder = () => {
+    navigate(createOrder)
   }
   
   return (
@@ -23,7 +32,7 @@ const Order = () => {
             <HeaderAction>
                 <Button title="PRINT" normal={true} />
                 <Button title="EXPORT" normal={true} />
-                <Button title="CREATE ORDER"  active={true} />
+                <Button title="CREATE ORDER" active={true} onClick={handleClickCreateOrder}  />
             </HeaderAction>
         </HeaderActionWrapper>
       </Header>
