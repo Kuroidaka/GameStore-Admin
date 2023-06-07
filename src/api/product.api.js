@@ -13,6 +13,11 @@ export const productApi = {
         const url = `/game/getByName?name=${name}`;
         
         return axiosClient.get(url)
+    },
+    getProduct () {
+        const url= `/game/get`
+
+        return axiosClient.get(url)
     }
 }
 

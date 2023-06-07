@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
-import { DataTable } from 'primereact/datatable'
-import { Column } from 'primereact/column'
-import { Tag } from 'primereact/tag'
-import Button2 from '~/component/template/Button2.template'
-import CalendarInput from '~/component/template/DateInput.template'
+
+import { DataView } from 'primereact/dataview';
 
 const GameTable = (props) => {
-  const { order } = props
+  const { product } = props
 
   const [modal, setModal] = useState({ state: false, data: null })
   
@@ -30,7 +27,7 @@ const GameTable = (props) => {
     return (
         <div className="col-12">
             <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-                <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={``} alt={product.name} />
+                <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={``} alt={product.game_name} />
                 <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
                     <div className="flex flex-column align-items-center sm:align-items-start gap-3">
                         <div className="text-2xl font-bold text-900">{product.game_name}</div>
@@ -38,7 +35,7 @@ const GameTable = (props) => {
                         <div className="flex align-items-center gap-3">
                             <span className="flex align-items-center gap-2">
                                 <i className="pi pi-tag"></i>
-                                <span className="font-semibold">{product.category}</span>
+                                <span className="font-semibold">{product.developer}</span>
                             </span>
                             {/* <Tag value={product.inventoryStatus} severity={getSeverity(product)}></Tag> */}
                         </div>
@@ -55,7 +52,7 @@ const GameTable = (props) => {
 
   return (
     <div className="card">
-
+          <DataView value={product} itemTemplate={itemTemplate} />
     </div>
   )
 }

@@ -8,7 +8,7 @@ import Button2 from './Button2.template';
 
 
 
-const SearchBar = ({ searchFeature }) => {
+const SearchBar = ({ searchFeature, className }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
@@ -57,7 +57,7 @@ const SearchBar = ({ searchFeature }) => {
   }, [debouncedSearchTerm]);
 
   return (
-    <SearchBarWrapper className='py-3'>
+    <SearchBarWrapper className={'py-3' + className}>
       <span className="p-input-icon-left">
         <i className="pi pi-search" />
         <SearchInput
