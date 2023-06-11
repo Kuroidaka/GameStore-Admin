@@ -288,7 +288,7 @@ const dataAll = [
 
 const Tab = (props) => {
 
-    const [orders] = OrderService()
+    const [orders, load] = OrderService()
       
     // const [orderData, setOrder] = useState({
     //     dataAll: orders.order,
@@ -327,11 +327,13 @@ const Tab = (props) => {
         <Container className="card">
             <TabView>
                 <TabPanel header="All">
-                    {orders.length === 0 ?
+                    { !load ?
                     (
-                      <SkelentonTable />
+                      orders.length > 0 
+                      ? <TabTable orderData={orders} />
+                      : <div>Empty</div>
                     ) : (
-                      <TabTable orderData={orders} />
+                      <SkelentonTable />
                     )}
                 </TabPanel>
                 {/* <TabPanel header="Accepted">
