@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchBox from '../component/SearchBox';
 import Avatar from '../component/Avatar';
-import UserMenu, { PopperUserMenu } from '../component/UserMenu';
+import UserMenu, { PopperUserMenu } from './component/UserMenu';
 import { icon } from '../assert/icon/icon';
 
 const HeaderLayout = (props) => {
@@ -57,9 +57,6 @@ const AvatarWrapper = styled.div`
   align-items: center;
   position: relative;
   
-  &:hover ${PopperUserMenu} {
-    display: block;
-  }
 `;
 
 const ActionWrapper = styled.div`

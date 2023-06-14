@@ -7,6 +7,9 @@ const UserMenu = () => {
       <MenuItem>
         <MenuLabel>Profile</MenuLabel>
       </MenuItem>
+      {/* <Box>
+        <div className="box1"></div>
+      </Box> */}
       <MenuItem>
         <MenuLabel>Setting</MenuLabel>
       </MenuItem>
@@ -23,7 +26,6 @@ const UserMenu = () => {
 export default UserMenu;
 
 export const PopperUserMenu = styled.div`
-  display: none;
   position: absolute;
   top: 110%;
   right: 0;
@@ -33,6 +35,7 @@ export const PopperUserMenu = styled.div`
   border-radius: 10px;
   z-index: 99;
   overflow: hidden; 
+
 `;
 
 const MenuItem = styled.div`
@@ -51,3 +54,16 @@ const MenuLabel = styled.span`
   font-size: 16px;
   font-weight: 500;
 `;
+
+const Box = styled.div`
+  background-color:  red;
+  width: 30px;
+  height: 30px;
+
+  .box1{
+    background-color:  blue;
+  width: 15px;
+  height: 15px;
+
+  }
+`
