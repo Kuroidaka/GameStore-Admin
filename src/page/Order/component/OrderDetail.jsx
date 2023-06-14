@@ -82,7 +82,7 @@ const OrderDetail = (props) => {
             />
         </RentDate>
         <div>
-          <TextInputTemplate label="Customer" value={data.username} onInput={handleChangeValue}/>
+          <TextInputTemplate label="Phone" value={data.phone} onInput={handleChangeValue}/>
           <TextInputTemplate label="Address" value={data.address ?? 'Not Provided'} onInput={handleChangeValue}/>
         </div>
       </div>

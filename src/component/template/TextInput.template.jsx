@@ -5,14 +5,18 @@ import styled from "styled-components/macro";
 
 const  TextInputTemplate = (props) => {
 
-    const { value, onInput, label, className, textarea } = props
+    const { value, onInput, label, className, textarea, name } = props
 
     const [text, setText] = useState(value);
 
     const handleInput = (e) => {
-        onInput()
+        onInput && onInput(e)
         setText(e.target.value)
     }
+
+    useEffect(() => {
+        setText(value)
+    }, [value]);
 
     const Input = textarea ? InputTextarea : InputText
 
@@ -20,7 +24,7 @@ const  TextInputTemplate = (props) => {
         <Container className={className}>
             <div className="flex flex-column gap-2 py-2 text-2xl">
                 <label htmlFor="username" className="text-xl font-semibold">{label ?? ''}</label>
-                <Input id="username" name={label} aria-describedby="username-help" value={text} onInput={handleInput} />
+                <Input id="username" aria-describedby={name} value={text} onInput={handleInput} />
             </div>
         </Container>
     )

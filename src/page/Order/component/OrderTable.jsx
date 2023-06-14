@@ -55,16 +55,22 @@ const Table = (props) => {
     },
     {
       name: 'CUSTOMER',
-      selector: 'username',
+      selector: 'display_name',
       sortable: true,
       header: 'CUSTOMER',
+    },
+    {
+      name: 'Phone',
+      selector: 'phone',
+      sortable: true,
+      header: 'Phone',
     },
     {
       name: 'START TIME',
       selector: 'rental_start_date',
       sortable: true,
       header: 'START TIME',
-      cell: row => <CalendarInput value={row.rental_start_date}  dateFormat="dd/mm/yy" />
+      // cell: row => <CalendarInput value={row.rental_start_date}  dateFormat="dd/mm/yy" />
     },
     {
       name: 'END TIME',

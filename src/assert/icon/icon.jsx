@@ -1,6 +1,6 @@
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 import { AiOutlineUserAdd, AiOutlineGooglePlus } from 'react-icons/ai';
-import { MdSecurity, MdOutlineAdminPanelSettings, MdNotificationsNone } from 'react-icons/md'
+import { MdSecurity, MdOutlineAdminPanelSettings, MdNotificationsNone, MdDelete } from 'react-icons/md'
 import { FiUser } from 'react-icons/fi'
 import { SlOptionsVertical } from 'react-icons/sl'
 import { IoIosArrowDown } from 'react-icons/io'
@@ -30,6 +30,7 @@ export const icon = {
     arrowDown2: MdKeyboardArrowDown,
     loading: AiOutlineLoading3Quarters,
     notification: MdNotificationsNone,
-    message: BiMessageAltDetail
+    message: BiMessageAltDetail,
+    delete: MdDelete
 }
 

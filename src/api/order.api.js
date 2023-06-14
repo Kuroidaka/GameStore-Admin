@@ -11,6 +11,16 @@ export const orderApi = {
         const url = `/order/get-order-detail?orderId=${id}`;
       
         return axiosClient.get(url)
+    },
+    book (data) {
+        const url = `/order/book`;
+        const token = localStorage.getItem('token');
+    
+        return axiosClient.post(url, data, {
+            headers: {
+                'authorization': `${token}` 
+              }
+        })
     }
 }
 
