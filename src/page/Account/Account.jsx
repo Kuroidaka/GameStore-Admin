@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components/macro'
 import { icon } from '~/assert/icon/icon'
 import Button from '~/component/template/Button.template'
+import Tab from '~/page/Order/component/TabViewOrder'
 // import Avatar from '~/component/Avatar/Avatar';
 // import Tippy from '@tippyjs/react/headless';
 
@@ -31,86 +32,7 @@ const ManageUser = () => {
         <div className="description">Managing user's state</div>
       </Header>
 
-      <Form>
-        <div className="content">
-          <div className="add">
-            <Button title="Add new user" active={true} />
-          </div>
-
-          <div className="search">
-            <input type="text" placeholder="Search user..." />
-          </div>
-
-          <table className="list">
-            <thead>
-              <tr>
-                <th id="id" style={{ textAlign: 'center' }}>
-                  ID
-                </th>
-                <th id="user">User</th>
-                <th id="status">Status</th>
-                <th id="date">Create Date</th>
-                <th id="role">Access Level</th>
-                <th></th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {userList.length >= 1 &&
-                userList.map((user, idx) => {
-                    return (
-                      <tr
-                        key={idx}
-                        style={
-                          idx % 2 === 0
-                            ? { backgroundColor: 'grey' }
-                            : {}
-                        }
-                      >
-                        <td style={{ textAlign: 'center' }}>{user.id}</td>
-                        <td>
-                          <div className="user">
-                            <div className="info">
-                              <div className="name">{user.name}</div>
-                              <div className="username"></div>
-                            </div>
-                          </div>
-                        </td>
-                        <td
-                          className={`${
-                            user.Status === 'Online' ? 'online' : 'offline'
-                          }`}
-                        >
-                          <span>
-                            {user.Status === 'Online' ? 'Online' : 'Offline'}
-                          </span>
-                        </td>
-
-                        <td></td>
-                        <td>
-                          <div
-                            className="role-btn"
-                            // onClick={() => handleIsRuleOptionOpen(idx)}
-                          >
-                            <icon.adminRole />
-                            <span></span>
-                          </div>
-                        </td>
-                        <td>
-                          <div className="option">
-                            <div className="icon">
-                              <icon.option />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-
-                })}
-            </tbody>
-          </table>
-        </div>
-      </Form>
+      {/* <Tab /> */}
     </Container>
   )
 }

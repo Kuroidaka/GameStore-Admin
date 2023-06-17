@@ -1,6 +1,6 @@
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 import { AiOutlineUserAdd, AiOutlineGooglePlus } from 'react-icons/ai';
-import { MdSecurity, MdOutlineAdminPanelSettings, MdNotificationsNone } from 'react-icons/md'
+import { MdSecurity, MdOutlineAdminPanelSettings, MdNotificationsNone, MdDelete } from 'react-icons/md'
 import { FiUser } from 'react-icons/fi'
 import { SlOptionsVertical } from 'react-icons/sl'
 import { IoIosArrowDown } from 'react-icons/io'
@@ -9,7 +9,7 @@ import { VscSearch } from 'react-icons/vsc'
 import { BsCart2 } from 'react-icons/bs'
 import { BsHeart } from 'react-icons/bs'
 import { MdKeyboardArrowDown } from 'react-icons/md'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { AiOutlineLoading3Quarters, AiFillTag } from 'react-icons/ai'
 import { BiMessageAltDetail } from 'react-icons/bi'
 
 
@@ -30,6 +30,8 @@ export const icon = {
     arrowDown2: MdKeyboardArrowDown,
     loading: AiOutlineLoading3Quarters,
     notification: MdNotificationsNone,
-    message: BiMessageAltDetail
+    message: BiMessageAltDetail,
+    delete: MdDelete,
+    tag: AiFillTag
 }
 

@@ -1,9 +1,10 @@
 import styled from "styled-components/macro";
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 const Load = () => {
     return ( 
         <Container>
-            <div className="lds-facebook"><div></div><div></div><div></div></div>
+            <ProgressSpinner style={{width: '50px', height: '50px'}} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" />
         </Container>
      );
 }
@@ -15,8 +16,8 @@ display: flex;
 position: fixed;
 justify-content: center;
 align-items: center;
-width: 100vw;
-height: 100vh;
+width: 100%;
+height: 100%;
 .lds-facebook {
   display: inline-block;
   position: relative;

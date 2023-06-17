@@ -1,21 +1,26 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import styled from 'styled-components/macro'
 import { icon } from '~/assert/icon/icon'
 import Button from '~/component/template/Button.template'
 
-import InputBox from '~/component/template/InputSelect.template'
+import config from '~/config'
+import Tab from '~/page/Order/component/TabViewOrder'
 
 
 
 const Order = () => {
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawdawd ad awd awd awberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ]
+
+  const { createOrder } = config.adminRoutePath
+
+  const navigate = useNavigate()
 
   const handleSelect = () => {
-    console.log("select")
+
+  }
+
+  const handleClickCreateOrder = () => {
+    navigate(createOrder)
   }
   
   return (
@@ -27,20 +32,11 @@ const Order = () => {
             <HeaderAction>
                 <Button title="PRINT" normal={true} />
                 <Button title="EXPORT" normal={true} />
-                <Button title="CREATE ORDER"  active={true} />
+                <Button title="CREATE ORDER" active={true} onClick={handleClickCreateOrder}  />
             </HeaderAction>
         </HeaderActionWrapper>
       </Header>
-
-      <FilterSection>
-        <InputBox options={options} title='Date range'/>
-        <InputBox options={options} title='Status'/>
-      </FilterSection>
-
-      
-
-
-    
+    <Tab />
 
     </Container>
   )
@@ -78,13 +74,3 @@ flex-direction: row;
 justify-content: space-between;
 `
 
-const FilterSection = styled.div`
-width: 100%;
-height: 60px;
-display: flex;
-justify-content: flex-end;
-align-items: center;
-padding: 0 20px;
-gap: 10px;
-
-`

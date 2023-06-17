@@ -1,5 +1,5 @@
 import React, { Fragment, Suspense, useEffect } from 'react';
-import { GlobalStyles } from './component/Global.styles';
+import { GlobalStyles } from './GlobalStyle/Global.styles';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Load from './component/load';
 import config from './config';
@@ -12,6 +12,7 @@ import HeaderLayout from './Layout/MainLayout';
 import Auth from './page/Auth/Auth';
 import Home from './page/Home';
 import Order from './page/Order/Order';
+import CreateOrder from './page/Order/CreateOrder/CreateOrder';
 
 
 function ScrollToTopOnLocationChange() {
@@ -26,7 +27,7 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
-  const { auth, admin, gameManage, dashboard, order } = config.adminRoutePath
+  const { auth, admin, gameManage, dashboard, order, createOrder } = config.adminRoutePath
   const navigate = useNavigate()
 
   const { pathname } = useLocation()
@@ -55,6 +56,7 @@ function App() {
                   <Route path={admin} element={<HeaderLayout><AdminManagementPage/></HeaderLayout>} />
                   <Route path={gameManage} element={<HeaderLayout><GameManage/></HeaderLayout>} />
                   <Route path={order} element={<HeaderLayout><Order/></HeaderLayout>} />
+                  <Route path={createOrder} element={<HeaderLayout><CreateOrder/></HeaderLayout>} />
                 </Fragment>
               ) : (
                 <Route path={auth} replace element={<Auth/>} />
