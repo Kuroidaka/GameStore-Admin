@@ -3,15 +3,21 @@ import { Calendar } from 'primereact/calendar'
 import styled from 'styled-components/macro'
 
 const CalendarInput = (props) => {
-  const { value, dateFormat, disabled } = props
+  const { value, dateFormat, disabled, onInput, name } = props
 
   const [dates, setDates] = useState(new Date(value))
+
+  const handleChangeValue = (e) => {
+    setDates(e.value)
+    onInput && onInput(e)
+  }
 
   return (
     <Container>
         <Calendar
           value={dates}
-          onChange={(e) => setDates(e.value)}
+          name={name}
+          onChange={handleChangeValue}
           dateFormat={dateFormat}
           disabled={disabled}
         />

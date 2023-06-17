@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Tag } from 'primereact/tag'
@@ -8,12 +8,13 @@ import Button2 from '~/component/template/Button2.template'
 import OrderDetail from './OrderDetail'
 import CalendarInput from '~/component/template/DateInput.template'
 import { formatDate } from '~/utils'
+import OrderContext from '~/Context/Order.context'
 
 const Table = (props) => {
-  const { order } = props
-
+  
   const [modal, setModal] = useState({ state: false, data: null })
   
+  const { orders } = useContext(OrderContext)
 
   const getOrderSeverity = (value) => {
     switch (value) {
@@ -123,7 +124,7 @@ const Table = (props) => {
    
    
         <DataTable
-          value={order}
+          value={orders}
           paginator
           rows={9}
           scrollHeight="70vh"

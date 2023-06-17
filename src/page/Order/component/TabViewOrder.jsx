@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'; 
+import React, { useContext, useEffect, useState } from 'react'; 
 import { TabView, TabPanel } from 'primereact/tabview';
 import styled from "styled-components/macro";
 import { InputText } from 'primereact/inputtext';
@@ -7,6 +7,8 @@ import Table from './OrderTable';
 import { icon } from '~/assert/icon/icon'
 import SkelentonTable from './Skelenton';
 import OrderService from '~/service/order.service';
+import { orderApi } from '~/api/order.api';
+import OrderContext from '~/Context/Order.context';
 
 const dataAll = [
 {
@@ -287,9 +289,28 @@ const dataAll = [
 ]
 
 const Tab = (props) => {
-
-    const [orders, load] = OrderService()
       
+    const [orders, setOrders] = useState([]);
+    const [load, setLoad] = useState(true);
+  
+    useEffect(() => {
+      const fetchOrderList = async () => {
+        setLoad(true)
+        try {
+          const response = await orderApi.getOrderList();
+          setOrders(response.data);
+          setLoad(false)
+        } catch (error) {
+          console.error('Error fetching order list:', error);
+          setLoad(false)
+        }
+      };
+  
+      fetchOrderList();
+    }, []);
+
+    
+
     // const [orderData, setOrder] = useState({
     //     dataAll: orders.order,
     // })
@@ -323,14 +344,22 @@ const Tab = (props) => {
      
     // }, [orders]);
 
+    const orderValue = {
+      orders,
+      setOrders,
+      load,
+      setLoad
+    }
+
     return (
+      <OrderContext.Provider value={orderValue}>
         <Container className="card">
             <TabView>
                 <TabPanel header="All">
                     { !load ?
                     (
                       orders.length > 0 
-                      ? <TabTable orderData={orders} />
+                      ? <TabTable/>
                       : <div>Empty</div>
                     ) : (
                       <SkelentonTable />
@@ -354,6 +383,7 @@ const Tab = (props) => {
                 </TabPanel> */}
             </TabView>
         </Container>
+      </OrderContext.Provider>
     )
 }
 
@@ -361,10 +391,12 @@ const TabTable = (props) => {
 
     const { orderData } = props
 
+    const { orders } = useContext(OrderContext)
+
     return (
     <TotalQuantity>
         <div className="d-flex justify-content-between">
-            <p className='my-auto'>{orderData.length} results</p>
+            <p className='my-auto'>{orders.length} results</p>
             
             <span className="p-input-icon-left">
                 <icon.search/>
@@ -373,7 +405,7 @@ const TabTable = (props) => {
 
         </div>
             <Content>
-                {orderData && <Table order={orderData}/>}
+                {orders && <Table/>}
             </Content>
     </TotalQuantity>
     )

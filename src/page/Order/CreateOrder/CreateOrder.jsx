@@ -121,6 +121,7 @@ const CreateOrder = () => {
     else {
       const newArray = [...gameOrder, product];
       setGameOrder(newArray);
+      setSearchResult([])
     }
   };
   const deleteGame = (id) => {
@@ -185,6 +186,18 @@ const CreateOrder = () => {
               <Button label="Submit" className='h-4rem' loading={loading.submit} onClick={handleSubmitForm} />
           </Header>
           
+           {/* Search Function */}
+           <div className="card w-8 h-auto my-3 mx-8 p-3 border-round relative"
+                  style={{boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', maxHeight: '44rem'}}>
+                <SearchBar searchFeature={searchFeature} className='justify-content-center w-full' /> 
+                {searchResult.length > 0 && 
+                  <div className=" game-result my-6 overflow-y-scroll absolute z-5 w-full border-round" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", top: '29px'}}>
+                    <GameTable product={searchResult} gameOrderFeature={gameOrderFeature}/>
+                  </div>
+                }
+                
+              </div>
+
           <div className="content px-5 grid justify-content-around" >
 
               {/* customer information */}
@@ -195,10 +208,10 @@ const CreateOrder = () => {
                   <div className="card p-3 m-3 grid flex-row justify-content-around">
                       <TextInputTemplate name='phone' label="Phone Number" onInput={onInput} value={customerInfo.phone}  className="col-8"/>
                       <Button label="Find" className='h-4rem align-self-end m-6 col 3' loading={loading.phoneFind} onClick={handlePhoneFind} />
-                      <TextInputTemplate name='display_name' label="Display Name" onInput={onInput} value={customerInfo["display_name"]} className="col-4"/>
+                      <TextInputTemplate name='display_name' label="Display Name" onInput={onInput} value={customerInfo["display_name"]} className="col-8"/>
                       {/* <TextInputTemplate label="Last Name" onInput={onInput}  className="col-5"/> */}
-                      <TextInputTemplate name='email' label="Email" onInput={onInput} value={customerInfo.email}  className="col-4"/>
-                      <TextInputTemplate name='rent_duration' label="Duration" onInput={onInput} value={customerInfo['rent_duration']}  className="col-2"/>
+                      <TextInputTemplate name='email' label="Email" onInput={onInput} value={customerInfo.email}  className="col-5"/>
+                      <TextInputTemplate name='rent_duration' label="Duration" onInput={onInput} value={customerInfo['rent_duration']}  className="col-3"/>
                       <TextInputTemplate name='address' label="Address" onInput={onInput} value={customerInfo.address} className="col-12" />
                       <TextInputTemplate name='note' label="Note" onInput={onInput} className="col-12" textarea/>
 
@@ -206,7 +219,7 @@ const CreateOrder = () => {
               </div>
 
               {/* Order list */}
-              <div className=" col-3 px-4 w-6 pt-2 mt-6 border-round"
+              <div className=" col-3 px-4 w-5 my-3  p-3 border-round"
                 style={{boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}}>
 
                 <h1 class="text-3xl font-bold pt-4 my-0 mx-3 pb-3">Order Product</h1>
@@ -214,18 +227,6 @@ const CreateOrder = () => {
                   <OrderListTable></OrderListTable>
               </div>
 
-
-              {/* Search Function */}
-              <div className="card w-5 h-auto my-3 p-3 border-round"
-                  style={{boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', maxHeight: '44rem'}}>
-                <SearchBar searchFeature={searchFeature} className='justify-content-center' /> 
-                <div className="card game-result my-6 overflow-y-scroll ">
-                  {searchResult && <GameTable product={searchResult} gameOrderFeature={gameOrderFeature}/>}
-                </div>
-              </div>
-              
-             
-            
           </div>
 
       </Container>
@@ -247,8 +248,8 @@ const OrderListTable = () => {
                 <div className="flex-1 flex flex-column gap-2 xl:mr-8">
                     <span className="font-bold">{item.game_name}</span>
                     <div className="flex align-items-center gap-2">
-                        <i className="pi pi-tag text-sm"></i>
-                        <span>{item.developer}</span>
+                      <icon.tag />
+                      <span>{item.developer}</span>
                     </div> 
                 </div>
                 <span className="font-bold text-900">${item.price}</span>
@@ -259,7 +260,7 @@ const OrderListTable = () => {
     
     return (
         <div className="flex flex-column justify-content-center">
-            <OrderList value={gameOrder} itemTemplate={itemTemplate} header="Products" filter filterBy="game_name"></OrderList>
+            <OrderList value={gameOrder} itemTemplate={itemTemplate} header="Products"></OrderList>
         </div>
     )
 }

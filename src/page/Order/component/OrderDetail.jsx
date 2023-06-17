@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button2 from '~/component/template/Button2.template'
 import InputSelect from '~/component/template/InputSelect.template'
 import styled from 'styled-components/macro'
@@ -10,6 +10,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { orderApi } from '~/api/order.api';
 import { Timeline } from 'primereact/timeline';
 import TextInputTemplate from '~/component/template/TextInput.template';
+import OrderContext from '~/Context/Order.context';
 
 const OrderDetail = (props) => {
   const { modal, feature } = props
@@ -20,7 +21,9 @@ const OrderDetail = (props) => {
 
   const [currentData, setCurrentData] = useState(data);
 
-
+  const { orders, setOrders,
+    load,
+    setLoad } = useContext(OrderContext)
 
   const getDefaultValueStatus = (data) => {
 
@@ -39,13 +42,16 @@ const OrderDetail = (props) => {
     }
   }
 
+  const [status, setStatus] = useState()
+
+
   const RentInput = [
     {
       status: "Start Date",
-      element: <CalendarInput value={data.rental_start_date} dateFormat="dd/mm/yy" />
+      element: <CalendarInput name="rental_start_date" value={currentData.rental_start_date} onInput={(e) => handleChangeValue(e)} dateFormat="dd/mm/yy" />
     },{
       status: "End Date",
-      element: <CalendarInput value={data.rental_end_date} dateFormat="dd/mm/yy" />
+      element: <CalendarInput name="rental_end_date" value={currentData.rental_end_date} onInput={(e) => handleChangeValue(e)}  dateFormat="dd/mm/yy" />
     }
     
     
@@ -54,7 +60,11 @@ const OrderDetail = (props) => {
   const handleChangeValue = (e) => {
 
     const {name, value} = e.target
+    console.log(name)
+
     setCurrentData({...currentData, [name]: value})
+  
+
   }
 
   const handleClickCancel = () => {
@@ -62,7 +72,45 @@ const OrderDetail = (props) => {
   }
 
   const handleClickUpdate = () => {
-    console.log("current data", currentData)
+    const { phone, rental_start_date, rental_end_date, address } = currentData
+
+    const rentalStartDate = new Date(rental_start_date);
+    const rentalEndDate = new Date(rental_end_date);
+
+    rentalStartDate.setDate(rentalStartDate.getDate() + 1);
+    rentalEndDate.setDate(rentalEndDate.getDate() + 1);
+
+    const order = {
+      address: address ? address : data.address,
+      rental_start_date: rentalStartDate.toISOString().split('T')[0],
+      rental_end_date : rentalEndDate.toISOString().split('T')[0]
+    }
+
+    const customer = {
+      phone: phone ? phone : data.phone,
+      customerID : data.customerID
+    }
+
+
+    const query = {
+      status : status ? status.name : data.queue_status,
+      id: data.id
+    }
+
+    console.log(currentData)
+    
+    orderApi.editOrder({order, customer}, query)
+    .then((res) => {
+      close()
+      setLoad(true)
+      orderApi.getOrderList()
+      .then(({data})=> {
+        console.log(" res ", data)
+        setOrders(data)
+        setLoad(false)
+        
+      })
+    })
   }
 
   return (
@@ -72,7 +120,12 @@ const OrderDetail = (props) => {
       <div className="flex flex-wrap gap-4 align-items-center justify-content-around">
         
         <div className='w-full text-center'>
-          <ToggleSelect  data={[ { name: 'WAITING' }, { name: 'REJECT' }, { name: 'DONE' }]} defaultValueIndex={getDefaultValueStatus(data.queue_status)} />
+          <ToggleSelect
+            data={[ { name: 'WAITING' }, { name: 'DECLINE' }, { name: 'DONE' }]}
+            defaultValueIndex={getDefaultValueStatus(data.queue_status)}
+            value = {status}
+            setValue = {setStatus}
+          />
         </div>
         
         <RentDate className='flex'>
@@ -82,8 +135,8 @@ const OrderDetail = (props) => {
             />
         </RentDate>
         <div>
-          <TextInputTemplate label="Phone" value={data.phone} onInput={handleChangeValue}/>
-          <TextInputTemplate label="Address" value={data.address ?? 'Not Provided'} onInput={handleChangeValue}/>
+          <TextInputTemplate label="Phone" name='phone' value={data.phone} onInput={handleChangeValue}/>
+          <TextInputTemplate label="Address" name='address' value={data.address ?? 'Not Provided'} onInput={handleChangeValue}/>
         </div>
       </div>
 

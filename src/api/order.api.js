@@ -22,8 +22,16 @@ export const orderApi = {
               }
         })
     },
-    editOrder (data) {
-        
+    editOrder (data, query) {
+        const {status, id} = query;
+        const url = `/order/edit-order-detail?queue_status=${status}&orderId=${id}`;
+        const token = localStorage.getItem('token');
+    
+        return axiosClient.post(url, data, {
+            headers: {
+                'authorization': `${token}` 
+              }
+        })
 
     }
 }

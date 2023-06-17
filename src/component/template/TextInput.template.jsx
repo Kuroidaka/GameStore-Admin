@@ -23,8 +23,8 @@ const  TextInputTemplate = (props) => {
     return (
         <Container className={className}>
             <div className="flex flex-column gap-2 py-2 text-2xl">
-                <label htmlFor="username" className="text-xl font-semibold">{label ?? ''}</label>
-                <Input id="username" aria-describedby={name} value={text} onInput={handleInput} />
+                <label htmlFor={name} className="text-xl font-semibold">{label ?? ''}</label>
+                <Input id={name} aria-describedby={name} name={name} value={text} onInput={handleInput} />
             </div>
         </Container>
     )

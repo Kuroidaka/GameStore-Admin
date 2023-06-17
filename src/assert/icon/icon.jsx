@@ -9,7 +9,7 @@ import { VscSearch } from 'react-icons/vsc'
 import { BsCart2 } from 'react-icons/bs'
 import { BsHeart } from 'react-icons/bs'
 import { MdKeyboardArrowDown } from 'react-icons/md'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { AiOutlineLoading3Quarters, AiFillTag } from 'react-icons/ai'
 import { BiMessageAltDetail } from 'react-icons/bi'
 
 
@@ -31,6 +31,7 @@ export const icon = {
     loading: AiOutlineLoading3Quarters,
     notification: MdNotificationsNone,
     message: BiMessageAltDetail,
-    delete: MdDelete
+    delete: MdDelete,
+    tag: AiFillTag
 }
 

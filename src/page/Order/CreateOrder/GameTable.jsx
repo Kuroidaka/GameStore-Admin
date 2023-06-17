@@ -3,8 +3,7 @@ import React, { useContext, useState } from 'react'
 import { DataView } from 'primereact/dataview';
 import styled from 'styled-components/macro';
 import { GameOrderContext } from './CreateOrder';
-
-
+import { icon } from '~/assert/icon/icon'
 
 const GameTable = (props) => {
   const { product } = props
@@ -23,9 +22,9 @@ const GameTable = (props) => {
                       <div className="flex flex-column align-items-center sm:align-items-start gap-3">
                           <div className="text-2xl font-bold text-900">{product.game_name}</div>
                         
-                          <div className="flex alignc-items-center gap-3">
+                          <div className="flex align-items-center gap-3">
                               <span className="flex align-items-center gap-2">
-                                  <i className="pi pi-tag"></i>
+                                  <icon.tag />
                                   <span className="font-semibold">{product.developer}</span>
                               </span>
                               {/* <Tag value={product.inventoryStatus} severity={getSeverity(product)}></Tag> */}

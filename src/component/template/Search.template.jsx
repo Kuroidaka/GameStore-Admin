@@ -5,7 +5,7 @@ import { usePopper } from 'react-popper';
 import useDebounce from '~/hook/useDebounce';
 import { productApi } from '~/api/product.api';
 import Button2 from './Button2.template';
-
+import { icon } from '~/assert/icon/icon';
 
 
 const SearchBar = (props ) => {
@@ -55,14 +55,15 @@ const SearchBar = (props ) => {
 
   return (
     <SearchBarWrapper className={'py-3' + className}>
-      <span className="p-input-icon-left">
-        <i className="pi pi-search" />
+      <span className="p-input-icon-left w-full">
+        <icon.search />
         <SearchInput
           value={searchTerm}
           onChange={handleChange}
           onBlur={handleBlur}
           placeholder="Search..."
           ref={setReferenceElement}
+          className='w-full'
         />
       </span>
     {children}
