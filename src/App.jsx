@@ -13,7 +13,7 @@ import Auth from './page/Auth/Auth';
 import Home from './page/Home';
 import Order from './page/Order/Order';
 import CreateOrder from './page/Order/CreateOrder/CreateOrder';
-
+import { AuthProvider } from './Context/Auth.context';
 
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation();
@@ -46,6 +46,7 @@ function App() {
   }, []);
 
   return (
+    <AuthProvider>
       <Container>
         <GlobalStyles />
         <ScrollToTopOnLocationChange />
@@ -63,8 +64,8 @@ function App() {
               )
               }
           </Routes>
-
       </Container>
+    </AuthProvider>
 
   );
 }

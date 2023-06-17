@@ -11,6 +11,15 @@ export const auth = {
         const url = '/admin/login';
 
         return axiosClient.post(url, data)
+    },
+    checkToken(token) {
+        const url = '/admin/check-token';
+
+        return axiosClient.post(url, {
+            headers: {
+                'authorization': token
+            }
+        })
     }
 }
 
