@@ -77,7 +77,8 @@ const CreateOrder = () => {
         customerID : customerInfo.id,
         queue_data : customerInfo.note,
         rent_duration: customerInfo["rent_duration"],
-        gameList: gameOrder.map(item => item.id)
+        gameList: gameOrder.map(item => item.id),
+        address: customerInfo.address
       }
       
       orderApi.book(newData)
@@ -203,7 +204,7 @@ const CreateOrder = () => {
               {/* customer information */}
               <div className="col-3 card w-5 my-3  p-3 border-round" 
                   style={{boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}}>
-                  <h1 class="text-3xl mx-3 font-bold pt-3 my-0 pb-4 ">Customer information</h1>
+                  <h1 className="text-3xl mx-3 font-bold pt-3 my-0 pb-4 ">Customer information</h1>
 
                   <div className="card p-3 m-3 grid flex-row justify-content-around">
                       <TextInputTemplate name='phone' label="Phone Number" onInput={onInput} value={customerInfo.phone}  className="col-8"/>
@@ -222,7 +223,7 @@ const CreateOrder = () => {
               <div className=" col-3 px-4 w-5 my-3  p-3 border-round"
                 style={{boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}}>
 
-                <h1 class="text-3xl font-bold pt-4 my-0 mx-3 pb-3">Order Product</h1>
+                <h1 className="text-3xl font-bold pt-4 my-0 mx-3 pb-3">Order Product</h1>
 
                   <OrderListTable></OrderListTable>
               </div>
