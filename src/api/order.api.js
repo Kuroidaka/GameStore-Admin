@@ -21,6 +21,10 @@ export const orderApi = {
                 'authorization': `${token}` 
               }
         })
+    },
+    editOrder (data) {
+        
+
     }
 }
 

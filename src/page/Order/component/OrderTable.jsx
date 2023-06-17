@@ -7,6 +7,7 @@ import Button2 from '~/component/template/Button2.template'
 
 import OrderDetail from './OrderDetail'
 import CalendarInput from '~/component/template/DateInput.template'
+import { formatDate } from '~/utils'
 
 const Table = (props) => {
   const { order } = props
@@ -70,14 +71,14 @@ const Table = (props) => {
       selector: 'rental_start_date',
       sortable: true,
       header: 'START TIME',
-      // cell: row => <CalendarInput value={row.rental_start_date}  dateFormat="dd/mm/yy" />
+      cell: row =><p>{formatDate(row.rental_start_date)}</p>
     },
     {
       name: 'END TIME',
       selector: 'rental_end_date',
       sortable: true,
       header: 'END TIME',
-      cell: row => <CalendarInput value={row.rental_end_date}  dateFormat="dd/mm/yy" />
+      cell: row => <p>{formatDate(row.rental_end_date)}</p>
     },
     {
       name: 'DISTRIBUTION',
@@ -129,6 +130,8 @@ const Table = (props) => {
           tableStyle={{ minWidth: '50rem' }}
         >
         {columns.map((column) => {
+            console.log("column",column)
+
             return (
               <Column
                 key={column.name}

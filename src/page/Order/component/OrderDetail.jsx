@@ -18,7 +18,7 @@ const OrderDetail = (props) => {
 
   const { close } = feature
 
-  const [currentData, setCurrentData] = useState({});
+  const [currentData, setCurrentData] = useState(data);
 
 
 
@@ -62,7 +62,7 @@ const OrderDetail = (props) => {
   }
 
   const handleClickUpdate = () => {
-
+    console.log("current data", currentData)
   }
 
   return (
