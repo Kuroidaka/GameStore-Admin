@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import styled from 'styled-components';
 import SearchBox from '../component/SearchBox';
 import Avatar from '../component/Avatar';
@@ -6,7 +6,6 @@ import UserMenu, { PopperUserMenu } from './component/UserMenu';
 import { icon } from '../assert/icon/icon';
 
 const HeaderLayout = (props) => {
-
 
   return (
       <Header>
@@ -19,9 +18,8 @@ const HeaderLayout = (props) => {
           <icon.message />
 
         </ActionWrapper>
-
-        <AvatarWrapper> 
-          <Avatar />
+        <AvatarWrapper > 
+          <Avatar/>
           <UserMenu />
         </AvatarWrapper>
       </Header>
@@ -56,7 +54,12 @@ const AvatarWrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  
+  ${PopperUserMenu}{
+    display: none;
+  }
+  &:hover ${PopperUserMenu}{
+    display: inline-block;
+  }
 `;
 
 const ActionWrapper = styled.div`
