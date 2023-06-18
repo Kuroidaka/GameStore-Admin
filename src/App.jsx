@@ -14,6 +14,7 @@ import Home from './page/Home';
 import Order from './page/Order/Order';
 import CreateOrder from './page/Order/CreateOrder/CreateOrder';
 import { AuthProvider } from './Context/Auth.context';
+import AddGame from './page/GameManage/AddGame/AddGame';
 
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation();
@@ -27,7 +28,7 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
-  const { auth, admin, gameManage, dashboard, order, createOrder } = config.adminRoutePath
+  const { auth, admin, gameManage, dashboard, order, createOrder, addGame } = config.adminRoutePath
   const navigate = useNavigate()
 
   const { pathname } = useLocation()
@@ -58,6 +59,7 @@ function App() {
                   <Route path={gameManage} element={<HeaderLayout><GameManage/></HeaderLayout>} />
                   <Route path={order} element={<HeaderLayout><Order/></HeaderLayout>} />
                   <Route path={createOrder} element={<HeaderLayout><CreateOrder/></HeaderLayout>} />
+                  <Route path={addGame} element={<HeaderLayout><AddGame/></HeaderLayout>} />
                 </Fragment>
               ) : (
                 <Route path={auth} replace element={<Auth/>} />

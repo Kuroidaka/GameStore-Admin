@@ -1,31 +1,46 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FiSettings } from "react-icons/fi";
 import styled from "styled-components/macro";
 import { mockGameData } from "../../../assert/mockData";
+import GameContext from "~/Context/Game.context";
+import { formatDate } from "~/utils";
+import { API_BASE_URL } from "~/config/api";
+import { Tag } from 'primereact/tag';
 
 
-const GameList = ({ games }) => {
+const GameList = ({ className, style }) => {
+
+  const { gameList } = useContext(GameContext)
+
+
+
   return (
-    <GameListContainer>
-      {games.map((game) => (
+    <GameListContainer className={className} style={style}>
+      {gameList && gameList.map((game) =>{
+        console.log(game.platform.split(','))
+       return (
         <GameSquare key={game.id}>
-          <div>
-            <GameLogo src={game.image} alt="Game Logo" />
-            <GamePlatform>{game.platform}</GamePlatform>
+          <div className="flex flex-column mr-4 w-5">
+            <GameLogo src={`${API_BASE_URL}file/image/${game.imageList[0].filepath}`} alt="Game Logo" />
+            <GamePlatform className="flex flex-wrap flex-start gap-2">{
+            game.platform && game.platform.split(',').map(tag => (
+              <Tag severity="info" value={tag}></Tag>
+            ))
+            }</GamePlatform>
           </div>
           <GameInfo>
-            <GameTitle>{game.title}</GameTitle>
-            <GameDescription>{game.description}</GameDescription>
+            <GameTitle>{game.game_name}</GameTitle>
+            {/* <GameDescription>{game.description}</GameDescription> */}
             <GameDetails>
-              <GameDate>Create: {game.createDate}</GameDate>
-              <GameDate>Last Modified: {game.modifyDate}</GameDate>
+              <GameDate>Create: {formatDate(game.release_date)}</GameDate>
+              <GameDate>Last Modified: {formatDate(game.updated_at)}</GameDate>
               <SettingsButton>
                 <SettingsIcon />
               </SettingsButton>
             </GameDetails>
           </GameInfo>
         </GameSquare>
-      ))}
+      )})}
     </GameListContainer>
   );
 };
@@ -35,29 +50,29 @@ export default GameList;
 
 
 const GameListContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  overflow-y: scroll;
+  width: 50%
 `;
 
 const GameSquare = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  border: 1px solid black;
-  border-right: 1px solid black;
-  width: 50%;
-  height: 15rem;
-  margin-left: 2rem;
+    position: relative;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid rgb(206 206 206);
+    width: 80%;
+    height: auto;
+    margin-left: 2rem;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 `;
 
 const GameLogo = styled.img`
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  margin-right: 1rem;
-  border: 1px solid black;
+  width: auto;
+  height: 60px;
+  object-fit: contain;
 `;
 
 const GameInfo = styled.div`
@@ -65,7 +80,6 @@ const GameInfo = styled.div`
   flex-direction: column;
   flex: 1;
   align-items: flex-start;
-  margin-left: 1rem;
 `;
 
 const GameTitle = styled.div`
@@ -81,11 +95,11 @@ const GameDescription = styled.div`
 
 const GamePlatform = styled.div`
   margin-top: 0.5rem;
-  width: 80px;
-  background-color: red;
-  color: white;
+  width:auto;
   text-align: center;
   padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap
 `;
 
 
@@ -103,9 +117,9 @@ const GameDate = styled.div`
 
 const SettingsButton = styled.button`
   position: absolute;
-  bottom: 2rem;
   right: 2rem;
   width: 4rem;
+  top: 2rem;
   height: 4rem;
   display: flex;
   align-items: center;

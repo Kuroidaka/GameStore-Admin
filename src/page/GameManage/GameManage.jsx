@@ -1,18 +1,22 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import GameManageHeader from "./Component/GameManageHeader";
 import GameList from "./Component/GameList";
 import { mockGames } from "../../component/mockData";
+import { productApi } from "~/api/product.api";
+import { GameProvider } from "~/Context/Game.context";
 
 const GameManage = () => {
   return (
-    <Container>
-      <GameManageHeader />
-      <GameListContainer>
-        <GameList games={mockGames} />
-      </GameListContainer>
-    </Container>
+    <GameProvider>
+      <Container>
+        <GameManageHeader />
+        <GameListContainer className="grid">
+          <GameList className="card col-5 mx-7 my-4" style={{height: "75vh"}}/>
+        </GameListContainer>
+      </Container>
+    </GameProvider>
   );
 };
 

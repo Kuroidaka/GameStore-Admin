@@ -5,4 +5,5 @@ export const adminRoutePath = {
     dashboard: '/dashboard',
     order: '/order',
     createOrder: '/order/create-order',
+    addGame: 'game-manage/add-game'
 }
