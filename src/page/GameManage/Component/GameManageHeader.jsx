@@ -1,8 +1,8 @@
 import React from "react";
 
-import SearchBar from "./SearchBar";
-import SortOptions from "./SortOptions";
-import ShowOptions from "./ShowOptions";
+import SearchBar from "../../../component/SearchBar";
+import SortOptions from "../../../component/SortOptions";
+import ShowOptions from "../../../component/ShowOptions";
 
 import styled from "styled-components/macro";
 

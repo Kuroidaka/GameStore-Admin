@@ -1,7 +1,37 @@
 import React from "react";
 import { FiSettings } from "react-icons/fi";
 import styled from "styled-components/macro";
-import { mockGameData } from "../assert/mockData";
+import { mockGameData } from "../../../assert/mockData";
+
+
+const GameList = ({ games }) => {
+  return (
+    <GameListContainer>
+      {games.map((game) => (
+        <GameSquare key={game.id}>
+          <div>
+            <GameLogo src={game.image} alt="Game Logo" />
+            <GamePlatform>{game.platform}</GamePlatform>
+          </div>
+          <GameInfo>
+            <GameTitle>{game.title}</GameTitle>
+            <GameDescription>{game.description}</GameDescription>
+            <GameDetails>
+              <GameDate>Create: {game.createDate}</GameDate>
+              <GameDate>Last Modified: {game.modifyDate}</GameDate>
+              <SettingsButton>
+                <SettingsIcon />
+              </SettingsButton>
+            </GameDetails>
+          </GameInfo>
+        </GameSquare>
+      ))}
+    </GameListContainer>
+  );
+};
+
+export default GameList;
+
 
 
 const GameListContainer = styled.div`
@@ -97,31 +127,3 @@ const SettingsIcon = styled(FiSettings)`
     height: 2rem;
     font-size: 100px; /* Increase the font size for a larger icon */
 `;
-
-const GameList = ({ games }) => {
-  return (
-    <GameListContainer>
-      {games.map((game) => (
-        <GameSquare key={game.id}>
-          <div>
-            <GameLogo src={game.image} alt="Game Logo" />
-            <GamePlatform>{game.platform}</GamePlatform>
-          </div>
-          <GameInfo>
-            <GameTitle>{game.title}</GameTitle>
-            <GameDescription>{game.description}</GameDescription>
-            <GameDetails>
-              <GameDate>Create: {game.createDate}</GameDate>
-              <GameDate>Last Modified: {game.modifyDate}</GameDate>
-              <SettingsButton>
-                <SettingsIcon />
-              </SettingsButton>
-            </GameDetails>
-          </GameInfo>
-        </GameSquare>
-      ))}
-    </GameListContainer>
-  );
-};
-
-export default GameList;

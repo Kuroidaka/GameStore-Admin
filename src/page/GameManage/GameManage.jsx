@@ -1,8 +1,8 @@
 
 import React from "react";
 import styled from "styled-components/macro";
-import GameManageHeader from "../../component/GameManageHeader";
-import GameList from "../../component/GameList";
+import GameManageHeader from "./Component/GameManageHeader";
+import GameList from "./Component/GameList";
 import { mockGames } from "../../component/mockData";
 
 const GameManage = () => {
