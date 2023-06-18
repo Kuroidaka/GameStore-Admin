@@ -6,18 +6,27 @@ import GameContext from "~/Context/Game.context";
 import { formatDate } from "~/utils";
 import { API_BASE_URL } from "~/config/api";
 import { Tag } from 'primereact/tag';
+import { useNavigate } from "react-router";
+import config from "~/config";
 
 
 const GameList = ({ className, style }) => {
 
   const { gameList } = useContext(GameContext)
 
+  const { gameDetail } = config.adminRoutePath
 
+  const navigate = useNavigate()
+
+  const handleClickGameDetail = (id) => {
+    console.log(id)
+
+    navigate(`${gameDetail}/${id}`)
+  }
 
   return (
     <GameListContainer className={className} style={style}>
       {gameList && gameList.map((game) =>{
-        console.log(game.platform.split(','))
        return (
         <GameSquare key={game.id}>
           <div className="flex flex-column mr-4 w-5">
@@ -34,7 +43,7 @@ const GameList = ({ className, style }) => {
             <GameDetails>
               <GameDate>Create: {formatDate(game.release_date)}</GameDate>
               <GameDate>Last Modified: {formatDate(game.updated_at)}</GameDate>
-              <SettingsButton>
+              <SettingsButton onClick={() => handleClickGameDetail(game.id)}>
                 <SettingsIcon />
               </SettingsButton>
             </GameDetails>

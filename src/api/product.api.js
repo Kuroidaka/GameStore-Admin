@@ -18,6 +18,11 @@ export const productApi = {
         const url= `/game/get`
 
         return axiosClient.get(url)
-    }
+    },
+    getProductById (id) {
+        const url= `/game/getById?id=${id}`
+
+        return axiosClient.get(url)
+    },
 }
 

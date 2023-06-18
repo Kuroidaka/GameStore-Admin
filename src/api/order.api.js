@@ -33,6 +33,11 @@ export const orderApi = {
               }
         })
 
+    },
+    getOrderListByGameID (id) {
+        const url = `/order/get-order-by-game?id=${id}`;
+      
+        return axiosClient.get(url)
     }
 }
 

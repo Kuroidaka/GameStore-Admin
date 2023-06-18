@@ -7,7 +7,7 @@ import { icon } from '~/assert/icon/icon'
 import config from '~/config'
 import TextInputTemplate from '~/component/template/TextInput.template'
 import GameTable from './GameTable'
-import ProductService from '~/service/Product';
+import ProductService from '~/service/product.service';
 import { OrderList } from 'primereact/orderlist';
 import { Button } from 'primereact/button';
 import { customer } from '~/api/customer.api'
