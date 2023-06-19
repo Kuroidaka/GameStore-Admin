@@ -7,13 +7,26 @@ import { getProductDetail } from "~/service/product.service";
 import { formatDate, formatMoney } from "~/utils";
 import { Image } from 'primereact/image';
 import { API_BASE_URL } from "~/config/api";
+import { icon } from "~/assert/icon/icon.jsx"
+import InputField from "~/component/InputField";
+import { InputText } from "primereact/inputtext";
+import TextInputTemplate from "~/component/template/TextInput.template";
+import { MultiSelect } from 'primereact/multiselect';
+import Button from "~/component/Button";
+
 
 const GameDetail = () => {
     const { id } = useParams()
 
     const [detail, setDetail] = useState({})
 
+    const [validDetail, setValidDetail] = useState()
+
+    const [imgUploaded, setImgUploaded] = useState([])
+    
     const [order, setOrder] = useState([])
+
+    const [valid, setValid] = useState(false)
 
     const [chartData, setChartData] = useState({
         waiting : 0,
@@ -21,13 +34,52 @@ const GameDetail = () => {
         done : 0,
         none : true
     })
+    // 'Action','Adventure','Role-playing','Simulation','Strategy','Sports','Rhythm','Other')
+
+    const [selectedGenres, setSelectedGenres] = useState([]);
+    const genres = [
+        { name: 'Action', value: 'Action' },
+        { name: 'Adventure', value: 'Adventure' },
+        { name: 'Role-playing', value: 'Role-playing' },
+        { name: 'Simulation', value: 'Simulation' },
+        { name: 'Strategy', value: 'Strategy' },
+        { name: 'Sports', value: 'Sports' },
+        { name: 'Rhythm', value: 'Rhythm' },
+        { name: 'Other', value: 'Other' },
+    ];
+
+
+
+  
+    const handlePostImg = async (e) => {
+        const file = e.target.files[0]
+        file.preview = URL.createObjectURL(file)
+
+        setImgUploaded(prev => ([...prev, file]))
+
+    }
 
     useEffect(() => {
         getProductDetail(id)
         .then(({data}) => {
-            setDetail(data)
-            console.log("detail", data)
+
+            const splitArray = splitGenre(data)
+
+            const newData = {...data, ["genre"]: splitArray}
+            setDetail(newData)
+            const valid = JSON.stringify(newData)
+            setValidDetail(valid)
         })
+
+        const splitGenre = (data) => {
+            if(data.genre.length !== 0){ 
+                const dataSplit = data.genre.split(',')
+                setSelectedGenres(dataSplit)
+                return dataSplit
+            }
+        }
+
+        
     }, [])
 
     useEffect(() => {
@@ -37,6 +89,32 @@ const GameDetail = () => {
             getChartValue(data)
         })
     }, []);
+
+    useEffect(() => {
+    
+        const validateDetail = () => {
+            const valid = JSON.stringify(detail)
+            if(valid === validDetail) {
+                setValid(false)
+            }
+            else {
+                setValid(true)
+            }
+        }
+        validateDetail()
+
+    }, [detail]);
+
+    console.log("detail", detail)
+
+    const handleInputValue = (e) => {
+        const { name, value } = e.target
+
+        if(name === "genre") {
+            setSelectedGenres(value)
+        }
+        setDetail(prev => ({...prev, [name]: value}))
+    }
 
     const getChartValue = (data) => {
 
@@ -74,7 +152,7 @@ const GameDetail = () => {
                     {chartData && <ChartTemp chart={chartData} ></ChartTemp>}
                 </div>
 
-                <div className="list-order card border-round-lg w-10 p-4 my-5 m-auto" style = {{boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px;'}}>
+                <div className="list-order card border-round-lg w-10 p-4 my-5 m-auto" style = {{boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'}}>
                     <div className="header text-4xl font-medium">Recent Order</div>
 
                     <div className="card p-5 table-wrapper overflow-scroll h-20rem">
@@ -86,9 +164,9 @@ const GameDetail = () => {
                                 <th className="text-xl font-normal">Price</th>
                             </thead>
                             <tbody>
-                            {order && order.map(data => {
+                            {order && order.map((data, idx) => {
                                 return (
-                                    <tr>
+                                    <tr key={idx}>
                                         <td className="py-3">
                                             {data.booking_id}
                                         </td>
@@ -119,24 +197,91 @@ const GameDetail = () => {
                     boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px"
                 }}>
 
-                    {/* <ImageList className="image-list flex justify-content-center flex-column ">
-                        <div className="w-8 border-round-lg overflow-hidden">
+                    {detail?.imageList?.length > 0 &&  <ImageList className="image-list flex justify-content-center align-items-center flex-column ">
+                        <div className="w-6 border-round-lg overflow-hidden">
                            { detail?.imageList[0]?.filepath && <Image src={`${API_BASE_URL}file/image/${detail?.imageList[0]?.filepath}`} className="primary-image" alt="Image" preview width="100%" height="100px" />}
                         </div>
-                        <div className="child-image-list flex flex-wrap w-full">
+                        <div className="child-image-list h-10rem flex flex-wrap w-full gap-2">
                             {detail.imageList && detail.imageList.map((image, index) => {
                                 if(index === 0) return
                                 return (
-                                    <div className="w-3 border-round-lg overflow-hidden">
+                                    <div className="w-8rem border-round-lg overflow-hidden" key={index}>
                                         <Image src={`${API_BASE_URL}file/image/${image.filepath}`} className="primary-image" alt="Image" preview width="100%" height="100px" />
-                                  </div>
-                                )})}  
+                                    </div>
+                                )})}
+
+                                {imgUploaded.length > 0 &&      
+                                    imgUploaded.map((img ,idx) => {
+                                        return (
+                                        <div className="w-8 border-round-lg overflow-hidden" key={idx}>
+                                            <Image src={`${img.preview}`} className="primary-image" alt="Image" preview width="100%" height="100px" />
+                                        </div> 
+                                        )
+                                    })}
+                                   
+
+                                <AddGameImageBtn htmlFor="input-file" className="w-7rem border-round-lg overflow-hidden flex justify-content-center align-items-center">
+                                    <icon.plus />
+                                    <input type="file" id="input-file" className="hidden" onInput={handlePostImg} />
+                                </AddGameImageBtn>
                         </div>
-                    </ImageList> */}
+                    </ImageList> }
 
+                    <div className="info mt-5">
+                        <TextInputTemplate
+                            onInput={handleInputValue}
+                            value={detail.game_name}
+                            // onInput
+                            label="Game Name"
+                            className=""
+                            name="game_name"
 
+                        />
+
+                        <TextInputTemplate
+                            onInput={handleInputValue}
+                            value={detail.developer}
+                            // onInput
+                            label="Developer"
+                            className=""
+                            name="developer"
+                        />
+
+                        <TextInputTemplate
+                            onInput={handleInputValue}
+                            value={detail.price}
+                            // onInput
+                            label="Price"
+                            className="w-2"
+                            name="price"
+                        />
+
+                        <div className="text-wrapper flex flex-column gap-2 py-2 text-2xl">
+                            <label htmlFor="genres" className="text-xl font-semibold">Genres</label>
+                            <MultiSelect id="genres" value={selectedGenres} onChange={handleInputValue} name="genre" options={genres} optionLabel="name" display="chip" 
+                                placeholder="Select Cities" className="w-full w-full" />
+                        </div>
+                        
+                        <TextInputTemplate
+                            onInput={handleInputValue}
+                        value={detail.description}
+                        // onInput
+                        label="Description"
+                        className=""
+                        name="description"
+                        textarea={true}
+                    />
+                    <div className="flex w-full justify-content-end">
+                        <Button
+                            title="Save"
+                            active={valid}
+                            disable={!valid}
+                            className=""
+                        ></Button>
+                    </div>
+                    </div>
                 </div>
-
+                
             </section>
         </div>
         
@@ -168,7 +313,16 @@ const ImageList = styled.div `
         width: 100%!important;
 
         img {
-            object-fit: cover!important;
+            object-fit: contain!important;
         }
+    }
+`
+
+const AddGameImageBtn = styled.label`
+    background-color: #d1d1d1;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background-color: #c1c1c1;
     }
 `

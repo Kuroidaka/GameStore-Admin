@@ -11,6 +11,7 @@ import { BsHeart } from 'react-icons/bs'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { AiOutlineLoading3Quarters, AiFillTag } from 'react-icons/ai'
 import { BiMessageAltDetail } from 'react-icons/bi'
+import { ImPlus } from 'react-icons/im'
 
 
 export const icon = {
@@ -32,6 +33,7 @@ export const icon = {
     notification: MdNotificationsNone,
     message: BiMessageAltDetail,
     delete: MdDelete,
-    tag: AiFillTag
+    tag: AiFillTag,
+    plus: ImPlus
 }
 
