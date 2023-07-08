@@ -24,5 +24,10 @@ export const productApi = {
 
         return axiosClient.get(url)
     },
+    insertGameImage (data, id) {
+        const url = `file/image/game/?gameID=${id}`
+
+        return axiosClient.post(url, data)
+    }
 }
 

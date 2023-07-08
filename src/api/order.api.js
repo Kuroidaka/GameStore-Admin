@@ -38,6 +38,11 @@ export const orderApi = {
         const url = `/order/get-order-by-game?id=${id}`;
       
         return axiosClient.get(url)
+    },
+    getTotalRevenue () {
+        const url = '/order/get-total-revenue'
+
+        return axiosClient.get(url)
     }
 }
 

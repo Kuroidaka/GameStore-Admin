@@ -10,7 +10,7 @@ import AdminManagementPage from './page/Account/Account';
 import GameManage from './page/GameManage/GameManage';
 import HeaderLayout from './Layout/MainLayout';
 import Auth from './page/Auth/Auth';
-import Home from './page/Home';
+import Dashboard from './page/Dashboard/main';
 import Order from './page/Order/Order';
 import CreateOrder from './page/Order/CreateOrder/CreateOrder';
 import { AuthProvider } from './Context/Auth.context';
@@ -55,7 +55,7 @@ function App() {
           <Routes>
               {token ? (
                 <Fragment>
-                  <Route path={dashboard} element={<HeaderLayout><Home/></HeaderLayout>} />
+                  <Route path={dashboard} element={<HeaderLayout><Dashboard/></HeaderLayout>} />
                   <Route path={admin} element={<HeaderLayout><AdminManagementPage/></HeaderLayout>} />
                   <Route path={gameManage} element={<HeaderLayout><GameManage/></HeaderLayout>} />
                   <Route path={order} element={<HeaderLayout><Order/></HeaderLayout>} />

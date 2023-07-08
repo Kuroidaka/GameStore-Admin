@@ -72,14 +72,14 @@ const Table = (props) => {
       selector: 'rental_start_date',
       sortable: true,
       header: 'START TIME',
-      cell: row =><p>{formatDate(row.rental_start_date)}</p>
+      cell: row =><p style={{color: '#42a445'}}>{formatDate(row.rental_start_date)}</p>
     },
     {
       name: 'END TIME',
       selector: 'rental_end_date',
       sortable: true,
       header: 'END TIME',
-      cell: row => <p>{formatDate(row.rental_end_date)}</p>
+      cell: row => <p style={{color: 'red '}}>{formatDate(row.rental_end_date)}</p>
     },
     {
       name: 'DISTRIBUTION',

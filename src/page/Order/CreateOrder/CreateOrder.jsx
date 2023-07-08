@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import styled from 'styled-components/macro'
 import { API_BASE_URL } from '~/config/api'
@@ -12,6 +12,7 @@ import { OrderList } from 'primereact/orderlist';
 import { Button } from 'primereact/button';
 import { customer } from '~/api/customer.api'
 import { orderApi } from '~/api/order.api'
+import { Toast } from 'primereact/toast';
 
 export const GameOrderContext = createContext(null) 
 
@@ -31,6 +32,8 @@ const CreateOrder = () => {
     submit: false,
     phoneFind: false
   });
+
+  const toast = useRef(null);
 
 
   const handleSubmitForm = (e) => {
@@ -59,7 +62,7 @@ const CreateOrder = () => {
         display_name: customerInfo.display_name,
         email: customerInfo.email,
         phone: customerInfo.phone,
-        address: customerInfo.address
+        address: customerInfo.address,
       }).then((res) => {
         const { data, status } = res
         if(status === 200){
@@ -74,7 +77,7 @@ const CreateOrder = () => {
     const bookOrder = () => {
       const newData = {
         book_date : new Date(),
-        customerID : customerInfo.id,
+        customer_id : customerInfo.id,
         queue_data : customerInfo.note,
         rent_duration: customerInfo["rent_duration"],
         gameList: gameOrder.map(item => item.id),
@@ -143,33 +146,53 @@ const CreateOrder = () => {
     setCustomerInfo(prev => ({...prev, [name]: e.target.value}))
   }
 
+  // Handle click find user
   const handlePhoneFind = () => {
-    setLoading(prev => ({...prev, phoneFind: true}));
+  
     setCustomerInfo({})
-    customer.getInfo({
-      name: 'phone',
-      value: customerInfo["phone"]
-    }).then((res) => {
-      const { data, status } = res
-      const newData = {
-        address: data.address,
-        display_name: data.display_name,
-        email: data.email,
-        id: data.id
-      }
-      if(status === 404){
-        setCustomerInfo(prev => ({...prev, having: false}))
-      }
-      else if(status === 200) {
-        
-        setCustomerInfo(prev => ({...prev, ...newData, having: true}))
-      }
 
-      setLoading(prev => ({...prev, phoneFind: false}));
-    }).catch(err => {
-      console.log(err)
+    if(customerInfo.phone) {
       setLoading(prev => ({...prev, phoneFind: true}));
-    })
+      customer.getInfo({
+        name: 'phone',
+        value: customerInfo["phone"]
+      }).then((res) => {
+        const { data, status } = res
+        const newData = {
+          address: data.address,
+          display_name: data.display_name,
+          email: data.email,
+          id: data.id
+        }
+        if(status === 404){
+          const keyObject = Object.keys(customerInfo)
+          const dataSearch ={}
+          toast.current.show({severity:'info', summary: 'User not found', detail:'', life: 3000});
+          keyObject.forEach((key) => {
+            dataSearch[key] = ''
+          })
+          dataSearch.phone = customerInfo.phone
+          dataSearch.having = false
+          console.log("new data", customerInfo)
+          
+          setCustomerInfo(dataSearch)
+        }
+        else if(status === 200) {
+          
+          setCustomerInfo(prev => ({prev, ...newData, having: true}))
+          toast.current.show({severity:'success', summary: 'Found', detail:'Apply successful', life: 3000});
+        }
+  
+        setLoading(prev => ({...prev, phoneFind: false}));
+      }).catch(err => {
+        console.log(err)
+        setLoading(prev => ({...prev, phoneFind: true}));
+      })
+    }
+    else {
+      toast.current.show({severity:'info', summary: 'Phone number is empty', detail:'', life: 3000});
+    }
+
   }
 
   console.log(customerInfo)
@@ -178,6 +201,7 @@ const CreateOrder = () => {
 
     <GameOrderContext.Provider value={contextValue}>
       <Container>
+        <Toast ref={toast} />
           <Header>
               <div className="">
                 <div className="title">Create New Order</div>

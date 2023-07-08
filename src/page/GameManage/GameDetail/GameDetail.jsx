@@ -13,6 +13,7 @@ import { InputText } from "primereact/inputtext";
 import TextInputTemplate from "~/component/template/TextInput.template";
 import { MultiSelect } from 'primereact/multiselect';
 import Button from "~/component/Button";
+import { productApi } from "~/api/product.api";
 
 
 const GameDetail = () => {
@@ -23,7 +24,7 @@ const GameDetail = () => {
     const [validDetail, setValidDetail] = useState()
 
     const [imgUploaded, setImgUploaded] = useState([])
-    
+
     const [order, setOrder] = useState([])
 
     const [valid, setValid] = useState(false)
@@ -93,17 +94,18 @@ const GameDetail = () => {
     useEffect(() => {
     
         const validateDetail = () => {
-            const valid = JSON.stringify(detail)
-            if(valid === validDetail) {
-                setValid(false)
+            const valid = JSON.stringify(detail) 
+            console.log(imgUploaded.length)
+            if(valid !== validDetail || imgUploaded.length > 0) {
+                setValid(true)
             }
             else {
-                setValid(true)
+                setValid(false)
             }
         }
         validateDetail()
 
-    }, [detail]);
+    }, [detail, imgUploaded]);
 
     console.log("detail", detail)
 
@@ -136,6 +138,27 @@ const GameDetail = () => {
                 none: false
             })
         }
+
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const {id, game_name, price, genre, description} = detail
+
+        const formData = new FormData();
+        for (let i = 0; i < imgUploaded.length; i++) {
+          formData.append('images', imgUploaded[i]);
+        }
+
+        console.log("formData ", formData)
+
+        await productApi.insertGameImage(formData, id)
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 
     }
 
@@ -191,7 +214,7 @@ const GameDetail = () => {
                 </div>
             </section>
 
-            <section className="game col">
+            <form className="game col" onSubmit={handleSubmit}>
                 <div className="content px-4 py-3 w-full m-auto h-full border-round-xl" style={{
                     backgroundColor: "rgb(252 252 252)",
                     boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px"
@@ -213,14 +236,14 @@ const GameDetail = () => {
                                 {imgUploaded.length > 0 &&      
                                     imgUploaded.map((img ,idx) => {
                                         return (
-                                        <div className="w-8 border-round-lg overflow-hidden" key={idx}>
+                                        <div className="w-8rem border-round-lg overflow-hidden" key={idx}>
                                             <Image src={`${img.preview}`} className="primary-image" alt="Image" preview width="100%" height="100px" />
                                         </div> 
                                         )
                                     })}
                                    
 
-                                <AddGameImageBtn htmlFor="input-file" className="w-7rem border-round-lg overflow-hidden flex justify-content-center align-items-center">
+                                <AddGameImageBtn htmlFor="input-file" className="w-8rem border-round-lg overflow-hidden flex justify-content-center align-items-center">
                                     <icon.plus />
                                     <input type="file" id="input-file" className="hidden" onInput={handlePostImg} />
                                 </AddGameImageBtn>
@@ -277,12 +300,13 @@ const GameDetail = () => {
                             active={valid}
                             disable={!valid}
                             className=""
+                            onClick={handleSubmit}
                         ></Button>
                     </div>
                     </div>
                 </div>
                 
-            </section>
+            </form>
         </div>
         
 
