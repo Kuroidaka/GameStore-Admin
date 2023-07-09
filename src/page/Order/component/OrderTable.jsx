@@ -7,7 +7,7 @@ import Button2 from '~/component/template/Button2.template'
 
 import OrderDetail from './OrderDetail'
 import CalendarInput from '~/component/template/DateInput.template'
-import { formatDate } from '~/utils'
+import { formatDate, formatMoney } from '~/utils'
 import OrderContext from '~/Context/Order.context'
 
 const Table = (props) => {
@@ -106,6 +106,7 @@ const Table = (props) => {
       selector: 'rental_price',
       sortable: true,
       header: 'PRICE',
+      cell: row => <p style={{ fontWeight: '900',fontSize: '1.6rem', color: '#0e890e'}}>{formatMoney(row.rental_price)}</p>
     },
     {
       name: 'OPTION',

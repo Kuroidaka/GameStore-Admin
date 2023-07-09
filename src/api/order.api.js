@@ -43,6 +43,11 @@ export const orderApi = {
         const url = '/order/get-total-revenue'
 
         return axiosClient.get(url)
+    },
+    getOrderRevenueByMonth () {
+        const url = "/order/get-total-revenue-by-month"
+
+        return axiosClient.get(url)
     }
 }
 

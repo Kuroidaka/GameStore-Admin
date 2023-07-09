@@ -28,6 +28,11 @@ export const productApi = {
         const url = `file/image/game/?gameID=${id}`
 
         return axiosClient.post(url, data)
+    },
+    getCountGame () {
+        const url = `/game/get-count-game`
+
+        return axiosClient.get(url)
     }
 }
 

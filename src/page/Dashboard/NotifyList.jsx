@@ -1,34 +1,49 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
+import { trackingApi } from "~/api/tracking.api";
 
 const NotifyList = () => {
+
+    const [trackingList, setTrackingList] = useState([])
+
+    useEffect(() => {
+
+        const fetchApi = () => {
+            trackingApi.getTrackingList().
+            then(res => {
+                console.log(res.data)
+                setTrackingList(res.data)
+            })
+        }
+
+        fetchApi()
+
+    }, []);
+
     return ( 
         <Container>
             <div className="title">View all</div>
             
             <div className="ListContainer">
-                <NotifyItem />
-                <NotifyItem />
-                <NotifyItem />
-                <NotifyItem />
-                <NotifyItem />
-                <NotifyItem />
-                <NotifyItem />
-                <NotifyItem />
-                <NotifyItem />
+                {trackingList && trackingList.map((item, index) =>
+                 <NotifyItem key={index} username={item.username} action={item.action}/>)}
+                
             </div>
         </Container>
     );
 }
  
-const NotifyItem = () => {
+const NotifyItem = (props) => {
+
+    const {username, action} = props
 
     return (
         <NotifyItemContainer >
             <div className="flex h-full w-full">
                 <div className="avatar mr-3" />
                 <span className="infor">
-                    <span className="user">Canh Pham</span>
-                    <span className="action w-full">Place a new der #123 Mỹ đình nam từ liêm cần tuyển thực tập lập trình reactjs , cv gửi về ctylhv1@gmail.com3</span>
+                    <span className="user">{username}</span>
+                    <span className="action w-full">{action}</span>
                 </span>
             </div>
         </NotifyItemContainer>
@@ -46,6 +61,8 @@ const Container = styled.div`
     overflow: hidden;   
     position: fixed;
     right: 0;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
 
     .title {
         position: relative;
@@ -100,6 +117,7 @@ const NotifyItemContainer = styled.div`
     .infor {
         overflow: hidden;
         width: auto;
+        align-self: center;
 
         .user {
             font-weight: 600;

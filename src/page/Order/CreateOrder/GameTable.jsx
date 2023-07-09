@@ -6,15 +6,20 @@ import { GameOrderContext } from './CreateOrder';
 import { icon } from '~/assert/icon/icon'
 
 const GameTable = (props) => {
-  const { product } = props
+  const { product, onSearchInput } = props
 
   const [modal, setModal] = useState({ state: false, data: null })
   
   const { handleChooseGame, gameOrder } = useContext(GameOrderContext)
 
+  const chooseGame = (product) => {
+    onSearchInput("")
+    return handleChooseGame(product)
+  }
+
   const itemTemplate = (product) => {
     return (
-        <Container onClick={() => handleChooseGame(product)}>
+        <Container onClick={() => chooseGame(product)}>
           <div className="col-12">
               <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4 cursor-pointer">
                   <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={`http://localhost:8000/file/image/${product.filepath}`} alt={product.game_name} />

@@ -5,6 +5,8 @@ import { LineChart } from "~/component/LineChart";
 import NotifyList from "./NotifyList";
 import { useEffect, useState } from "react";
 import { orderApi } from "~/api/order.api";
+import { customer } from "~/api/customer.api";
+import { productApi } from "~/api/product.api";
 
 const Dashboard = () => {
 
@@ -17,8 +19,8 @@ const Dashboard = () => {
         value: '' // get data when called from api
       }, 
       apiDetail: {
-        percent: '5%',
-        increase: true
+        percent: '',
+        increase: false
       }
     },
     {
@@ -39,12 +41,25 @@ const Dashboard = () => {
       qty: {
         money: false,
         value: '5000'
-      }, 
-      apiDetail: {
-        percent: '55%',
-        increase: true
       }
     }
+  ])
+
+  const [chartData, setChartData] = useState([ 
+    {
+      label: 'Money',
+      data: [125, 139, 332, 53, 253, 323],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      yAxisID: 'y',
+    },
+    {
+      label: "Customer",
+      data: [40, 50, 36, 52, 91, 120],
+      borderColor: 'rgb(71, 163, 243)',
+      backgroundColor: 'rgba(38, 98, 226, 0.5)',
+      yAxisID: 'y1',
+    },
   ])
 
   useEffect(() => {
@@ -52,12 +67,21 @@ const Dashboard = () => {
       try {
         const response = await orderApi.getTotalRevenue();
         const dataRevenue = response?.data?.data;
+        const percent = response?.data?.percent;
         if (dataRevenue) {
           setMainData(prev => {
             const newData = [...prev];
             if (newData[0]?.qty) {
               newData[0].qty.value = dataRevenue;
             }
+
+            if(newData[0]?.apiDetail) {
+              if(percent > 0){
+                newData[0].apiDetail.increase = true
+              }
+              newData[0].apiDetail.percent = percent;
+            }
+
             return newData;
           });
         }
@@ -65,8 +89,114 @@ const Dashboard = () => {
         console.error(error);
       }
     };
+
+    const fetchUserJoinToday = async () => {
+      try {
+        const response = await customer.getUserJoinToday();
+        const dataUser = response?.data?.data;
+        const increase = response?.data?.increase;
+        const percent = response?.data?.percent;
+        if (dataUser) {
+          setMainData(prev => {
+            const newData = [...prev];
+            if (newData[1]?.qty) {
+              newData[1].qty.value = dataUser;
+            }
+            if (newData[1]?.apiDetail) {
+              newData[1].apiDetail.increase = increase;
+              newData[1].apiDetail.percent = percent;
+            }
+
+            return newData;
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    const fetchGameCount = async () => {
+      try {
+        const response = await productApi.getCountGame();
+        const dataGame = response?.data?.data;
+        if (dataGame) {
+          setMainData(prev => {
+            const newData = [...prev];
+            if (newData[1]?.qty) {
+              newData[2].qty.value = dataGame;
+            }
+            // if (newData[1]?.apiDetail) {
+            //   newData[1].apiDetail.increase = increase;
+            //   newData[1].apiDetail.percent = percent;
+            // }
+
+            return newData;
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    const fetchRevenueByMonth = async () => {
+      try {
+        const response = await orderApi.getOrderRevenueByMonth();
+        const dataRevenue = response?.data;
+        if (dataRevenue) {
+         console.log("dataRevenue", dataRevenue)
+         const newChartMoneyData = []
+         dataRevenue.forEach(data => {
+          newChartMoneyData[Number(data.month) - 1] = data.revenue
+         })
+
+          setChartData(prev => {
+            const data = [...prev];
+            if (data[0]?.data) {
+              data[0].data = newChartMoneyData;
+            }
+            return data;
+          })
+
+         console.log("newChartMoneyData",newChartMoneyData)
+
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    const fetchCustomerByMonth = async () => {
+      try {
+        const response = await customer.getUserJoinMonth();
+        const dataCustomer = response?.data;
+        if (dataCustomer) {
+         const newChartCustomerData = []
+         dataCustomer.forEach(data => {
+          newChartCustomerData[Number(data.month) - 1] = data.totalUsers
+         })
+
+          setChartData(prev => {
+            const data = [...prev];
+            if (data[1]?.data) {
+              data[1].data = newChartCustomerData;
+            }
+            return data;
+          })
+
+         console.log("newChartCustomerData",newChartCustomerData)
+
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+
+
   
     fetchRevenue();
+    fetchUserJoinToday();
+    fetchGameCount();
+    fetchRevenueByMonth();
+    fetchCustomerByMonth();
   }, []);
   
 
@@ -109,22 +239,6 @@ const Dashboard = () => {
       }
     ]
     
-    const chartData = [ 
-      {
-        label: 'Money',
-        data: [125, 139, 332, 53, 253, 323],
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        yAxisID: 'y',
-      },
-      {
-        label: "Customer",
-        data: [40, 50, 36, 52, 91, 120],
-        borderColor: 'rgb(71, 163, 243)',
-        backgroundColor: 'rgba(38, 98, 226, 0.5)',
-        yAxisID: 'y1',
-      },
-    ]
 
     const todayData = [ 
       {
@@ -173,19 +287,24 @@ const Dashboard = () => {
 
 
 const FeatureQty = ({data}) => {
-  const { title, description, qty, apiDetail } = data
+  const { title, description, qty } = data
   const { money, value } = qty
-  const { percent, increase } = apiDetail
+  const apiDetail = data?.apiDetail
+  const percent = apiDetail?.percent
+  const increase = apiDetail?.increase
   return (
   <div className="card w-30rem" style={{borderRadius: '1.25rem', height: 'auto'}}>
     <div className="card-body p-4 ">
       <div className="title font-semibold text-xl">{title}</div>
       <span className="description" style={{color: '#8F8FB1'}}>{description}</span>
       <div className="quantity text-4xl font-bold py-3">{ money ? formatMoney(value) : value}</div>
-      <div className="note"> 
-        {percent}
-        <span style={increase ? {color: '#26B35D'} : {color: '#ea2020'}} className="pl-2">{increase? 'Higher':'Decrease' }</span> 
+      {apiDetail && 
+       <div className="note" style={increase ? {color: '#26B35D'} : {color: '#ea2020'}} > 
+        {percent}%
+        <span className="pl-2">{increase? 'Higher':'Decrease' }</span> 
       </div>
+      }
+     
     </div>
   </div>
   )

@@ -10,29 +10,24 @@ import { icon } from '~/assert/icon/icon';
 
 const SearchBar = (props ) => {
 
-  const { searchFeature, className, setReferenceElement, children, ref } = props
+  const { searchFeature, className, setReferenceElement, children, ref, valueSearch, onInput } = props
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const debouncedSearchTerm = useDebounce(valueSearch, 500)
 
   const { searchResult, setSearchResult } = searchFeature
  
   // const { setResultsVisible  } = popperFeature
 
-
-
-  const handleChange = (e) => {
+  const handleInput = (e) => {
     const value = e.target.value;
-    setSearchTerm(value);
-    // setResultsVisible(value.trim().length > 0);
-  };
+    return onInput(value)
+  }
 
   const handleBlur = () => {
     setTimeout(() => {
       // setResultsVisible(false);
     }, 200);
   };
-
 
   useEffect(() => {
 
@@ -58,12 +53,12 @@ const SearchBar = (props ) => {
       <span className="p-input-icon-left w-full">
         <icon.search />
         <SearchInput
-          value={searchTerm}
-          onChange={handleChange}
+          value={valueSearch}
+          onChange={handleInput}
           onBlur={handleBlur}
           placeholder="Search..."
           ref={setReferenceElement}
-          className='w-full'
+          className={'w-full'}
         />
       </span>
     {children}

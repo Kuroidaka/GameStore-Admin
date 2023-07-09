@@ -33,7 +33,16 @@ const CreateOrder = () => {
     phoneFind: false
   });
 
+  const [valueSearch, setValueSearch] = useState('')
+
   const toast = useRef(null);
+
+  const onInputSearchValue= (value) => {
+
+    setValueSearch(value);
+    // setResultsVisible(value.trim().length > 0);
+  };
+
 
 
   const handleSubmitForm = (e) => {
@@ -120,7 +129,7 @@ const CreateOrder = () => {
 
   const pickGame = (product) => {
     if(gameOrder.find(item => item.id === product.id)){
-      return alert("Game already in order")
+      toast.current.show({severity:'info', summary: 'Game Already in your cart', detail:'', life: 3000});
     } 
     else {
       const newArray = [...gameOrder, product];
@@ -214,10 +223,10 @@ const CreateOrder = () => {
            {/* Search Function */}
            <div className="card w-8 h-auto my-3 mx-8 p-3 border-round relative"
                   style={{boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', maxHeight: '44rem'}}>
-                <SearchBar searchFeature={searchFeature} className='justify-content-center w-full' /> 
+                <SearchBar searchFeature={searchFeature} className='justify-content-center w-full' valueSearch={valueSearch} onInput={onInputSearchValue}/> 
                 {searchResult.length > 0 && 
                   <div className=" game-result my-6 overflow-y-scroll absolute z-5 w-full border-round" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", top: '29px'}}>
-                    <GameTable product={searchResult} gameOrderFeature={gameOrderFeature}/>
+                    <GameTable product={searchResult} gameOrderFeature={gameOrderFeature} onSearchInput={onInputSearchValue}/>
                   </div>
                 }
                 
@@ -264,11 +273,9 @@ const OrderListTable = () => {
 
     const { gameOrder, handleDeleteGame } = useContext(GameOrderContext)
 
-   
-
     const itemTemplate = (item) => {
         return (
-            <GameOrderStyle className="flex flex-wrap p-2 align-items-center gap-3">
+            <GameOrderStyle className="flex flex-wrap p-2 align-items-center gap-3 h-full">
                 <img className="w-4rem shadow-2 flex-shrink-0 border-round" src={`${API_BASE_URL}file/image/${item.filepath}`} alt={item.game_name} />
                 <div className="flex-1 flex flex-column gap-2 xl:mr-8">
                     <span className="font-bold">{item.game_name}</span>

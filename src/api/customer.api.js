@@ -21,6 +21,16 @@ export const customer = {
         const url = `/customer/update?id=${id}`;
 
         return axiosClient.post(url, data)
+    },
+    getUserJoinToday () {
+        const url = `/customer/get-user-join-today`
+
+        return axiosClient.get(url)
+    },
+    getUserJoinMonth () {
+        const url = `/customer/get-user-join-month`
+
+        return axiosClient.get(url)
     }
 }
 
