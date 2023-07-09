@@ -1,12 +1,23 @@
 import React from "react";
 
-import SearchBar from "./SearchBar";
-import SortOptions from "./SortOptions";
-import ShowOptions from "./ShowOptions";
+import SearchBar from "../../../component/SearchBar";
+import SortOptions from "../../../component/SortOptions";
+import ShowOptions from "../../../component/ShowOptions";
 
 import styled from "styled-components/macro";
+import Button from "~/component/Button";
+import config from "~/config";
+import { useNavigate } from "react-router";
 
 const GameManageHeader = () => {
+
+  const { addGame } = config.adminRoutePath
+
+  const navigate = useNavigate()
+
+  const handleClickAddGame = (() => {
+    navigate(`/${addGame}`)
+  })
   return (
     <Header>
       <HeaderContent>
@@ -28,7 +39,10 @@ const GameManageHeader = () => {
           <SearchBar />
         </SearchBarWrapper>
         <ButtonWrapper>
-        <Button>Add Game</Button>
+        <Button title="ADD GAME"
+          active={true}
+          onClick={handleClickAddGame}
+           />
       </ButtonWrapper>
       </OptionsWrapper>
       
@@ -65,20 +79,6 @@ const ButtonWrapper = styled.div`
   margin-top: 1rem;
 `;
 
-const Button = styled.button`
-  font-size: 1.3rem;
-  color: #ffffff;
-  background-color: #333333;
-  border: none;
-  padding: 0.8rem 1.6rem;
-  cursor: pointer;
-  &:first-child {
-    margin-right: 1rem;
-  }
-  &:hover {
-    background-color: #555555;
-  }
-`;
 
 const OptionsWrapper = styled.div`
   display: flex;

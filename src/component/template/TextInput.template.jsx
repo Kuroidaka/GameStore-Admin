@@ -22,9 +22,9 @@ const  TextInputTemplate = (props) => {
 
     return (
         <Container className={className}>
-            <div className="flex flex-column gap-2 py-2 text-2xl">
+            <div className="text-wrapper flex flex-column gap-2 py-2 text-2xl">
                 <label htmlFor={name} className="text-xl font-semibold">{label ?? ''}</label>
-                <Input id={name} aria-describedby={name} name={name} value={text} onInput={handleInput} />
+                <Input id={name} aria-describedby={name} name={name} className="h-full" value={text} onInput={handleInput} />
             </div>
         </Container>
     )
@@ -38,4 +38,6 @@ const Container = styled.div`
 .p-inputtext {
     font-size: 1.4rem!important;
 }
+
+
 `

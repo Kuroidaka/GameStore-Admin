@@ -18,6 +18,21 @@ export const productApi = {
         const url= `/game/get`
 
         return axiosClient.get(url)
+    },
+    getProductById (id) {
+        const url= `/game/getById?id=${id}`
+
+        return axiosClient.get(url)
+    },
+    insertGameImage (data, id) {
+        const url = `file/image/game/?gameID=${id}`
+
+        return axiosClient.post(url, data)
+    },
+    getCountGame () {
+        const url = `/game/get-count-game`
+
+        return axiosClient.get(url)
     }
 }
 

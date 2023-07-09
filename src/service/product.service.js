@@ -20,4 +20,9 @@ function ProductService() {
   return [products];
 }
 
+export const getProductDetail = (id) => {
+  return productApi.getProductById(id)
+}
+
+
 export default ProductService;

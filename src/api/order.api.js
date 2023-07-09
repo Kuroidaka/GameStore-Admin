@@ -33,6 +33,21 @@ export const orderApi = {
               }
         })
 
+    },
+    getOrderListByGameID (id) {
+        const url = `/order/get-order-by-game?id=${id}`;
+      
+        return axiosClient.get(url)
+    },
+    getTotalRevenue () {
+        const url = '/order/get-total-revenue'
+
+        return axiosClient.get(url)
+    },
+    getOrderRevenueByMonth () {
+        const url = "/order/get-total-revenue-by-month"
+
+        return axiosClient.get(url)
     }
 }
 

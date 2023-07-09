@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import styled from 'styled-components/macro'
 import { API_BASE_URL } from '~/config/api'
@@ -7,11 +7,12 @@ import { icon } from '~/assert/icon/icon'
 import config from '~/config'
 import TextInputTemplate from '~/component/template/TextInput.template'
 import GameTable from './GameTable'
-import ProductService from '~/service/Product';
+import ProductService from '~/service/product.service';
 import { OrderList } from 'primereact/orderlist';
 import { Button } from 'primereact/button';
 import { customer } from '~/api/customer.api'
 import { orderApi } from '~/api/order.api'
+import { Toast } from 'primereact/toast';
 
 export const GameOrderContext = createContext(null) 
 
@@ -31,6 +32,17 @@ const CreateOrder = () => {
     submit: false,
     phoneFind: false
   });
+
+  const [valueSearch, setValueSearch] = useState('')
+
+  const toast = useRef(null);
+
+  const onInputSearchValue= (value) => {
+
+    setValueSearch(value);
+    // setResultsVisible(value.trim().length > 0);
+  };
+
 
 
   const handleSubmitForm = (e) => {
@@ -59,7 +71,7 @@ const CreateOrder = () => {
         display_name: customerInfo.display_name,
         email: customerInfo.email,
         phone: customerInfo.phone,
-        address: customerInfo.address
+        address: customerInfo.address,
       }).then((res) => {
         const { data, status } = res
         if(status === 200){
@@ -74,7 +86,7 @@ const CreateOrder = () => {
     const bookOrder = () => {
       const newData = {
         book_date : new Date(),
-        customerID : customerInfo.id,
+        customer_id : customerInfo.id,
         queue_data : customerInfo.note,
         rent_duration: customerInfo["rent_duration"],
         gameList: gameOrder.map(item => item.id),
@@ -117,7 +129,7 @@ const CreateOrder = () => {
 
   const pickGame = (product) => {
     if(gameOrder.find(item => item.id === product.id)){
-      return alert("Game already in order")
+      toast.current.show({severity:'info', summary: 'Game Already in your cart', detail:'', life: 3000});
     } 
     else {
       const newArray = [...gameOrder, product];
@@ -143,33 +155,53 @@ const CreateOrder = () => {
     setCustomerInfo(prev => ({...prev, [name]: e.target.value}))
   }
 
+  // Handle click find user
   const handlePhoneFind = () => {
-    setLoading(prev => ({...prev, phoneFind: true}));
+  
     setCustomerInfo({})
-    customer.getInfo({
-      name: 'phone',
-      value: customerInfo["phone"]
-    }).then((res) => {
-      const { data, status } = res
-      const newData = {
-        address: data.address,
-        display_name: data.display_name,
-        email: data.email,
-        id: data.id
-      }
-      if(status === 404){
-        setCustomerInfo(prev => ({...prev, having: false}))
-      }
-      else if(status === 200) {
-        
-        setCustomerInfo(prev => ({...prev, ...newData, having: true}))
-      }
 
-      setLoading(prev => ({...prev, phoneFind: false}));
-    }).catch(err => {
-      console.log(err)
+    if(customerInfo.phone) {
       setLoading(prev => ({...prev, phoneFind: true}));
-    })
+      customer.getInfo({
+        name: 'phone',
+        value: customerInfo["phone"]
+      }).then((res) => {
+        const { data, status } = res
+        const newData = {
+          address: data.address,
+          display_name: data.display_name,
+          email: data.email,
+          id: data.id
+        }
+        if(status === 404){
+          const keyObject = Object.keys(customerInfo)
+          const dataSearch ={}
+          toast.current.show({severity:'info', summary: 'User not found', detail:'', life: 3000});
+          keyObject.forEach((key) => {
+            dataSearch[key] = ''
+          })
+          dataSearch.phone = customerInfo.phone
+          dataSearch.having = false
+          console.log("new data", customerInfo)
+          
+          setCustomerInfo(dataSearch)
+        }
+        else if(status === 200) {
+          
+          setCustomerInfo(prev => ({prev, ...newData, having: true}))
+          toast.current.show({severity:'success', summary: 'Found', detail:'Apply successful', life: 3000});
+        }
+  
+        setLoading(prev => ({...prev, phoneFind: false}));
+      }).catch(err => {
+        console.log(err)
+        setLoading(prev => ({...prev, phoneFind: true}));
+      })
+    }
+    else {
+      toast.current.show({severity:'info', summary: 'Phone number is empty', detail:'', life: 3000});
+    }
+
   }
 
   console.log(customerInfo)
@@ -178,6 +210,7 @@ const CreateOrder = () => {
 
     <GameOrderContext.Provider value={contextValue}>
       <Container>
+        <Toast ref={toast} />
           <Header>
               <div className="">
                 <div className="title">Create New Order</div>
@@ -190,10 +223,10 @@ const CreateOrder = () => {
            {/* Search Function */}
            <div className="card w-8 h-auto my-3 mx-8 p-3 border-round relative"
                   style={{boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', maxHeight: '44rem'}}>
-                <SearchBar searchFeature={searchFeature} className='justify-content-center w-full' /> 
+                <SearchBar searchFeature={searchFeature} className='justify-content-center w-full' valueSearch={valueSearch} onInput={onInputSearchValue}/> 
                 {searchResult.length > 0 && 
                   <div className=" game-result my-6 overflow-y-scroll absolute z-5 w-full border-round" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", top: '29px'}}>
-                    <GameTable product={searchResult} gameOrderFeature={gameOrderFeature}/>
+                    <GameTable product={searchResult} gameOrderFeature={gameOrderFeature} onSearchInput={onInputSearchValue}/>
                   </div>
                 }
                 
@@ -240,11 +273,9 @@ const OrderListTable = () => {
 
     const { gameOrder, handleDeleteGame } = useContext(GameOrderContext)
 
-   
-
     const itemTemplate = (item) => {
         return (
-            <GameOrderStyle className="flex flex-wrap p-2 align-items-center gap-3">
+            <GameOrderStyle className="flex flex-wrap p-2 align-items-center gap-3 h-full">
                 <img className="w-4rem shadow-2 flex-shrink-0 border-round" src={`${API_BASE_URL}file/image/${item.filepath}`} alt={item.game_name} />
                 <div className="flex-1 flex flex-column gap-2 xl:mr-8">
                     <span className="font-bold">{item.game_name}</span>

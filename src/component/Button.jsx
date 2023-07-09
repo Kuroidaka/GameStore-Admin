@@ -53,7 +53,8 @@ const Button = (props)  => {
         active = false,
         outline = false,
         disable = false,
-        normal = false
+        normal = false,
+        className
     } = props
 
 
@@ -68,6 +69,7 @@ const Button = (props)  => {
                     outline={outline}
                     disable={disable}
                     normal={normal}
+                    className={className}
                     >
             {children}
             {title}

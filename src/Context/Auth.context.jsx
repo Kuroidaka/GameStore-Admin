@@ -14,9 +14,18 @@ export const AuthProvider = (props) => {
     const navigate = useNavigate()
     const { auth:authRoute } = config.adminRoutePath 
 
+
+    useEffect(() => {
+        const getToken = () => {
+            const token = localStorage.getItem('token')
+            setToken(token)
+        }
+        getToken()
+    },[])
+
     useEffect(() => {
         const checkToken = () => {
-            auth.checkToken(`${token} 1`)
+            token && auth.checkToken(`${token}`)
             .then(({data}) => {
                 console.log(data)
 
@@ -26,12 +35,11 @@ export const AuthProvider = (props) => {
 
             }).catch(err => {
                 console.log(err)
-             
             })  
         }
 
         checkToken()
-    }, []);
+    }, [token]);
 
     const logOut = () => {
         localStorage.removeItem('token')

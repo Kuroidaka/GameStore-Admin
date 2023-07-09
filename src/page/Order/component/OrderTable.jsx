@@ -7,7 +7,7 @@ import Button2 from '~/component/template/Button2.template'
 
 import OrderDetail from './OrderDetail'
 import CalendarInput from '~/component/template/DateInput.template'
-import { formatDate } from '~/utils'
+import { formatDate, formatMoney } from '~/utils'
 import OrderContext from '~/Context/Order.context'
 
 const Table = (props) => {
@@ -72,14 +72,14 @@ const Table = (props) => {
       selector: 'rental_start_date',
       sortable: true,
       header: 'START TIME',
-      cell: row =><p>{formatDate(row.rental_start_date)}</p>
+      cell: row =><p style={{color: '#42a445'}}>{formatDate(row.rental_start_date)}</p>
     },
     {
       name: 'END TIME',
       selector: 'rental_end_date',
       sortable: true,
       header: 'END TIME',
-      cell: row => <p>{formatDate(row.rental_end_date)}</p>
+      cell: row => <p style={{color: 'red '}}>{formatDate(row.rental_end_date)}</p>
     },
     {
       name: 'DISTRIBUTION',
@@ -106,6 +106,7 @@ const Table = (props) => {
       selector: 'rental_price',
       sortable: true,
       header: 'PRICE',
+      cell: row => <p style={{ fontWeight: '900',fontSize: '1.6rem', color: '#0e890e'}}>{formatMoney(row.rental_price)}</p>
     },
     {
       name: 'OPTION',
