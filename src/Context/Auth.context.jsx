@@ -43,6 +43,7 @@ export const AuthProvider = (props) => {
 
     const logOut = () => {
         localStorage.removeItem('token')
+        window.history.pushState(null, '', '/');
         navigate(authRoute)
     }
 

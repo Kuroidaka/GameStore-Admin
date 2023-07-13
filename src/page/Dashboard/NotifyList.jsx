@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { trackingApi } from "~/api/tracking.api";
+import Avatar from "~/component/Avatar";
 
 const NotifyList = () => {
 
@@ -11,8 +12,8 @@ const NotifyList = () => {
         const fetchApi = () => {
             trackingApi.getTrackingList().
             then(res => {
-                console.log(res.data)
-                setTrackingList(res.data)
+                console.log("tracking data", res.data)
+                setTrackingList(res.data.reverse())
             })
         }
 
@@ -39,11 +40,12 @@ const NotifyItem = (props) => {
 
     return (
         <NotifyItemContainer >
-            <div className="flex h-full w-full">
-                <div className="avatar mr-3" />
+            <div className="flex h-full w-full align-items-center gap-3">
+                <Avatar label={username[0]}/>
                 <span className="infor">
                     <span className="user">{username}</span>
                     <span className="action w-full">{action}</span>
+                    <p>27/02/2023</p>
                 </span>
             </div>
         </NotifyItemContainer>
@@ -88,10 +90,8 @@ const Container = styled.div`
 const NotifyItemContainer = styled.div`
     /* box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; */
     width: 100%;
-    height: 100px;
     /* border-radius: 10px; */
-    padding: 10px 5px;
-    margin: 10px 0; 
+    padding: 0px 5px;
     cursor: pointer;
 
     &:hover{
@@ -132,5 +132,10 @@ const NotifyItemContainer = styled.div`
             color: #484848;
         }
 
+        p {
+            padding-top: 6.9px;
+            font-size: 1.1rem;
+            color: grey;
+        }
     }
 `
