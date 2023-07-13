@@ -27,12 +27,28 @@ export const productApi = {
     insertGameImage (data, id) {
         const url = `file/image/game/?gameID=${id}`
 
-        return axiosClient.post(url, data)
+        return axiosClient.post(url, data,  {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
     },
     getCountGame () {
         const url = `/game/get-count-game`
 
         return axiosClient.get(url)
+    },
+    editGame (data, id) {
+        const url = `/game/edit?id=${id}`
+
+        const token = localStorage.getItem('token');
+
+        return axiosClient.post(url, data, {
+            headers: {
+                'authorization': `${token}` 
+            }
+        })
     }
+
 }
 
