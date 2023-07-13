@@ -7,13 +7,13 @@ import config from '~/config';
 
 const SideBarLayout = (props) => {
 
-    const { dashboard, admin, gameManage, order } = config.adminRoutePath
+    const { dashboard, admin, gameManage, order, customerManage } = config.adminRoutePath
     const menuItems = [
         { id: 1, label: 'Dashboard', link: dashboard  },
         { id: 2, label: 'Game', link: gameManage },
         { id: 3, label: 'Admin', link: admin },
         { id: 4, label: 'Order', link: order },
-        { id: 5, label: 'Customer', link: '' },
+        { id: 5, label: 'Customer', link: customerManage },
         { id: 6, label: 'Notification', link: '' },
     ];
 

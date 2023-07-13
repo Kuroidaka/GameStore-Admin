@@ -6,5 +6,6 @@ export const adminRoutePath = {
     order: '/order',
     createOrder: '/order/create-order',
     addGame: '/game-manage/add-game',
-    gameDetail: '/game-manage/game-detail'
+    gameDetail: '/game-manage/game-detail',
+    customerManage: '/customer-manage'
 }
