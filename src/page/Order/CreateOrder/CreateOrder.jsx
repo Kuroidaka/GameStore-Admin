@@ -79,8 +79,13 @@ const CreateOrder = () => {
         if(status === 200){
           setCustomerInfo(prev => ({...prev, id: data.data.id}))
           callback && callback()
+        } else if (status == 500) {
+          toast.current.show({severity:'error', summary: 'Error', detail:'Create User error', life: 3000});
+          setLoading(prev => ({...prev, submit: false}));
         }
       }).catch((err) => {
+        toast.current.show({severity:'error', summary: 'Error', detail:'Create User error', life: 3000});
+        setLoading(prev => ({...prev, submit: false}));
         console.log(err)
       })
     }
@@ -257,7 +262,7 @@ const CreateOrder = () => {
                       <Button label="Find" className='h-4rem align-self-end m-6 col 3' loading={loading.phoneFind} onClick={handlePhoneFind} />
                       <TextInputTemplate name='display_name' label="Display Name" onInput={onInput} value={customerInfo["display_name"]} className="col-8"/>
                       {/* <TextInputTemplate label="Last Name" onInput={onInput}  className="col-5"/> */}
-                      <TextInputTemplate name='email' label="Email" onInput={onInput} value={customerInfo.email}  className="col-5"/>
+                      {/* <TextInputTemplate name='email' label="Email" onInput={onInput} value={customerInfo.email}  className="col-5"/> */}
                       <TextInputTemplate name='rent_duration' label="Duration" onInput={onInput} value={customerInfo['rent_duration']}  className="col-3"/>
                       <TextInputTemplate name='address' label="Address" onInput={onInput} value={customerInfo.address} className="col-12" />
                       <TextInputTemplate name='note' label="Note" onInput={onInput} className="col-12" textarea/>
