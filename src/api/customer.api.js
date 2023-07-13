@@ -7,6 +7,11 @@ export const customer = {
 
         return axiosClient.post(url)
     },
+    getList () {
+        const url = '/customer/get-list-user'
+
+        return axiosClient.get(url)
+    },
     create (data) {
         const url = `/customer/create`;
         const token = localStorage.getItem('token');

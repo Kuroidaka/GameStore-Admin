@@ -16,7 +16,12 @@ import CreateOrder from './page/Order/CreateOrder/CreateOrder';
 import { AuthProvider } from './Context/Auth.context';
 import AddGame from './page/GameManage/AddGame/AddGame';
 import GameDetail from './page/GameManage/GameDetail/GameDetail';
+
+import CustomerManage from './page/CustomerManage/CustomerManage';
+import CustomerDetail from './page/CustomerManage/Component/CustomerDetail';
+
 import Profile from './page/Profile/Profile';
+
 
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation();
@@ -30,7 +35,9 @@ function ScrollToTopOnLocationChange() {
 
 function App() {
 
-  const { auth, admin, gameManage, dashboard, order, createOrder, addGame, gameDetail, profile } = config.adminRoutePath
+
+  const { auth, admin, gameManage, dashboard, order, createOrder, addGame, gameDetail, customerManage, profile } = config.adminRoutePath
+
   const navigate = useNavigate()
 
   const { pathname } = useLocation()
@@ -59,6 +66,8 @@ function App() {
                   <Route path={dashboard} element={<HeaderLayout><Dashboard/></HeaderLayout>} />
                   <Route path={admin} element={<HeaderLayout><AdminManagementPage/></HeaderLayout>} />
                   <Route path={gameManage} element={<HeaderLayout><GameManage/></HeaderLayout>} />
+                  <Route path={customerManage} element={<HeaderLayout><CustomerManage/></HeaderLayout>} />
+                  <Route path={`${customerManage}/:id`} element={<HeaderLayout><CustomerDetail/></HeaderLayout>} />
                   <Route path={order} element={<HeaderLayout><Order/></HeaderLayout>} />
                   <Route path={createOrder} element={<HeaderLayout><CreateOrder/></HeaderLayout>} />
                   <Route path={addGame} element={<HeaderLayout><AddGame/></HeaderLayout>} />

@@ -222,8 +222,6 @@ const CreateOrder = () => {
 
   }
 
-  console.log(customerInfo)
-
   return (
 
     <GameOrderContext.Provider value={contextValue}>
