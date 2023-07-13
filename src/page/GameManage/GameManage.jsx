@@ -13,7 +13,9 @@ const GameManage = () => {
       <Container>
         <GameManageHeader />
         <GameListContainer className="grid">
-          <GameList className="card col-5 mx-7 my-4" style={{height: "75vh"}}/>
+          <GameListWrapper>
+            <GameList className=""/>
+          </GameListWrapper>
         </GameListContainer>
       </Container>
     </GameProvider>
@@ -23,11 +25,29 @@ const GameManage = () => {
 export default GameManage;
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
 
 `;
 
 const GameListContainer = styled.div`
-  flex: 1;
+  width: 100%;
+
 `;
+
+const GameListWrapper = styled.div`
+  margin: 4rem;
+  width: 100%;
+  height: 70vh;
+  padding: 20px;
+  overflow-y: scroll;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 0.25rem;
+`

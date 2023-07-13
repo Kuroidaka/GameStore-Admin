@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCog, faSignOutAlt, faMoon } from '@fortawesome/free-solid-svg-icons';
+import AuthContext from '~/Context/Auth.context';
+import { useNavigate } from 'react-router';
+import config from '~/config';
 
-const UserMenu = () => {
-  
-  
+const UserMenu = (props) => {
+
+  const { togglePopper } = props
+
+  const { logOut } = useContext(AuthContext)
+
+  const { profile } = config.adminRoutePath
+
+  const navigate = useNavigate()
+
+  const handleClickProfile = () => {
+    togglePopper()
+    navigate(profile)
+  }
+
   return (
     <PopperUserMenu>
-      <MenuItem>
+      <MenuItem onClick={handleClickProfile}>
         <StyledIcon icon={faUser}></StyledIcon>
         <MenuLabel>Profile</MenuLabel>
       </MenuItem>
@@ -20,7 +35,7 @@ const UserMenu = () => {
         <StyledIcon icon={faMoon}></StyledIcon>
         <MenuLabel>Theme</MenuLabel>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={() => logOut()}>
         <StyledIcon icon={faSignOutAlt}></StyledIcon>
         <MenuLabel>Sign Out</MenuLabel>
       </MenuItem>
@@ -40,15 +55,6 @@ export const PopperUserMenu = styled.div`
   background-color: #ffffff;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   z-index: 99;
-  &:before{
-    content:'';
-
-    height: 2.5rem;
-    position: absolute;
-    left:0;
-    right: 0;
-    transform:translateY(-100%);
-  }
 `;
 
 

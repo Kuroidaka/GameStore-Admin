@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import config from '~/config';
@@ -8,6 +8,9 @@ import config from '~/config';
 const SideBarLayout = (props) => {
 
     const { dashboard, admin, gameManage, order } = config.adminRoutePath
+
+    const [select, setSelect] = useState(dashboard)
+
     const menuItems = [
         { id: 1, label: 'Dashboard', link: dashboard  },
         { id: 2, label: 'Game', link: gameManage },
@@ -17,13 +20,17 @@ const SideBarLayout = (props) => {
         { id: 6, label: 'Notification', link: '' },
     ];
 
+    const handleSelect = (link) => {
+      setSelect(link)
+    }
+
   return (
     <SideBar>
 
 
         <SidebarMenu>
             {menuItems.map((menuItem) => (
-            <SidebarMenuItem key={menuItem.id}>
+            <SidebarMenuItem key={menuItem.id} onClick={() => handleSelect(menuItem.link)} className={select === menuItem.link  &&'active'}>
                 <SidebarLink to={menuItem.link}>{menuItem.label}</SidebarLink>
             </SidebarMenuItem>
             ))}
@@ -50,6 +57,16 @@ const SidebarMenu = styled.ul`
 
 const SidebarMenuItem = styled.li`
   margin-bottom: 10px;
+
+  &.active{
+    background-color: var(--first-color) !important;
+    border-radius: 10px!important;
+    z-index: 99;
+    a {
+      color: #ffffff!important;
+    }
+  }
+
 `;
 
 const SidebarLink = styled(Link)`
@@ -62,7 +79,4 @@ const SidebarLink = styled(Link)`
   font-size: 14px;
 font-weight: 700;
 
-  &:hover {
-    background-color: #ddd;
-  }
 `;
