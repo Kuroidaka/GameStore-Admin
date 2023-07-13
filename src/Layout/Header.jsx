@@ -1,11 +1,30 @@
-import React,{useState} from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import SearchBox from '../component/SearchBox';
 import Avatar from '../component/Avatar';
 import UserMenu, { PopperUserMenu } from './component/UserMenu';
 import { icon } from '../assert/icon/icon';
+import jwt_decode from 'jwt-decode';
+import AuthContext from '~/Context/Auth.context';
 
 const HeaderLayout = (props) => {
+
+  const [popperMenu, setPopperMenu] = useState(false)
+  const [avatarLabel, setAvatarLabel] = useState('')
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if(token) {
+      const decodedToken = jwt_decode(token);
+
+      setAvatarLabel(decodedToken.username[0])
+    }
+  }, []);
+
+  const togglePopper = () => {
+    setPopperMenu(!popperMenu)
+  }
 
   return (
       <Header>
@@ -19,8 +38,8 @@ const HeaderLayout = (props) => {
 
         </ActionWrapper>
         <AvatarWrapper > 
-          <Avatar/>
-          <UserMenu />
+          <Avatar onClick={togglePopper} label={avatarLabel}/>
+         {popperMenu && <UserMenu togglePopper={togglePopper}/>}
         </AvatarWrapper>
       </Header>
   );
@@ -54,12 +73,6 @@ const AvatarWrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  ${PopperUserMenu}{
-    display: none;
-  }
-  &:hover ${PopperUserMenu}{
-    display: inline-block;
-  }
 `;
 
 const ActionWrapper = styled.div`
