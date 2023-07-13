@@ -18,7 +18,7 @@ export const GameOrderContext = createContext(null)
 
 const CreateOrder = () => {
 
-  const { createOrder } = config.adminRoutePath
+  const { createOrder, order } = config.adminRoutePath
 
   const [customerInfo, setCustomerInfo] = useState({})
   
@@ -27,6 +27,8 @@ const CreateOrder = () => {
   const [ product ] = ProductService()
 
   const [gameOrder, setGameOrder] = useState([])
+
+  const navigate = useNavigate()
 
   const [loading, setLoading] = useState({
     submit: false,
@@ -88,6 +90,7 @@ const CreateOrder = () => {
       })
     }
 
+    //  Booking function
     const bookOrder = () => {
       const newData = {
         book_date : new Date(),
@@ -97,14 +100,24 @@ const CreateOrder = () => {
         gameList: gameOrder.map(item => item.id),
         address: customerInfo.address
       }
+      console.log("newData", newData)
       
       orderApi.book(newData)
       .then(res => {
-        console.log(res)
+        console.log("booking data", res)
+
+        if(res.status === 200){
+          toast.current.show({severity:'success', summary: 'Success', detail:'Booking Successfully', life: 3000});
+          setTimeout(() => {
+            navigate(order)
+          }, 2000)
+        }
         setLoading(prev => ({...prev, submit: false}));
       })
       .catch(err => {
         console.log(err)
+        toast.current.show({severity:'error', summary: 'Error', detail:'Error Booking', life: 3000});
+        setLoading(prev => ({...prev, submit: false}));
       })
 
     }
