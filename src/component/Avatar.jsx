@@ -1,18 +1,24 @@
 import React from 'react';
 import styled from 'styled-components/macro';
+import { Avatar as TeamplateAvatar } from 'primereact/avatar';
 
-const Avatar = () => {
+const Avatar = (props) => {
+
+  const { onClick, label } = props
+
+  const handleClick = () => {
+    return onClick()
+  }
+
   return (
-    <AvatarImage
-      src="https://iupac.org/wp-content/uploads/2018/05/default-avatar.png"
-      alt="User Avatar"
-    />
+    <TeamplateAvatar size="large" className='flex-shrink-0' onClick={handleClick} label={label.toUpperCase()} style={{ backgroundColor: '#2196F3', color: '#ffffff' }} shape="circle" />
   );
 };
 
 export default Avatar;
 
 const AvatarImage = styled.img`
+  cursor: pointer;
   width: 3vw;
   height: 3vw;
   border-radius: 50%;
