@@ -54,39 +54,50 @@ const Table = (props) => {
       selector: 'id',
       sortable: true,
       header: 'ORDER ID',
+      
     },
     {
       name: 'CUSTOMER',
       selector: 'display_name',
       sortable: true,
       header: 'CUSTOMER',
+      cell: row =><span className='font-bold'>
+        { row["display_name"] }
+      </span>
     },
     {
       name: 'Phone',
       selector: 'phone',
       sortable: true,
       header: 'Phone',
+      cell: row =><span className='font-bold'>
+        { row["phone"] }
+      </span>
     },
     {
       name: 'START TIME',
       selector: 'rental_start_date',
       sortable: true,
       header: 'START TIME',
-      cell: row =><p style={{color: '#42a445'}}>{formatDate(row.rental_start_date)}</p>
+      cell: row =><p style={{color: '#42a445'}}>
+        { row.rental_start_date !== null ? formatDate(row.rental_start_date) : formatDate(row.book_date) }
+      </p>
     },
     {
       name: 'END TIME',
       selector: 'rental_end_date',
       sortable: true,
       header: 'END TIME',
-      cell: row => <p style={{color: 'red '}}>{formatDate(row.rental_end_date)}</p>
+      cell: row => <p style={{color: 'red '}}>
+        { row.rental_end_date !== null ? formatDate(row.rental_end_date) : <span style={{color: '#4f5187',fontWeight: '700'}}>Waiting</span>}
+        </p>
     },
     {
       name: 'DISTRIBUTION',
       selector: 'address',
       sortable: true,
       header: 'DISTRIBUTION',
-      // cell: row => <TextInputTemplate value={row.address} />
+      cell: row => <div>{row.address !== null && row.address !== 'null' ? <span>{row.address}</span> : <span style={{color: '#0077df'}}>Not Provided</span>}</div>
     },
     {
       name: 'STATUS',

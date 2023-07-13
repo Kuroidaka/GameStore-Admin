@@ -20,6 +20,7 @@ const GameDetail = () => {
     const { id } = useParams()
 
     const [detail, setDetail] = useState({})
+    const [newDetail, setNewDetail] = useState({})
 
     const [validDetail, setValidDetail] = useState()
 
@@ -38,6 +39,7 @@ const GameDetail = () => {
     // 'Action','Adventure','Role-playing','Simulation','Strategy','Sports','Rhythm','Other')
 
     const [selectedGenres, setSelectedGenres] = useState([]);
+    const [selectedFlatForm, setSelectedFlatForm] = useState([]);
     const genres = [
         { name: 'Action', value: 'Action' },
         { name: 'Adventure', value: 'Adventure' },
@@ -46,6 +48,15 @@ const GameDetail = () => {
         { name: 'Strategy', value: 'Strategy' },
         { name: 'Sports', value: 'Sports' },
         { name: 'Rhythm', value: 'Rhythm' },
+        { name: 'Other', value: 'Other' },
+    ];
+    const platForm = [
+        { name: 'PC', value: 'PC' },
+        { name: 'PlayStation', value: 'PlayStation' },
+        { name: 'Xbox', value: 'Xbox' },
+        { name: 'Nintendo', value: 'Nintendo' },
+        { name: 'Mobile', value: 'Mobile' },
+        { name: 'VR', value: 'VR' },
         { name: 'Other', value: 'Other' },
     ];
 
@@ -60,13 +71,15 @@ const GameDetail = () => {
 
     }
 
-    useEffect(() => {
+    const setUpCheckValid = () => {
         getProductDetail(id)
         .then(({data}) => {
 
-            const splitArray = splitGenre(data)
+            const splitDataGenre = splitGenre(data)
 
-            const newData = {...data, ["genre"]: splitArray}
+            const splitDataPlatForm = splitPlatForm(data)
+
+            const newData = {...data, ["genre"]: splitDataGenre, ["platform"]: splitDataPlatForm}
             setDetail(newData)
             const valid = JSON.stringify(newData)
             setValidDetail(valid)
@@ -80,7 +93,17 @@ const GameDetail = () => {
             }
         }
 
-        
+        const splitPlatForm = (data) => {
+            if(data.platform.length !== 0){ 
+                const dataSplit = data.platform.split(',')
+                setSelectedFlatForm(dataSplit)
+                return dataSplit
+            }
+        }
+    }
+
+    useEffect(() => {
+        setUpCheckValid()
     }, [])
 
     useEffect(() => {
@@ -115,7 +138,12 @@ const GameDetail = () => {
         if(name === "genre") {
             setSelectedGenres(value)
         }
+        else if(name === "platform") {
+            setSelectedFlatForm(value)
+        }
+
         setDetail(prev => ({...prev, [name]: value}))
+        setNewDetail(prev => ({...prev, [name]: value}))
     }
 
     const getChartValue = (data) => {
@@ -143,22 +171,41 @@ const GameDetail = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const {id, game_name, price, genre, description} = detail
+        const {id, game_name, developer, price, genre, description} = detail
 
         const formData = new FormData();
         for (let i = 0; i < imgUploaded.length; i++) {
+            console.log("imgUploaded[i] ", imgUploaded[i])
           formData.append('images', imgUploaded[i]);
         }
+        
+            // Log the formData entries for debugging
+        // for (let entry of formData.entries()) {
+        //     console.log(entry);
+        // }
 
-        console.log("formData ", formData)
+        if(imgUploaded.length > 0) {
+            await productApi.insertGameImage(formData, id)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+        
+        if(newDetail) { 
+            console.log("newDetail", newDetail)
+            productApi.editGame(newDetail, id)
+            .then(res => {
+                console.log("res", res)
+                if(res.status === 200) {
+                    setValid(false)
+                    setUpCheckValid()
+                }
+            })
+        }
 
-        await productApi.insertGameImage(formData, id)
-        .then(res => {
-            console.log(res)
-        })
-        .catch(err => {
-            console.log(err)
-        })
 
     }
 
@@ -168,7 +215,7 @@ const GameDetail = () => {
           <div className="title">GAME DETAIL</div>
           <div className="description">Managing Game status</div>
         </Header>
-        <div className="grid gap-4 ">
+        <div className="grid gap-4">
 
             <section className="order col">
                 <div className="w-8 m-auto">
@@ -214,7 +261,7 @@ const GameDetail = () => {
                 </div>
             </section>
 
-            <form className="game col" onSubmit={handleSubmit}>
+            <form className="game col" name="file" onSubmit={handleSubmit} contenttype='multipart/form-data' >
                 <div className="content px-4 py-3 w-full m-auto h-full border-round-xl" style={{
                     backgroundColor: "rgb(252 252 252)",
                     boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px"
@@ -242,7 +289,6 @@ const GameDetail = () => {
                                         )
                                     })}
                                    
-
                                 <AddGameImageBtn htmlFor="input-file" className="w-8rem border-round-lg overflow-hidden flex justify-content-center align-items-center">
                                     <icon.plus />
                                     <input type="file" id="input-file" className="hidden" onInput={handlePostImg} />
@@ -270,18 +316,28 @@ const GameDetail = () => {
                             name="developer"
                         />
 
-                        <TextInputTemplate
-                            onInput={handleInputValue}
-                            value={detail.price}
-                            // onInput
-                            label="Price"
-                            className="w-2"
-                            name="price"
-                        />
+                        <div className="flex gap-3">
 
-                        <div className="text-wrapper flex flex-column gap-2 py-2 text-2xl">
-                            <label htmlFor="genres" className="text-xl font-semibold">Genres</label>
-                            <MultiSelect id="genres" value={selectedGenres} onChange={handleInputValue} name="genre" options={genres} optionLabel="name" display="chip" 
+                            <TextInputTemplate
+                                onInput={handleInputValue}
+                                value={detail.price}
+                                // onInput
+                                label="Price"
+                                className="w-2"
+                                name="price"
+                            />
+
+                            <div id="genres-comp" className="text-wrapper flex flex-column gap-2 py-2 text-2xl">
+                                <label htmlFor="genres" className="text-xl font-semibold">Genres</label>
+                                <MultiSelect id="genres" value={selectedGenres} onChange={handleInputValue} name="genre" options={genres} optionLabel="name" display="chip" 
+                                    placeholder="Select Cities" className="w-full w-full" />
+                            </div>
+
+                        </div>
+
+                        <div id="platform-comp" className="text-wrapper flex flex-column gap-2 py-2 text-2xl">
+                            <label htmlFor="platform" className="text-xl font-semibold">Genres</label>
+                            <MultiSelect id="platform" value={selectedFlatForm} onChange={handleInputValue} name="platform" options={platForm} optionLabel="name" display="chip" 
                                 placeholder="Select Cities" className="w-full w-full" />
                         </div>
                         
@@ -319,6 +375,13 @@ export default GameDetail;
 const Container = styled.div`
   height: calc(100vh - var(--header-height));
     padding: 20px;
+
+    #genres-comp {
+        .p-multiselect {
+            max-width: 330px!important;
+        }
+    }
+    
 `
 const Header = styled.header`
   padding: 16px;

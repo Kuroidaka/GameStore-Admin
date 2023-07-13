@@ -99,7 +99,7 @@ const Options = styled.ul`
 `;
 
 const OptionCell = styled.li`
-  background-color: #f5f5f5;
+ 
   display: flex;
   align-items: center;
   justify-content: center;

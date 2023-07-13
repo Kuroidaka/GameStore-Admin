@@ -59,8 +59,12 @@ export default GameList;
 
 
 const GameListContainer = styled.div`
-  overflow-y: scroll;
-  width: 50%
+
+  width: 100%;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  gap: 22;
 `;
 
 const GameSquare = styled.div`
@@ -68,12 +72,10 @@ const GameSquare = styled.div`
     display: flex;
     -webkit-box-align: center;
     align-items: center;
-    margin-bottom: 2rem;
     padding: 1.5rem;
     border: 1px solid rgb(206 206 206);
-    width: 80%;
-    height: auto;
-    margin-left: 2rem;
+    width: 49%;
+    height: 150px;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 `;
