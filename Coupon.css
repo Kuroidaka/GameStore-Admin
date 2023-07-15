@@ -1,0 +1,85 @@
+/* src/App.css */
+
+/* Style for the container */
+.Container {
+  margin-top: 30px;
+}
+
+/* Style for the table */
+table {
+  width: 100%;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Style for the buttons */
+.Button {
+  margin-right: 10px;
+}
+
+/* Style for the form group */
+.FormGroup {
+  display: flex;
+}
+
+.FormLabel {
+  margin-right: 10px;
+  line-height: 38px;
+}
+
+.FormControl {
+  flex: 1;
+}
+
+/* Style for the Applied Coupon section */
+.AppliedCoupon {
+  background-color: #f2f2f2;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+/* Style for the Remove button */
+.RemoveButton {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.RemoveButton:hover {
+  background-color: #c82333;
+}
+
+/* Style for the Add Coupon button */
+.AddCouponButton {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.AddCouponButton:hover {
+  background-color: #0056b3;
+}
+
+/* Style for the Apply Coupon button */
+.ApplyCouponButton {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.ApplyCouponButton:hover {
+  background-color: #218838;
+}
