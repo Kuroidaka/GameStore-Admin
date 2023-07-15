@@ -7,6 +7,7 @@ import { mockGames } from "../../component/mockData";
 import { productApi } from "~/api/product.api";
 import { GameProvider } from "~/Context/Game.context";
 
+
 const GameManage = () => {
   return (
     <GameProvider>

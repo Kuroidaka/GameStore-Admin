@@ -7,9 +7,17 @@ const CalendarInput = (props) => {
 
   const [dates, setDates] = useState(new Date(value))
 
+  useEffect(() => {
+    console.log("date Value", value)
+    setDates(new Date(value))
+  }, [value])
+
   const handleChangeValue = (e) => {
     setDates(e.value)
-    onInput && onInput(e)
+
+    const customName = "birthday"
+
+    onInput && onInput(e, customName)
   }
 
   return (
@@ -17,7 +25,8 @@ const CalendarInput = (props) => {
         <Calendar
           value={dates}
           name={name}
-          onChange={handleChangeValue}
+          aria-describedby={name}
+          onChange={(e) => handleChangeValue(e)}
           dateFormat={dateFormat}
           disabled={disabled}
         />

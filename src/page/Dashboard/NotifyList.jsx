@@ -41,7 +41,7 @@ const NotifyItem = (props) => {
     return (
         <NotifyItemContainer >
             <div className="flex h-full w-full align-items-center gap-3">
-                <Avatar label={username[0]}/>
+                <Avatar label={username[0]} size="large"/>
                 <span className="infor">
                     <span className="user">{username}</span>
                     <span className="action w-full">{action}</span>

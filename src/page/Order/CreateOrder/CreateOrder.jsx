@@ -79,7 +79,7 @@ const CreateOrder = () => {
         if(status === 200){
           setCustomerInfo(prev => ({...prev, id: data.data.id}))
           callback && callback()
-        } else if (status == 500) {
+        } else if (status === 500) {
           toast.current.show({severity:'error', summary: 'Error', detail:'Create User error', life: 3000});
           setLoading(prev => ({...prev, submit: false}));
         }
