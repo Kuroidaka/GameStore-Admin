@@ -3,11 +3,11 @@
 
 Our store offers a wide selection of games for PlayStation 4, PlayStation 5, Xbox, and other popular gaming systems. Customers can browse the game list, view trailers and images, and make bookings for game rentals. Each game in our store comes with a detailed description, and customers can rate and review the games they have rented. 
 
-# ROLE: 
+## ROLE: 
 ## * [Pham Doan Canh](https://github.com/idaka123) : Scrum Master/Fullstack/Tester
 
 
-# FEATURE
+## FEATURE
 With two type of authenticate:
 
 Admin
@@ -33,3 +33,58 @@ Thank you for visiting our wiki GitHub, and we hope you find the information you
 Link Production: https://game-store-admin.vercel.app/auth (Comming soon)
 
 Link Demo: https://drive.google.com/drive/u/2/folders/1a9kmRFhWDXXN1hzmGpOLNS0WHn6jqCot
+
+
+
+### 1. Localhost Frontend
+Install project 
+```bash
+npm install
+```
+
+#### Start
+```
+npm run start
+```
+Install project Backend
+### 1. MySQL 
+
+* Install MySql workbench Desktop for your Operating System from [here](https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-8.0.34-winx64.msi)
+
+Setup desktop workbench until this window:
+
+   ![image](https://github.com/idaka123/GameStore-Admin/assets/75541791/be1d3cb1-05ab-4509-9c26-6060c476ff70)
+
+Setup database:
+
+  - Using database from [here](https://github.com/idaka123/GameStore-API/blob/master/Databases/gamestore_schema.sql)
+  
+  - Setup product data for testing [here](https://github.com/idaka123/GameStore-API/blob/master/Databases/gamestore_data.sql)
+
+### 2. [Install Backend](https://github.com/idaka123/GameStore-API/tree/master)
+```bash
+npm install
+```
+
+Setup for `env`
+
+```bash
+DATABASE_ID = 127.0.0.1
+DATABASE_USERNAME = root
+DATABASE_NAME = GAMESTORE
+DATABASE_PASSWORD = <YOUR DATABASE PASSWORD>
+SERVER_PORT = 8000
+
+# mail
+
+MAIL_HOST = <YOUR EMAIL>
+MAIL_PASSWORD = <YOUR EMAIL PASSWORD>
+MAIL_PORT = 587
+
+```
+
+#### Start
+```
+npm run start
+```
+
