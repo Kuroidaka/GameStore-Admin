@@ -9,5 +9,6 @@ export const adminRoutePath = {
     gameDetail: '/game-manage/game-detail',
     customerManage: '/customer-manage',
     profile: '/profile',
+    discount: '/discount',
 
 }

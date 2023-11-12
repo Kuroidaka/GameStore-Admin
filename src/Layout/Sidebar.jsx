@@ -7,7 +7,7 @@ import config from '~/config';
 
 const SideBarLayout = (props) => {
 
-    const { dashboard, admin, gameManage, order, customerManage } = config.adminRoutePath
+    const { dashboard, admin, gameManage, order, customerManage, discount } = config.adminRoutePath
 
 
     const [select, setSelect] = useState(dashboard)
@@ -19,7 +19,7 @@ const SideBarLayout = (props) => {
         { id: 3, label: 'Admin', link: admin },
         { id: 4, label: 'Order', link: order },
         { id: 5, label: 'Customer', link: customerManage },
-        { id: 6, label: 'Notification', link: '' },
+        { id: 6, label: 'Discount', link: discount },
     ];
 
     const handleSelect = (link) => {

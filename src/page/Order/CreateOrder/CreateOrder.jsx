@@ -47,14 +47,14 @@ const CreateOrder = () => {
 
 
 
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm =  (e) => {
     e.preventDefault()
     setLoading(prev => ({...prev, submit: true}));
 
     const updateCustomer = (callback) => {
       customer.update({
         display_name: customerInfo.display_name,
-        email: customerInfo.email,
+        // email: customerInfo.email,
         phone: customerInfo.phone,
         address: customerInfo.address
       }, customerInfo.id).then((res) => {
@@ -71,14 +71,15 @@ const CreateOrder = () => {
     const createCustomer = (callback) => {
       customer.create({
         display_name: customerInfo.display_name,
-        email: customerInfo.email,
+        // email: customerInfo.email,
         phone: customerInfo.phone,
         address: customerInfo.address,
-      }).then((res) => {
+      }).then(async (res) => {
         const { data, status } = res
         if(status === 200){
+          console.log("data.data.id", data.data.id)
           setCustomerInfo(prev => ({...prev, id: data.data.id}))
-          callback && callback()
+          callback && await callback(data.data.id)
         } else if (status === 500) {
           toast.current.show({severity:'error', summary: 'Error', detail:'Create User error', life: 3000});
           setLoading(prev => ({...prev, submit: false}));
@@ -91,10 +92,10 @@ const CreateOrder = () => {
     }
 
     //  Booking function
-    const bookOrder = () => {
+    const bookOrder = (id) => {
       const newData = {
         book_date : new Date(),
-        customer_id : customerInfo.id,
+        customer_id : id?id:customerInfo.id,
         queue_data : customerInfo.note,
         rent_duration: customerInfo["rent_duration"],
         gameList: gameOrder.map(item => item.id),

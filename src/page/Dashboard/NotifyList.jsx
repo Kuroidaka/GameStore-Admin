@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { trackingApi } from "~/api/tracking.api";
 import Avatar from "~/component/Avatar";
+import { formatDate } from "~/utils";
 
 const NotifyList = () => {
 
@@ -12,8 +13,10 @@ const NotifyList = () => {
         const fetchApi = () => {
             trackingApi.getTrackingList().
             then(res => {
-                console.log("tracking data", res.data)
-                setTrackingList(res.data.reverse())
+                if(res.status === 200){
+                    console.log("tracking data", res.data)
+                    setTrackingList(res.data.reverse())
+                }
             })
         }
 
@@ -27,7 +30,7 @@ const NotifyList = () => {
             
             <div className="ListContainer">
                 {trackingList && trackingList.map((item, index) =>
-                 <NotifyItem key={index} username={item.username} action={item.action}/>)}
+                 <NotifyItem key={index} username={item.username} action={item.action} date={item.timestamp}/>)}
                 
             </div>
         </Container>
@@ -36,7 +39,7 @@ const NotifyList = () => {
  
 const NotifyItem = (props) => {
 
-    const {username, action} = props
+    const {username, action, date} = props
 
     return (
         <NotifyItemContainer >
@@ -45,7 +48,7 @@ const NotifyItem = (props) => {
                 <span className="infor">
                     <span className="user">{username}</span>
                     <span className="action w-full">{action}</span>
-                    <p>27/02/2023</p>
+                    <p>{formatDate(date)}</p>
                 </span>
             </div>
         </NotifyItemContainer>
@@ -57,7 +60,7 @@ export default NotifyList;
 const Container = styled.div`
     width: 300px;
     height: 86%;
-    /* background-color: #2a2a2d; */
+    background-color: #FFF;
     padding: 10px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     overflow: hidden;   

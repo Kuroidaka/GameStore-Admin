@@ -13,7 +13,7 @@ const CalendarInput = (props) => {
   }, [value])
 
   const handleChangeValue = (e) => {
-    setDates(e.value)
+    setDates(e.target.value)
 
     const customName = "birthday"
 

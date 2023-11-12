@@ -36,6 +36,11 @@ export const customer = {
         const url = `/customer/get-user-join-month`
 
         return axiosClient.get(url)
+    },
+    changeCustomerPassword (id, data) {
+        const url = `/admin/change-customer-Password?userID=${id}`
+
+        return axiosClient.post(url, data)
     }
 }
 
